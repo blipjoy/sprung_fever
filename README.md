@@ -13,6 +13,10 @@ the mailbox, and returning rental videos!
 Just don't let him get sidetracked by cute girls, or he'll fail his exams. The
 cuter they are, the worse is gets!
 
+## Play Online
+
+http://blipjoy.github.io/sprung_fever/public/index.html
+
 ## Develop
 
   $ git clone https://github.com/blipjoy/sprung_fever.git
