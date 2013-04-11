@@ -9,11 +9,6 @@ var game = {
             return;
         }
 
-        // Debug.
-        if (c.DEBUG) {
-            me.plugin.register(debugPanel, "debug");
-        }
-
         // Initialize the audio.
         me.audio.init("mp3,ogg");
 
