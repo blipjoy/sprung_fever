@@ -5,7 +5,6 @@ var c = {
     "WIDTH"     : 960,
     "HEIGHT"    : 640,
 
-    "MOBILE"    : navigator.userAgent.match(/Android|iPhone|iPad|iPod/i),
     "GUID"      : (function () {
         function S4() {
             return ("0000" + Math.floor(Math.random() * 0x10000).toString(16)).slice(-4);

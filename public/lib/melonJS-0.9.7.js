@@ -58,7 +58,7 @@ var me = me || {};
 		 * @type Boolean
 		 * @memberOf me.sys
 		 */
-		ua : navigator.userAgent.toLowerCase(),
+		ua : navigator.userAgent,
 		/**
 		 * Browser Audio capabilities (read-only) <br>
 		 * @type Boolean
@@ -91,6 +91,14 @@ var me = me || {};
 		 * @memberOf me.sys
 		 */
 		touch : false,
+		
+		/**
+		 * equals to true if a mobile device (read-only) <br>
+		 * (Android | iPhone | iPad | iPod | BlackBerry | Windows Phone)
+		 * @type Boolean
+		 * @memberOf me.sys
+		 */
+		isMobile : false,
 
 
 		// Global settings
@@ -777,6 +785,9 @@ var me = me || {};
 		
 		// detect touch capabilities
 		me.sys.touch = ('createTouch' in document) || ('ontouchstart' in $) || (navigator.isCocoonJS);
+		
+		// detect platform
+		me.sys.isMobile = me.sys.ua.match(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i);
 
 		// init the FPS counter if needed
 		me.timer.init();
@@ -1463,19 +1474,21 @@ var me = me || {};
 				me.entityPool.freeInstance(target);
 			}
 
-			// remove the object from the object list
-			if (force===true) {
-				// force immediate object deletion
-				removeNow(obj);
-			} else {
-				// make it invisible (this is bad...)
-				obj.visible = false;
-				// else wait the end of the current loop
-				/** @private */
-				pendingRemove = (function (obj) {
+			if (gameObjects.indexOf(obj) > -1) {
+				// remove the object from the object list
+				if (force===true) {
+					// force immediate object deletion
 					removeNow(obj);
-					pendingRemove = null;
-				}).defer(obj);
+				} else {
+					// make it invisible (this is bad...)
+					obj.visible = false;
+					// else wait the end of the current loop
+					/** @private */
+					pendingRemove = (function (obj) {
+						removeNow(obj);
+						pendingRemove = null;
+					}).defer(obj);
+				}
 			}
 		};
 
@@ -5866,7 +5879,7 @@ var me = me || {};
 							case 'xml' : 
 							case 'tmx' : {
 								// ie9 does not fully implement the responseXML
-								if (me.sys.ua.contains('msie') || !xmlhttp.responseXML) {
+								if (me.sys.ua.toLowerCase().contains('msie') || !xmlhttp.responseXML) {
 									// manually create the XML DOM
 									result = (new DOMParser()).parseFromString(xmlhttp.responseText, 'text/xml');
 								} else {
@@ -7495,8 +7508,7 @@ var me = me || {};
 			activeAudioExt = getSupportedAudioFormat(audioFormat);
 
 			// Disable audio on Mobile devices for now. (ARGH!)
-			var isMobile = me.sys.ua.match(/Android|iPhone|iPad|iPod/i);
-			if (isMobile && !navigator.isCocoonJS) {
+			if (me.sys.isMobile && !navigator.isCocoonJS) {
 				sound_enable = false;
 			}
 
@@ -7569,8 +7581,7 @@ var me = me || {};
 				return 0;
 
 			// check for specific platform
-			var isMobile = me.sys.ua.match(/Android|iPhone|iPad|iPod/i);
-			if (isMobile && !navigator.isCocoonJS) {
+			if (me.sys.isMobile && !navigator.isCocoonJS) {
 				if (sync_loading) {
 					sync_loader.push([ sound, onload_cb, onerror_cb ]);
 					return;
@@ -7581,7 +7592,7 @@ var me = me || {};
 			var channels = sound.channel || 1;
 			var eventname = "canplaythrough";
 
-			if (sound.stream === true && !isMobile) {
+			if (sound.stream === true && !me.sys.isMobile) {
 				channels = 1;
 				eventname = "canplay";
 			}
