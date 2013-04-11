@@ -1,0 +1,332 @@
+{"frames": [
+
+{
+	"filename": "kid-down-1.png",
+	"frame": {"x":196,"y":204,"w":48,"h":64},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":8,"w":48,"h":64},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-down-10.png",
+	"frame": {"x":146,"y":414,"w":48,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":48,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-down-2.png",
+	"frame": {"x":134,"y":346,"w":48,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":48,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-down-3.png",
+	"frame": {"x":52,"y":218,"w":48,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":2,"w":48,"h":70},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-down-4.png",
+	"frame": {"x":2,"y":224,"w":48,"h":72},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":72},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-down-5.png",
+	"frame": {"x":134,"y":278,"w":48,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":48,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-down-6.png",
+	"frame": {"x":196,"y":138,"w":48,"h":64},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":8,"w":48,"h":64},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-down-7.png",
+	"frame": {"x":102,"y":210,"w":48,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":48,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-down-8.png",
+	"frame": {"x":52,"y":146,"w":48,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":2,"w":48,"h":70},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-down-9.png",
+	"frame": {"x":2,"y":150,"w":48,"h":72},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":72},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-left-1.png",
+	"frame": {"x":228,"y":336,"w":42,"h":64},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":8,"w":42,"h":64},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-left-10.png",
+	"frame": {"x":196,"y":70,"w":42,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":6,"w":42,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-left-2.png",
+	"frame": {"x":196,"y":2,"w":42,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":6,"w":42,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-left-3.png",
+	"frame": {"x":102,"y":2,"w":42,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":2,"w":42,"h":70},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-left-4.png",
+	"frame": {"x":46,"y":372,"w":42,"h":72},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":42,"h":72},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-left-5.png",
+	"frame": {"x":196,"y":410,"w":42,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":6,"w":42,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-left-6.png",
+	"frame": {"x":228,"y":270,"w":42,"h":64},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":8,"w":42,"h":64},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-left-7.png",
+	"frame": {"x":184,"y":342,"w":42,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":6,"w":42,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-left-8.png",
+	"frame": {"x":102,"y":434,"w":42,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":2,"w":42,"h":70},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-left-9.png",
+	"frame": {"x":46,"y":298,"w":42,"h":72},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":42,"h":72},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-right-1.png",
+	"frame": {"x":240,"y":68,"w":42,"h":64},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":8,"w":42,"h":64},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-right-10.png",
+	"frame": {"x":184,"y":274,"w":42,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":6,"w":42,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-right-2.png",
+	"frame": {"x":152,"y":206,"w":42,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":6,"w":42,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-right-3.png",
+	"frame": {"x":90,"y":362,"w":42,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":2,"w":42,"h":70},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-right-4.png",
+	"frame": {"x":2,"y":372,"w":42,"h":72},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":42,"h":72},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-right-5.png",
+	"frame": {"x":152,"y":138,"w":42,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":6,"w":42,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-right-6.png",
+	"frame": {"x":240,"y":2,"w":42,"h":64},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":8,"w":42,"h":64},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-right-7.png",
+	"frame": {"x":152,"y":70,"w":42,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":6,"w":42,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-right-8.png",
+	"frame": {"x":90,"y":290,"w":42,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":2,"w":42,"h":70},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-right-9.png",
+	"frame": {"x":2,"y":298,"w":42,"h":72},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":42,"h":72},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-up-1.png",
+	"frame": {"x":52,"y":446,"w":48,"h":64},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":8,"w":48,"h":64},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-up-10.png",
+	"frame": {"x":102,"y":142,"w":48,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":48,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-up-2.png",
+	"frame": {"x":146,"y":2,"w":48,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":48,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-up-3.png",
+	"frame": {"x":2,"y":76,"w":48,"h":72},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":72},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-up-4.png",
+	"frame": {"x":52,"y":74,"w":48,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":2,"w":48,"h":70},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-up-5.png",
+	"frame": {"x":102,"y":74,"w":48,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":48,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-up-6.png",
+	"frame": {"x":2,"y":446,"w":48,"h":64},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":8,"w":48,"h":64},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-up-7.png",
+	"frame": {"x":146,"y":2,"w":48,"h":66},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":6,"w":48,"h":66},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-up-8.png",
+	"frame": {"x":52,"y":2,"w":48,"h":70},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":2,"w":48,"h":70},
+	"sourceSize": {"w":48,"h":72}
+},
+{
+	"filename": "kid-up-9.png",
+	"frame": {"x":2,"y":2,"w":48,"h":72},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":72},
+	"sourceSize": {"w":48,"h":72}
+}],
+"meta": {
+	"app": "http://www.texturepacker.com",
+	"version": "1.0",
+	"image": "kid.png",
+	"format": "RGBA8888",
+	"size": {"w":512,"h":512},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:26d3a8c6b58879c125eb283e1887bf0e$"
+}
+}

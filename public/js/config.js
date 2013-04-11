@@ -24,7 +24,9 @@ var c = {
 // Helper to enable debug by setting a special hash in the URL.
 if (document.location.hash === "#debug") {
     c.DEBUG = true;
-    enableDebug(true);
+    window.onReady(function () {
+        enableDebug.defer(true);
+    });
 }
 
 window.addEventListener("hashchange", function onHashChange(e) {
@@ -65,8 +67,7 @@ me.sys.useNativeAnimFrame = true; // Be fastest!
 me.sys.stopOnAudioError = false;
 
 function enableDebug(enable) {
-    me.debug.renderHitBox = enable;
-    //me.debug.renderCollisionMap = enable;
+    me.plugin.register(debugPanel, "debug");
 }
 
 // Game states.

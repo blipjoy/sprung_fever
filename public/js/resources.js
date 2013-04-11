@@ -1,8 +1,13 @@
 game.resources = {
     /* Graphics. */
     "img" : [
-        "brick",
-        "kid"
+        "grass-tileset",
+        "texture"
+    ],
+
+    /* Atlases */
+    "tps" : [
+        "texture"
     ],
 
     /* Maps. */

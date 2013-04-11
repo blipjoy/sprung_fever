@@ -41,6 +41,15 @@ var game = {
             })
         });
 
+        // Atlases.
+        this.resources["tps"].forEach(function forEach(value) {
+            resources.push({
+                "name"  : value,
+                "type"  : "tps",
+                "src"   : "resources/img/" + value + ".json"
+            })
+        });
+
         // Maps.
         this.resources["map"].forEach(function forEach(value) {
             resources.push({
@@ -67,7 +76,7 @@ var game = {
                 "type"      : "audio",
                 "src"       : "resources/bgm/",
                 "channel"   : 1,
-                "stream"	: true
+                "stream"    : true
             })
         });
 
@@ -83,8 +92,14 @@ var game = {
         game.playscreen = new game.PlayScreen();
         me.state.set(me.state.PLAY, game.playscreen);
 
-        // Add object classes to entity pool
-        me.entityPool.add("mainplayer", game.MainPlayer);
+        // Add object classes to entity pool.
+        me.entityPool.add("kid", game.Kid);
+
+        // Load texture.
+        game.texture = new me.TextureAtlas(
+            me.loader.getAtlas("texture"),
+            me.loader.getImage("texture")
+        );
 
         // Start the game.
         me.state.change(c.DEBUG ? me.state.PLAY : me.state.BLIPJOY);
