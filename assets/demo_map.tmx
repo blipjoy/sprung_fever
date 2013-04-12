@@ -18,6 +18,19 @@
  </layer>
  <objectgroup name="Objects" width="40" height="27">
   <object name="kid" x="672" y="384" width="48" height="48"/>
+  <object name="girl" x="960" y="192" width="48" height="48"/>
+  <object name="girl" x="288" y="480" width="48" height="48"/>
+  <object name="girl" x="720" y="912" width="48" height="48"/>
+  <object name="girl" x="1488" y="1008" width="48" height="48"/>
+  <object name="girl" x="1536" y="480" width="48" height="48"/>
+  <object name="girl" x="864" y="576" width="48" height="48"/>
+  <object name="girl" x="480" y="768" width="48" height="48"/>
+  <object name="girl" x="336" y="1104" width="48" height="48"/>
+  <object name="girl" x="144" y="912" width="48" height="48"/>
+  <object name="girl" x="1104" y="1152" width="48" height="48"/>
+  <object name="girl" x="1296" y="672" width="48" height="48"/>
+  <object name="girl" x="1392" y="240" width="48" height="48"/>
+  <object name="girl" x="192" y="192" width="48" height="48"/>
  </objectgroup>
  <layer name="Collision" width="40" height="27" visible="0">
   <data encoding="base64" compression="zlib">

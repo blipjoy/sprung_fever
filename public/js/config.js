@@ -32,7 +32,7 @@
         });
     }
 
-    window.addEventListener("hashchange", function onHashChange(e) {
+    window.addEventListener("hashchange", function (e) {
         var debug = (document.location.hash === "#debug");
         enableDebug(debug);
         try {
@@ -47,15 +47,15 @@
 
     // Turn the `c` object into a hash of constants.
     try {
-        Object.keys(c).forEach(function eachKey(key) {
+        Object.keys(c).forEach(function (key) {
             if (typeof(c[key]) === "function") {
                 return;
             }
 
             c.__defineGetter__(
                 key,
-                (function getterFactory(value) {
-                    return function returnValue() {
+                (function (value) {
+                    return function () {
                         return value
                     };
                 })(c[key])
@@ -84,4 +84,4 @@
     // Game states.
     me.state.BLIPJOY = me.state.USER + 0;
 
-});
+})();

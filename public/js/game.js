@@ -2,7 +2,7 @@
 /* Game namespace */
 var game = {
     // Run on page load.
-    "onload" : function onload() {
+    "onload" : function () {
         // Initialize the video.
         if (!me.video.init("screen", c.WIDTH, c.HEIGHT, c.DOUBLEBUF)) {
             alert("Your browser does not support HTML5 canvas.");
@@ -23,7 +23,7 @@ var game = {
         });
     },
 
-    "loadResources" : function loadResources() {
+    "loadResources" : function () {
         // Set all resources to be loaded.
         var resources = [];
 
@@ -80,7 +80,7 @@ var game = {
     },
 
     // Run on game resources loaded.
-    "loaded" : function loaded() {
+    "loaded" : function () {
         // Set up game states.
         me.state.set(me.state.BLIPJOY, new game.BlipjoyScreen());
         me.state.set(me.state.MENU, new game.TitleScreen());
@@ -89,6 +89,7 @@ var game = {
 
         // Add object classes to entity pool.
         me.entityPool.add("kid", game.Kid);
+        me.entityPool.add("girl", game.Girl);
 
         // Load texture.
         game.texture = new me.TextureAtlas(
@@ -98,6 +99,14 @@ var game = {
 
         // Start the game.
         me.state.change(c.DEBUG ? me.state.PLAY : me.state.BLIPJOY);
+    },
+
+    // Top-down perspective sort function
+    "sort" : function (a, b) {
+        var result = (b.z - a.z);
+        return (
+            result ? result : ((b.pos && b.pos.y) - (a.pos && a.pos.y)) || 0
+        );
     }
 
 };

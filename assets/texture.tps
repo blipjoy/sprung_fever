@@ -22,7 +22,7 @@
         <key>dataFormat</key>
         <string>json-array</string>
         <key>textureFileName</key>
-        <filename>../public/resources/img/kid.png</filename>
+        <filename>../public/resources/img/texture.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -111,7 +111,7 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>../public/resources/img/kid.json</filename>
+        <filename>../public/resources/img/texture.json</filename>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
@@ -181,6 +181,46 @@
             <filename>kid-up-8.png</filename>
             <filename>kid-up-9.png</filename>
             <filename>kid-up-10.png</filename>
+            <filename>girl-down-1.png</filename>
+            <filename>girl-down-2.png</filename>
+            <filename>girl-down-3.png</filename>
+            <filename>girl-down-4.png</filename>
+            <filename>girl-down-5.png</filename>
+            <filename>girl-down-6.png</filename>
+            <filename>girl-down-7.png</filename>
+            <filename>girl-down-8.png</filename>
+            <filename>girl-down-9.png</filename>
+            <filename>girl-down-10.png</filename>
+            <filename>girl-left-1.png</filename>
+            <filename>girl-left-2.png</filename>
+            <filename>girl-left-3.png</filename>
+            <filename>girl-left-4.png</filename>
+            <filename>girl-left-5.png</filename>
+            <filename>girl-left-6.png</filename>
+            <filename>girl-left-7.png</filename>
+            <filename>girl-left-8.png</filename>
+            <filename>girl-left-9.png</filename>
+            <filename>girl-left-10.png</filename>
+            <filename>girl-right-1.png</filename>
+            <filename>girl-right-2.png</filename>
+            <filename>girl-right-3.png</filename>
+            <filename>girl-right-4.png</filename>
+            <filename>girl-right-5.png</filename>
+            <filename>girl-right-6.png</filename>
+            <filename>girl-right-7.png</filename>
+            <filename>girl-right-8.png</filename>
+            <filename>girl-right-9.png</filename>
+            <filename>girl-right-10.png</filename>
+            <filename>girl-up-1.png</filename>
+            <filename>girl-up-2.png</filename>
+            <filename>girl-up-3.png</filename>
+            <filename>girl-up-4.png</filename>
+            <filename>girl-up-5.png</filename>
+            <filename>girl-up-6.png</filename>
+            <filename>girl-up-7.png</filename>
+            <filename>girl-up-8.png</filename>
+            <filename>girl-up-9.png</filename>
+            <filename>girl-up-10.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

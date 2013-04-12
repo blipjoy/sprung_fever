@@ -27,6 +27,175 @@
                  "width":48,
                  "x":672,
                  "y":384
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":960,
+                 "y":192
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":288,
+                 "y":480
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":720,
+                 "y":912
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":1488,
+                 "y":1008
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":1536,
+                 "y":480
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":864,
+                 "y":576
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":480,
+                 "y":768
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":336,
+                 "y":1104
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":144,
+                 "y":912
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":1104,
+                 "y":1152
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":1296,
+                 "y":672
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":1392,
+                 "y":240
+                }, 
+                {
+                 "height":48,
+                 "name":"girl",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":48,
+                 "x":192,
+                 "y":192
                 }],
          "opacity":1,
          "type":"objectgroup",
