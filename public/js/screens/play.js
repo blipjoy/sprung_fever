@@ -8,6 +8,9 @@ game.PlayScreen = me.ScreenObject.extend({
 
         // Load level
         me.levelDirector.loadLevel("demo_map");
+
+        // Reset HUD
+        me.game.HUD.reset();
     },
 
     "onDestroyEvent" : function () {

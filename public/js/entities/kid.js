@@ -2,6 +2,9 @@ game.Kid = game.Person.extend({
     "init" : function (x, y, settings) {
         this.parent(x, y, settings);
 
+        // Reference the kid from the global namespace
+        game.kid = this;
+
         me.game.viewport.follow(this, me.game.viewport.AXIS.BOTH);
     },
 
