@@ -3,7 +3,7 @@ game.Person = me.ObjectEntity.extend({
         this.parent(x, y, settings);
 
         // Physics
-        this.setVelocity(4.0, 4.0);
+        this.setVelocity(6.0, 6.0);
         this.setFriction(0.5, 0.5);
         this.moving = false;
 
@@ -74,6 +74,17 @@ game.Person = me.ObjectEntity.extend({
 
                 this.vel.y = this.accel.y * me.timer.tick;
                 break;
+            }
+
+            if (!this.sprinting) {
+                this.vel.x /= 1.5;
+                this.vel.y /= 1.5;
+
+                this.renderable.current.animationspeed =
+                    this.renderable.animationspeed;
+            }
+            else {
+                this.renderable.current.animationspeed = 0;
             }
         }
 

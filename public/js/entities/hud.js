@@ -1,8 +1,9 @@
-game.AttentionMeter = me.HUD_Item.extend({
-    "init" : function (x, y, val) {
+game.HUD_Item = me.HUD_Item.extend({
+    "init" : function (name, x, y, val) {
         this.parent(x, y, val);
-
         this.font = new me.Font("Verdana", 16, "#fff", "right");
+
+        this.name = name;
     },
 
     "draw" : function (context) {
@@ -16,12 +17,12 @@ game.AttentionMeter = me.HUD_Item.extend({
         context.strokeRect(x, y, 261, 20);
 
         context.fillStyle = "rgb(" +
-            Math.min((this.defaultvalue - this.value) * 2, 255) + "," + // Red
-            (this.value > 127 ? 255 : this.value * 2) + "," + // Green
+            Math.min((this.defaultvalue - ~~this.value) * 2, 255) + "," + // Red
+            (this.value > 127 ? 255 : ~~this.value * 2) + "," + // Green
             0 + // Blue
             ")";
-        context.fillRect(x + 3, y + 3, this.value, 14);
+        context.fillRect(x + 3, y + 3, ~~this.value, 14);
 
-        this.font.draw(context, "Attention:", x - 10, y);
+        this.font.draw(context, this.name + ":", x - 10, y);
     }
 });

@@ -9,6 +9,7 @@ game.Kid = game.Person.extend({
     },
 
     "update" : function () {
+        // Movement
         if (me.input.isKeyPressed("left")) {
             this.moving = true;
             this.direction = "left";
@@ -28,6 +29,31 @@ game.Kid = game.Person.extend({
         else {
             this.moving = false;
         }
+
+        // Sprinting
+        this.sprinting = this.cansprint && me.input.isKeyPressed("sprint");
+        if (this.sprinting) {
+            me.game.HUD.updateItemValue("stamina", -1);
+            if (me.game.HUD.getItemValue("stamina") <= 0) {
+                this.cansprint = false;
+            }
+        }
+        else {
+            me.game.HUD.updateItemValue("stamina", 0.5);
+            if (me.game.HUD.getItemValue("stamina") >= 255) {
+                me.game.HUD.reset("stamina");
+                this.cansprint = true;
+            }
+        }
+
+        // Attention
+        if (!this.attentionDeficit) {
+            me.game.HUD.updateItemValue("attention", 0.25);
+            if (me.game.HUD.getItemValue("attention") >= 255)
+                me.game.HUD.reset("attention");
+        }
+        else
+            this.attentionDeficit = false;
 
         return this.parent();
     }

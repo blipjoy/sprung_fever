@@ -97,10 +97,6 @@ var game = {
             me.loader.getImage("texture")
         );
 
-        // Create HUD.
-        me.game.addHUD(0, 0, c.WIDTH, 50, "#000");
-        me.game.HUD.addItem("attention", new game.AttentionMeter(100, 15, 255));
-
         // Start the game.
         me.state.change(c.DEBUG ? me.state.PLAY : me.state.BLIPJOY);
     },
