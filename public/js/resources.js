@@ -28,5 +28,6 @@ game.resources = {
 
     /* Background music. */
     "bgm" : [
+        "grocery"
     ]
 };

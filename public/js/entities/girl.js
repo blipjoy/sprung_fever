@@ -26,7 +26,7 @@ game.Girl = game.Person.extend({
             me.game.HUD.updateItemValue("attention", -1);
             if (me.game.HUD.getItemValue("attention") <= 0)
                 // End game.
-                me.state.change(me.state.PLAY);
+                me.state.change(me.state.MENU);
         }
 
         return this.parent();

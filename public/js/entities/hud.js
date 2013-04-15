@@ -1,9 +1,14 @@
 game.HUD_Item = me.HUD_Item.extend({
     "init" : function (name, x, y, val) {
         this.parent(x, y, val);
-        this.font = new me.Font("Verdana", 16, "#fff", "right");
 
-        this.name = name;
+        // Cache image for item name
+        var font = new me.Font("Verdana", 16, "#fff", "left");
+        this.image = document.createElement("canvas");
+        var ctx = this.image.getContext("2d");
+        this.image.width = font.measureText(ctx, name + ":").width;
+        this.image.height = 20;
+        font.draw(ctx, name + ":", 0, 0);
     },
 
     "draw" : function (context) {
@@ -23,6 +28,6 @@ game.HUD_Item = me.HUD_Item.extend({
             ")";
         context.fillRect(x + 3, y + 3, ~~this.value, 14);
 
-        this.font.draw(context, this.name + ":", x - 10, y);
+        context.drawImage(this.image, x - this.image.width - 10, y);
     }
 });

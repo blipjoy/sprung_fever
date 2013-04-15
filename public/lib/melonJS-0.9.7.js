@@ -27,7 +27,7 @@ var me = me || {};
 		// settings & configuration
 		// library name & version
 		mod : "melonJS",
-		version : "0.9.7",
+		version : "@VERSION",
 		nocache : '',
 
 		// Public Object (To be completed)
@@ -194,7 +194,7 @@ var me = me || {};
 		 * @public
 		 * @function
 		 * @param {String} first First version string to compare
-		 * @param {String} [second="0.9.7"] Second version string to compare 
+		 * @param {String} [second="@VERSION"] Second version string to compare 
 		 * @return {Integer} comparison result <br>&lt; 0 : first &lt; second <br>0 : first == second <br>&gt; 0 : first &gt; second
 		 * @example
 		 * if (me.sys.checkVersion("0.9.5") > 0) {
@@ -1712,6 +1712,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -1763,72 +1764,87 @@ var me = me || {};
 		 * set the Vector x and y properties to the given values<br>
 		 * @param {Number} x
 		 * @param {Number} y
+		 * @return Reference to this object for method chaining
 		 */
 		set : function(x, y) {
 			this.x = x;
 			this.y = y;
+			return this;
 		},
 
 		/**
 		 * set the Vector x and y properties to 0
+		 * @return Reference to this object for method chaining
 		 */
 		setZero : function() {
-			this.set(0, 0);
+			return this.set(0, 0);
 		},
 
 		/**
 		 * set the Vector x and y properties using the passed vector
 		 * @param {me.Vector2d} v
+		 * @return Reference to this object for method chaining
 		 */
 		setV : function(v) {
 			this.x = v.x;
 			this.y = v.y;
+			return this;
 		},
 
 		/**
 		 * Add the passed vector to this vector
 		 * @param {me.Vector2d} v
+		 * @return Reference to this object for method chaining
 		 */
 		add : function(v) {
 			this.x += v.x;
 			this.y += v.y;
+			return this;
 		},
 
 		/**
 		 * Substract the passed vector to this vector
 		 * @param {me.Vector2d} v
+		 * @return Reference to this object for method chaining
 		 */
 		sub : function(v) {
 			this.x -= v.x;
 			this.y -= v.y;
+			return this;
 		},
 
 		/**
 		 * Multiply this vector values by the passed vector
 		 * @param {me.Vector2d} v
+		 * @return Reference to this object for method chaining
 		 */
 		scale : function(v) {
 			this.x *= v.x;
 			this.y *= v.y;
+			return this;
 		},
 
 		/**
 		 * Divide this vector values by the passed value
 		 * @param {Number} value
+		 * @return Reference to this object for method chaining
 		 */
 		div : function(n) {
 			this.x /= n;
 			this.y /= n;
+			return this;
 		},
 
 		/**
 		 * Update this vector values to absolute values
+		 * @return Reference to this object for method chaining
 		 */
 		abs : function() {
 			if (this.x < 0)
 				this.x = -this.x;
 			if (this.y < 0)
 				this.y = -this.y;
+			return this;
 		},
 
 		/**
@@ -1845,6 +1861,7 @@ var me = me || {};
 		 * Clamp this vector value within the specified value range
 		 * @param {Number} low
 		 * @param {Number} high
+		 * @return Reference to this object for method chaining
 		 */
 		clampSelf : function(low, high) {
 			this.x = this.x.clamp(low, high);
@@ -1855,19 +1872,23 @@ var me = me || {};
 		/**
 		 * Update this vector with the minimum value between this and the passed vector
 		 * @param {me.Vector2d} v
+		 * @return Reference to this object for method chaining
 		 */
 		minV : function(v) {
 			this.x = this.x < v.x ? this.x : v.x;
 			this.y = this.y < v.y ? this.y : v.y;
+			return this;
 		},
 
 		/**
 		 * Update this vector with the maximum value between this and the passed vector
 		 * @param {me.Vector2d} v
+		 * @return Reference to this object for method chaining
 		 */
 		maxV : function(v) {
 			this.x = this.x > v.x ? this.x : v.x;
 			this.y = this.y > v.y ? this.y : v.y;
+			return this;
 		},
 
 		/**
@@ -1880,6 +1901,7 @@ var me = me || {};
 		
 		/**
 		 * Floor this vector values
+		 * @return Reference to this object for method chaining
 		 */
 		floorSelf : function() {
 			this.x = ~~this.x;
@@ -1897,6 +1919,7 @@ var me = me || {};
 		
 		/**
 		 * Ceil this vector values
+		 * @return Reference to this object for method chaining
 		 */
 		ceilSelf : function() {
 			this.x = Math.ceil(this.x);
@@ -1914,6 +1937,7 @@ var me = me || {};
 
 		/**
 		 * Negate this vector values
+		 * @return Reference to this object for method chaining
 		 */
 		negateSelf : function() {
 			this.x = -this.x;
@@ -1924,10 +1948,12 @@ var me = me || {};
 		/**
 		 * Copy the x,y values of the passed vector to this one
 		 * @param {me.Vector2d} v
+		 * @return Reference to this object for method chaining
 		 */
 		copy : function(v) {
 			this.x = v.x;
 			this.y = v.y;
+			return this;
 		},
 		
 		/**
@@ -2003,7 +2029,7 @@ var me = me || {};
 		 * @return {String}
 		 */			
 		 toString : function() {
-			return 'x:' + this.x + 'y:' + this.y;
+			return 'x:' + this.x + ',y:' + this.y;
 		}
 
 	});
@@ -2449,6 +2475,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -2512,6 +2539,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -2611,6 +2639,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -2830,7 +2859,7 @@ var me = me || {};
 		 *	@param {alpha} alpha opacity value between 0 and 1
 		 */
 		setOpacity : function(alpha) {
-			if (alpha) {
+			if (typeof (alpha) === "number") {
 				this.alpha = alpha.clamp(0.0,1.0);
 			}
 		},
@@ -3186,6 +3215,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -3382,6 +3412,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -3675,6 +3706,9 @@ var me = me || {};
 		 */
 
 		shake : function(intensity, duration, axis, onComplete) {
+			if (this.shaking)
+				return;
+
 			this.shaking = true;
 
 			this._shake = {
@@ -3790,6 +3824,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -4018,7 +4053,7 @@ var me = me || {};
 			}
 
 			if (name) {
-				console.error("Cannot instantiate entity of type '" + name + "': Class not found!");
+				console.error("Cannot instantiate entity of type '" + data + "': Class not found!");
 			}
 			return null;
 		};
@@ -4966,6 +5001,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -5664,6 +5700,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -5879,7 +5916,7 @@ var me = me || {};
 							case 'xml' : 
 							case 'tmx' : {
 								// ie9 does not fully implement the responseXML
-								if (me.sys.ua.toLowerCase().contains('msie') || !xmlhttp.responseXML) {
+								if (me.sys.ua.match(/msie/i) || !xmlhttp.responseXML) {
 									// manually create the XML DOM
 									result = (new DOMParser()).parseFromString(xmlhttp.responseText, 'text/xml');
 								} else {
@@ -6232,6 +6269,10 @@ var me = me || {};
 			// unload all tmx resources
 			for (name in tmxList)
 				obj.unload(name);
+			
+			// unload all atlas resources
+			for (name in atlasList)
+				obj.unload(name);
 
 			// unload all audio resources
 			me.audio.unloadAll();
@@ -6370,6 +6411,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -6718,6 +6760,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -6847,6 +6890,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -7197,6 +7241,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -7718,8 +7763,8 @@ var me = me || {};
 		 * @param {Number} volume Float specifying volume (0.0 - 1.0 values accepted).
 		 */
 		obj.setVolume = function(volume) {
-			if (volume) {
-				settings.volume = parseFloat(volume).clamp(0.0,1.0);
+			if (typeof(volume) === "number") {
+				settings.volume = volume.clamp(0.0,1.0);
 			}
 		};
 
@@ -7886,6 +7931,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -8526,6 +8572,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -9286,6 +9333,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -9559,6 +9607,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -9767,6 +9816,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -9830,6 +9880,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -9931,6 +9982,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -10134,6 +10186,7 @@ var me = me || {};
 // END END END
 /*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -10609,6 +10662,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -10870,6 +10924,7 @@ var me = me || {};
 	});
 
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -10877,7 +10932,7 @@ var me = me || {};
  *
  */
 
-(function($, game) {
+(function(window) {
 	
 	/**
 	 * a generic Color Layer Object
@@ -10900,7 +10955,7 @@ var me = me || {};
 			
 			this.floating = true;
 			
-			this.parent(new me.Vector2d(0, 0), game.viewport.width, game.viewport.height);
+			this.parent(new me.Vector2d(0, 0), me.game.viewport.width, me.game.viewport.height);
 		},
 
 		/**
@@ -10925,7 +10980,7 @@ var me = me || {};
 		 * @param {alpha} alpha opacity value between 0 and 1
 		 */
 		setOpacity : function(alpha) {
-			if (alpha) {
+			if (typeof(alpha) === "number") {
 				this.opacity = alpha.clamp(0.0, 1.0);
 			}
 		},
@@ -11022,12 +11077,16 @@ var me = me || {};
 			// if ratio !=0 scrolling image
 			this.ratio = ratio || 1.0;
 			
+			// a cached reference to the viewport
+			this.viewport = me.game.viewport;
+			
 			// last position of the viewport
-			this.lastpos = game.viewport.pos.clone();
+			this.lastpos = this.viewport.pos.clone();
+			
 			
 			// set layer width & height 
-			width  = width ? Math.min(game.viewport.width, width)   : game.viewport.width;
-			height = height? Math.min(game.viewport.height, height) : game.viewport.height;
+			width  = width ? Math.min(this.viewport.width, width)   : this.viewport.width;
+			height = height? Math.min(this.viewport.height, height) : this.viewport.height;
 			this.parent(new me.Vector2d(0, 0), width, height);
 			
 			// default opacity
@@ -11068,7 +11127,9 @@ var me = me || {};
 					}
 				}
 			});
-
+			
+			// default origin position
+			this.anchorPoint.set(0,0);
 			
 		},
 		
@@ -11097,7 +11158,7 @@ var me = me || {};
 		 * @param {alpha} alpha opacity value between 0 and 1
 		 */
 		setOpacity : function(alpha) {
-			if (alpha) {
+			if (typeof(alpha) === "number") {
 				this.opacity = alpha.clamp(0.0, 1.0);
 			}
 		},
@@ -11114,7 +11175,7 @@ var me = me || {};
 			}
 			else {
 				// reference to the viewport
-				var vpos = game.viewport.pos;
+				var vpos = this.viewport.pos;
 				// parallax / scrolling image
 				if (!this.lastpos.equals(vpos)) {
 					// viewport changed
@@ -11135,13 +11196,19 @@ var me = me || {};
 		 * @private
 		 */
 		draw : function(context, rect) {
+			// save current context state
+			context.save();
 			
-			// check if transparency
-			if (this.opacity < 1.0) {
-				// set the layer alpha value
-				var _alpha = context.globalAlpha
-				context.globalAlpha = this.opacity;
+			// translate default position using the anchorPoint value
+			if (this.anchorPoint.y !==0 || this.anchorPoint.x !==0) {
+				context.translate (
+					~~(this.anchorPoint.x * (this.viewport.width - this.imagewidth)),
+					~~(this.anchorPoint.y * (this.viewport.height - this.imageheight))
+				)
 			}
+			
+			// set the layer alpha value
+			context.globalAlpha = this.opacity;
 			
 			// if not scrolling ratio define, static image
 			if (this.ratio===0) {
@@ -11194,9 +11261,7 @@ var me = me || {};
 			}
 			
 			// restore context state
-			if (this.opacity < 1.0) {
-				context.globalAlpha = _alpha;
-			}
+			context.restore();
 		}
 	});	
 	
@@ -11492,7 +11557,7 @@ var me = me || {};
 		 * @param {alpha} alpha opacity value between 0 and 1
 		 */
 		setOpacity : function(alpha) {
-			if (alpha) {
+			if (typeof(alpha) === "number") {
 				this.opacity = alpha.clamp(0.0, 1.0);
 				// if pre-rendering is used, update opacity on the hidden canvas context
 				if (this.preRender) {
@@ -11573,7 +11638,7 @@ var me = me || {};
 		draw : function(context, rect) {
 			
 			// get a reference to the viewport
-			var vpos = game.viewport.pos;
+			var vpos = me.game.viewport.pos;
 			
 			// use the offscreen canvas
 			if (this.preRender) {
@@ -11608,7 +11673,8 @@ var me = me || {};
 	/*---------------------------------------------------------*/
 	// END END END
 	/*---------------------------------------------------------*/
-})(window, me.game);
+})(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -11821,6 +11887,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -12394,6 +12461,7 @@ var me = me || {};
 
 
 })(window);
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
@@ -12620,6 +12688,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })(window);
+
 /**
  * @preserve Tween JS
  * https://github.com/sole/Tween.js
@@ -13195,6 +13264,7 @@ var me = me || {};
 	// END END END
 	/*---------------------------------------------------------*/
 })();
+
 /**
  * @preserve MinPubSub
  * a micro publish/subscribe messaging framework
@@ -13387,6 +13457,7 @@ var me = me || {};
 	})();
 
 })();
+
 /*
  * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT

@@ -1,33 +1,25 @@
 game.PlayScreen = me.ScreenObject.extend({
     "onResetEvent" : function () {
         // Bind keys
-        me.input.bindKey(me.input.KEY.LEFT, "left");
-        me.input.bindKey(me.input.KEY.RIGHT, "right");
-        me.input.bindKey(me.input.KEY.UP, "up");
-        me.input.bindKey(me.input.KEY.DOWN, "down");
-
-        me.input.bindKey(me.input.KEY.A, "left");
-        me.input.bindKey(me.input.KEY.D, "right");
-        me.input.bindKey(me.input.KEY.W, "up");
-        me.input.bindKey(me.input.KEY.S, "down");
-
-        me.input.bindKey(me.input.KEY.SHIFT, "sprint");
+        this.invertX = null;
+        this.invertY = null;
+        this.bindKeys(false, false);
 
         // Load level
         me.levelDirector.loadLevel("demo_map");
 
-        // Create HUD.
-        if (!me.game.HUD) {
-            me.game.addHUD(0, 0, c.WIDTH, 50, "#000");
+        // Start music
+        if (!me.audio.getCurrentTrack())
+            me.audio.playTrack("grocery");
 
-            me.game.HUD.addItem("attention", new game.HUD_Item(
-                "Attention", 100, 15, 255
-            ));
-
-            me.game.HUD.addItem("stamina", new game.HUD_Item(
-                "Stamina", c.WIDTH - 300, 15, 255
-            ));
-        }
+        // Create HUD
+        me.game.addHUD(0, 0, c.WIDTH, 50, "#000");
+        me.game.HUD.addItem("attention", new game.HUD_Item(
+            "Attention", 100, 15, 255
+        ));
+        me.game.HUD.addItem("stamina", new game.HUD_Item(
+            "Stamina", c.WIDTH - 300, 15, 255
+        ));
     },
 
     "onDestroyEvent" : function () {
@@ -44,7 +36,43 @@ game.PlayScreen = me.ScreenObject.extend({
 
         me.input.unbindKey(me.input.KEY.SHIFT);
 
-        // Reset HUD
-        me.game.HUD.reset();
+        // Disable HUD
+        me.game.disableHUD();
+    },
+
+    "bindKeys" : function (invertX, invertY) {
+        if (this.invertX == invertX && this.invertY == invertY)
+            return;
+
+        this.invertX = invertX;
+        this.invertY = invertY;
+
+        if (invertX) {
+            me.input.bindKey(me.input.KEY.LEFT, "right");
+            me.input.bindKey(me.input.KEY.RIGHT, "left");
+            me.input.bindKey(me.input.KEY.A, "right");
+            me.input.bindKey(me.input.KEY.D, "left");
+        }
+        else {
+            me.input.bindKey(me.input.KEY.LEFT, "left");
+            me.input.bindKey(me.input.KEY.RIGHT, "right");
+            me.input.bindKey(me.input.KEY.A, "left");
+            me.input.bindKey(me.input.KEY.D, "right");
+        }
+
+        if (invertY) {
+            me.input.bindKey(me.input.KEY.UP, "down");
+            me.input.bindKey(me.input.KEY.DOWN, "up");
+            me.input.bindKey(me.input.KEY.W, "down");
+            me.input.bindKey(me.input.KEY.S, "up");
+        }
+        else {
+            me.input.bindKey(me.input.KEY.UP, "up");
+            me.input.bindKey(me.input.KEY.DOWN, "down");
+            me.input.bindKey(me.input.KEY.W, "up");
+            me.input.bindKey(me.input.KEY.S, "down");
+        }
+
+        me.input.bindKey(me.input.KEY.SHIFT, "sprint");
     }
 });

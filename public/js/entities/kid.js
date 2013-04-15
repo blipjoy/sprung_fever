@@ -49,11 +49,36 @@ game.Kid = game.Person.extend({
         // Attention
         if (!this.attentionDeficit) {
             me.game.HUD.updateItemValue("attention", 0.25);
-            if (me.game.HUD.getItemValue("attention") >= 255)
+            var attn = me.game.HUD.getItemValue("attention");
+            if (attn >= 255)
                 me.game.HUD.reset("attention");
+            else if (attn > 128) {
+                game.playscreen.bindKeys(false, false);
+            }
+            else if (attn > 64) {
+                game.playscreen.bindKeys(true, false);
+            }
         }
-        else
+        else {
             this.attentionDeficit = false;
+
+            // "Nervous" effects
+            var attn = me.game.HUD.getItemValue("attention");
+            if (attn < 32) {
+                me.game.viewport.shake(16, 50);
+            }
+            else if (attn < 64) {
+                game.playscreen.bindKeys(true, true);
+                me.game.viewport.shake(12, 50);
+            }
+            else if (attn < 128) {
+                game.playscreen.bindKeys(true, false);
+                me.game.viewport.shake(8, 50);
+            }
+            else if (attn < 192) {
+                me.game.viewport.shake(4, 50);
+            }
+        }
 
         return this.parent();
     }
