@@ -20,10 +20,10 @@ game.Girl = game.Person.extend({
         }
 
         // AoE
-        if ((this.pos.distance(game.kid.pos) / 48) < 4) {
+        if ((this.pos.distance(game.kid.pos) / 48) < 3) {
             game.kid.attentionDeficit = true;
 
-            me.game.HUD.updateItemValue("attention", -1);
+            me.game.HUD.updateItemValue("attention", -0.5);
             if (me.game.HUD.getItemValue("attention") <= 0)
                 // End game.
                 me.state.change(me.state.MENU);

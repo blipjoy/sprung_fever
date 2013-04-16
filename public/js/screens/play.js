@@ -6,7 +6,7 @@ game.PlayScreen = me.ScreenObject.extend({
         this.bindKeys(false, false);
 
         // Load level
-        me.levelDirector.loadLevel("demo_map");
+        me.levelDirector.loadLevel("grocery");
 
         // Start music
         if (!me.audio.getCurrentTrack())

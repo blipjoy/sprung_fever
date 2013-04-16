@@ -91,11 +91,26 @@ var game = {
         me.entityPool.add("kid", game.Kid);
         me.entityPool.add("girl", game.Girl);
 
+        me.entityPool.add("milk", game.Item);
+        me.entityPool.add("bread", game.Item);
+        me.entityPool.add("eggs", game.Item);
+        me.entityPool.add("cheese", game.Item);
+        me.entityPool.add("broccoli", game.Item);
+        me.entityPool.add("carrots", game.Item);
+
+        me.entityPool.add("cookies", game.Item);
+        me.entityPool.add("icecream", game.Item);
+        me.entityPool.add("cake", game.Item);
+        me.entityPool.add("candy", game.Item);
+
         // Load texture.
         game.texture = new me.TextureAtlas(
             me.loader.getAtlas("texture"),
             me.loader.getImage("texture")
         );
+
+        // Overlay.
+        me.game.add(new game.Overlay("overlay"), Infinity);
 
         // Start the game.
         me.state.change(c.DEBUG ? me.state.PLAY : me.state.BLIPJOY);

@@ -1,8 +1,9 @@
 game.resources = {
     /* Graphics. */
     "img" : [
-        "grass-tileset",
-        "texture"
+        "overlay",
+        "texture",
+        "tileset"
     ],
 
     /* Atlases */
@@ -12,7 +13,7 @@ game.resources = {
 
     /* Maps. */
     "map" : [
-        "demo_map"
+        "grocery"
     ],
 
     /* Sound effects. */
