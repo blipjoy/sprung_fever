@@ -41,6 +41,7 @@ game.Person = me.ObjectEntity.extend({
         this.direction = "down";
 
         // Set the renderable position to bottom center
+        // FIXME: melonJS bug: https://github.com/melonjs/melonJS/issues/202
         this.anchorPoint.set(0.5, 1.0);
     },
 

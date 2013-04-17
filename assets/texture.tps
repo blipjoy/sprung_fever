@@ -221,6 +221,46 @@
             <filename>girl-up-8.png</filename>
             <filename>girl-up-9.png</filename>
             <filename>girl-up-10.png</filename>
+            <filename>redgirl-down-1.png</filename>
+            <filename>redgirl-down-2.png</filename>
+            <filename>redgirl-down-3.png</filename>
+            <filename>redgirl-down-4.png</filename>
+            <filename>redgirl-down-5.png</filename>
+            <filename>redgirl-down-6.png</filename>
+            <filename>redgirl-down-7.png</filename>
+            <filename>redgirl-down-8.png</filename>
+            <filename>redgirl-down-9.png</filename>
+            <filename>redgirl-down-10.png</filename>
+            <filename>redgirl-left-1.png</filename>
+            <filename>redgirl-left-2.png</filename>
+            <filename>redgirl-left-3.png</filename>
+            <filename>redgirl-left-4.png</filename>
+            <filename>redgirl-left-5.png</filename>
+            <filename>redgirl-left-6.png</filename>
+            <filename>redgirl-left-7.png</filename>
+            <filename>redgirl-left-8.png</filename>
+            <filename>redgirl-left-9.png</filename>
+            <filename>redgirl-left-10.png</filename>
+            <filename>redgirl-right-1.png</filename>
+            <filename>redgirl-right-2.png</filename>
+            <filename>redgirl-right-3.png</filename>
+            <filename>redgirl-right-4.png</filename>
+            <filename>redgirl-right-5.png</filename>
+            <filename>redgirl-right-6.png</filename>
+            <filename>redgirl-right-7.png</filename>
+            <filename>redgirl-right-8.png</filename>
+            <filename>redgirl-right-9.png</filename>
+            <filename>redgirl-right-10.png</filename>
+            <filename>redgirl-up-1.png</filename>
+            <filename>redgirl-up-2.png</filename>
+            <filename>redgirl-up-3.png</filename>
+            <filename>redgirl-up-4.png</filename>
+            <filename>redgirl-up-5.png</filename>
+            <filename>redgirl-up-6.png</filename>
+            <filename>redgirl-up-7.png</filename>
+            <filename>redgirl-up-8.png</filename>
+            <filename>redgirl-up-9.png</filename>
+            <filename>redgirl-up-10.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

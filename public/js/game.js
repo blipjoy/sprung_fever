@@ -90,6 +90,7 @@ var game = {
         // Add object classes to entity pool.
         me.entityPool.add("kid", game.Kid);
         me.entityPool.add("girl", game.Girl);
+        me.entityPool.add("redgirl", game.Girl);
 
         me.entityPool.add("milk", game.Item);
         me.entityPool.add("bread", game.Item);
