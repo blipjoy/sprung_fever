@@ -261,6 +261,7 @@
             <filename>redgirl-up-8.png</filename>
             <filename>redgirl-up-9.png</filename>
             <filename>redgirl-up-10.png</filename>
+            <filename>heart.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

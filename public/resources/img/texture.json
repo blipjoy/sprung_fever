@@ -321,6 +321,14 @@
 	"sourceSize": {"w":72,"h":72}
 },
 {
+	"filename": "heart.png",
+	"frame": {"x":482,"y":302,"w":33,"h":27},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":33,"h":27},
+	"sourceSize": {"w":33,"h":27}
+},
+{
 	"filename": "kid-down-1.png",
 	"frame": {"x":2,"y":482,"w":48,"h":64},
 	"rotated": true,
@@ -967,6 +975,6 @@
 	"format": "RGBA8888",
 	"size": {"w":512,"h":1024},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:54b37cae222acc67104e71f75e39adc9$"
+	"smartupdate": "$TexturePacker:SmartUpdate:b747a831ff68d72c4cd9658c89c279e9$"
 }
 }

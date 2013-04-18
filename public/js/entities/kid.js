@@ -78,6 +78,16 @@ game.Kid = game.Person.extend({
             else if (attn < 192) {
                 me.game.viewport.shake(4, 50);
             }
+
+            // Emit a random heart
+            if (!~~(Math.random() * attn * 0.2)) {
+                me.game.add(new game.Heart(
+                    this.pos.x + (Math.random() - 0.5) * 15,
+                    this.pos.y - (this.renderable.height - 10),
+                    ~~(Math.random() * 60)
+                ), this.z + 1);
+                me.game.sort();
+            }
         }
 
         var result = this.parent();
