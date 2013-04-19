@@ -122,7 +122,14 @@ var me = me || {};
 		 * @memberOf me.sys
 		 */
 		scale : null, //initialized by me.video.init
- 	
+		
+		/**
+		 * enable/disable video scaling interpolation (default disable)<br>
+		 * @type Boolean
+		 * @memberOf me.sys
+		 */
+		scalingInterpolation : false,
+	
 		/**
 		 * Global gravity settings <br>
 		 * will override entities init value if defined<br>
@@ -187,6 +194,7 @@ var me = me || {};
 		 * @memberOf me.sys
 		 */
 		preRender : false,
+		
 
 		// System methods
 		/**
@@ -7072,6 +7080,8 @@ var me = me || {};
 			// create a canvas where to draw everything
 			this.HUDCanvas = me.video.createCanvas(this.width, this.height);
 			this.HUDCanvasSurface = this.HUDCanvas.getContext('2d');
+			// set scaling interpolation filter
+			me.video.setImageSmoothing(this.HUDCanvasSurface, me.sys.scalingInterpolation);
 			
 			// this is a little hack to ensure the HUD is always the first draw
 			this.z = 999;
@@ -8194,11 +8204,15 @@ var me = me || {};
 				
 			// get the 2D context
 			context2D = canvas.getContext('2d');
+			// set scaling interpolation filter
+			me.video.setImageSmoothing(context2D, me.sys.scalingInterpolation);
 
 			// create the back buffer if we use double buffering
 			if (double_buffering) {
 				backBufferCanvas = api.createCanvas(game_width, game_height, false);
 				backBufferContext2D = backBufferCanvas.getContext('2d');
+				// set scaling interpolation filter
+				me.video.setImageSmoothing(backBufferContext2D, me.sys.scalingInterpolation);
 			} else {
 				backBufferCanvas = canvas;
 				backBufferContext2D = context2D;
@@ -8292,7 +8306,10 @@ var me = me || {};
 		 * @return {Context2D}
 		 */
 		api.createCanvasSurface = function(width, height) {
-			return api.createCanvas(width, height, false).getContext('2d');
+			var _canvas = api.createCanvas(width, height, false);
+			var _context = _canvas.getContext('2d');
+			me.video.setImageSmoothing(_context, me.sys.scalingInterpolation);
+			return _context;
 		};
 
 		/**
@@ -8436,29 +8453,23 @@ var me = me || {};
 		};
 		
 		/**
-		 * enable/disable image smoothing <br>
+		 * enable/disable image smoothing (scaling interpolation) for the specified 2d Context<br>
 		 * (!) this might not be supported by all browsers <br>
-		 * default : enabled
 		 * @name me.video#setImageSmoothing
 		 * @function
-		 * @param {Boolean} enable
+		 * @param {Context2D} context
+		 * @param {Boolean} [enable=false]
 		 */
-		api.setImageSmoothing = function(enable) {
+		api.setImageSmoothing = function(context, enable) {
 			// a quick polyfill for the `imageSmoothingEnabled` property
 			var vendors = ['ms', 'moz', 'webkit', 'o'];
 			for(var x = 0; x < vendors.length; ++x) {
-				if (context2D[vendors[x]+'ImageSmoothingEnabled'] !== undefined) {
-					context2D[vendors[x]+'ImageSmoothingEnabled'] = enable;
-					if (double_buffering) {
-						backBufferContext2D[vendors[x]+'ImageSmoothingEnabled'] = enable;
-					}
+				if (context[vendors[x]+'ImageSmoothingEnabled'] !== undefined) {
+					context[vendors[x]+'ImageSmoothingEnabled'] = (enable===true);
 				}
 			};
 			// generic one (if implemented)
-			context2D.imageSmoothingEnabled = enable;
-			if (double_buffering) {
-				backBufferContext2D.imageSmoothingEnabled = enable;
-			}
+			context.imageSmoothingEnabled = (enable===true);
 		};
 		
 		/**
@@ -11387,11 +11398,12 @@ var me = me || {};
 			}
 
 
-
 			// if pre-rendering method is use, create the offline canvas
 			if (this.preRender) {
 				this.layerCanvas = me.video.createCanvas(this.cols * this.tilewidth, this.rows * this.tileheight);
 				this.layerSurface = this.layerCanvas.getContext('2d');
+				// set scaling interpolation filter
+				me.video.setImageSmoothing(this.layerSurface, me.sys.scalingInterpolation);
 					
 				// set alpha value for this layer
 				this.layerSurface.globalAlpha = this.opacity;
@@ -11431,7 +11443,9 @@ var me = me || {};
 			if (this.preRender) {
 				this.layerCanvas = me.video.createCanvas(this.cols * this.tilewidth, this.rows * this.tileheight);
 				this.layerSurface = this.layerCanvas.getContext('2d');
-					
+				// set scaling interpolation filter
+				me.video.setImageSmoothing(this.layerSurface, me.sys.scalingInterpolation);				
+				
 				// set alpha value for this layer
 				this.layerSurface.globalAlpha = this.opacity;
 			}	

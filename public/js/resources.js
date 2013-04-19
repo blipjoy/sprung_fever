@@ -1,6 +1,7 @@
 game.resources = {
     /* Graphics. */
     "img" : [
+        "note",
         "overlay",
         "texture",
         "tileset"
@@ -24,7 +25,8 @@ game.resources = {
         "blip4",
         "blip5",
         "blip6",
-        "blip7"
+        "blip7",
+        "collect"
     ],
 
     /* Background music. */

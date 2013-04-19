@@ -20,6 +20,43 @@ game.PlayScreen = me.ScreenObject.extend({
         me.game.HUD.addItem("stamina", new game.HUD_Item(
             "Stamina", c.WIDTH - 300, 15, 255
         ));
+        game.errands = new game.Errands([
+            "milk", "bread", "eggs", "cheese", "broccoli", "carrots"
+        ]);
+        me.game.add(game.errands, 1000);
+        me.game.sort();
+
+        // Animate errands list! :D
+        new me.Tween(game.errands)
+            .to({
+                "angle" : 0
+            }, 1000)
+            .delay(500)
+            .easing(me.Tween.Easing.Back.EaseOut)
+            .start();
+        new me.Tween(game.errands.pos)
+            .to({
+                "x" : 150
+            }, 1000)
+            .delay(500)
+            .easing(me.Tween.Easing.Back.EaseOut)
+            .onComplete(function () {
+                new me.Tween(game.errands)
+                    .to({
+                        "ratio" : 3
+                    }, 500)
+                    .easing(me.Tween.Easing.Quartic.EaseIn)
+                    .delay(1000)
+                    .start();
+                new me.Tween(game.errands.pos)
+                    .to({
+                        "x" : 20,
+                        "y" : 70
+                    }, 500)
+                    .delay(1000)
+                    .start();
+            })
+            .start();
     },
 
     "onDestroyEvent" : function () {

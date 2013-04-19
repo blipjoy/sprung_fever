@@ -5,6 +5,14 @@ game.Item = me.CollectableEntity.extend({
         this.font.bold();
     },
 
+    "onCollision" : function (res, obj) {
+        me.audio.play("collect");
+
+        game.errands.set(this.name, true);
+
+        this.parent(res, obj);
+    },
+
     "draw" : function (context) {
         context.fillStyle = "#000";
         context.fillRect(this.pos.x, this.pos.y, this.width, this.height);
