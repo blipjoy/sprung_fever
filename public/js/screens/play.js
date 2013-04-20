@@ -22,9 +22,7 @@ game.PlayScreen = me.ScreenObject.extend({
         me.game.HUD.addItem("stamina", new game.HUD_Item(
             "Stamina", c.WIDTH - 300, 15, 255
         ));
-        game.errands = new game.Errands([
-            "milk", "bread", "eggs", "cheese", "broccoli", "carrots"
-        ]);
+        game.errands = new game.Errands();
         me.game.add(game.errands, 1000);
         me.game.sort();
 

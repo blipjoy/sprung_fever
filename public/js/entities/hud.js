@@ -33,22 +33,13 @@ game.HUD_Item = me.HUD_Item.extend({
 });
 
 game.Errands = me.Renderable.extend({
-    "init" : function (items) {
+    "init" : function () {
         this.parent(new me.Vector2d(-360, 200), 0, 0);
 
         this.image = me.loader.getImage("note");
 
-        if (typeof(items) === "string") {
-            try {
-                items = JSON.parse(items);
-            }
-            catch (e) {
-                throw "Unable to parse JSON: " + items
-            }
-        }
-
         this.items = {};
-        items.forEach((function (item) {
+        me.game.currentLevel.items.forEach((function (item) {
             this.items[item] = false;
         }).bind(this));
 

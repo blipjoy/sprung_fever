@@ -513,7 +513,7 @@
  "orientation":"orthogonal",
  "properties":
     {
-
+     "items":"json:[\"milk\",\"bread\",\"eggs\",\"cheese\",\"broccoli\",\"carrots\"]"
     },
  "tileheight":24,
  "tilesets":[
