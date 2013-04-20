@@ -91,6 +91,8 @@ var game = {
         me.entityPool.add("kid", game.Kid);
         me.entityPool.add("girl", game.Girl);
         me.entityPool.add("redgirl", game.Girl);
+        me.entityPool.add("door", game.Door);
+        me.entityPool.add("exit", game.Exit);
 
         me.entityPool.add("milk", game.Item);
         me.entityPool.add("bread", game.Item);

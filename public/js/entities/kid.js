@@ -65,17 +65,14 @@ game.Kid = game.Person.extend({
             // "Nervous" effects
             var attn = me.game.HUD.getItemValue("attention");
             if (attn < 32) {
-                me.game.viewport.shake(16, 50);
-            }
-            else if (attn < 64) {
                 game.playscreen.bindKeys(true, true);
                 me.game.viewport.shake(12, 50);
             }
-            else if (attn < 128) {
+            else if (attn < 64) {
                 game.playscreen.bindKeys(true, false);
                 me.game.viewport.shake(8, 50);
             }
-            else if (attn < 192) {
+            else if (attn < 128) {
                 me.game.viewport.shake(4, 50);
             }
 

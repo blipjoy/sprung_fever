@@ -59,6 +59,8 @@ game.Errands = me.Renderable.extend({
         this.floating = true;
         this.invalidated = true;
 
+        this.complete = false;
+
         this.red = new me.Font("Verdana", 18, "#f30");
         this.red.bold();
         this.green = new me.Font("Verdana", 18, "#3f0");
@@ -69,6 +71,14 @@ game.Errands = me.Renderable.extend({
         if (item in this.items) {
             this.items[item] = (value === true);
             this.invalidated = true;
+
+            this.complete = true;
+            for (var item in this.items) {
+                if (!this.items[item]) {
+                    this.complete = false;
+                    break;
+                }
+            }
         }
     },
 
@@ -90,8 +100,6 @@ game.Errands = me.Renderable.extend({
             ~~(this.image.width * this.ratio),
             ~~(this.image.height * this.ratio)
         );
-        if (this.angle)
-            context.rotate(-this.angle);
 
         context.shadowBlur = 3;
         context.shadowColor = "#000";
@@ -114,5 +122,8 @@ game.Errands = me.Renderable.extend({
         }
 
         context.shadowColor = "rgba(0,0,0,0)";
+
+        if (this.angle)
+            context.rotate(-this.angle);
     }
 });

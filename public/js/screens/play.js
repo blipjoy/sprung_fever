@@ -5,6 +5,8 @@ game.PlayScreen = me.ScreenObject.extend({
         this.invertY = null;
         this.bindKeys(false, false);
 
+        this.ending = false;
+
         // Load level
         me.levelDirector.loadLevel("grocery");
 
