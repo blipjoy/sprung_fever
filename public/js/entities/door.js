@@ -19,9 +19,9 @@ game.Door = me.ObjectEntity.extend({
             // Open the door
             if (this.open === 0) {
                 this.open = 1;
-                new me.Tween(this.pos)
+                new me.Tween(this.renderable.pos)
                     .to({
-                        "x" : this.pos.x + ((this.which === "left") ? -48 : 48)
+                        "x" : ((this.which === "left") ? -48 : 48)
                     }, 500)
                     .onComplete((function () {
                         this.open = 2;
@@ -33,9 +33,9 @@ game.Door = me.ObjectEntity.extend({
         else if (this.open === 2) {
             // Close the door
             this.open = 1;
-            new me.Tween(this.pos)
+            new me.Tween(this.renderable.pos)
                 .to({
-                    "x" : this.pos.x + ((this.which === "left") ? 48 : -48)
+                    "x" : 0
                 }, 500)
                 .onComplete((function () {
                     this.open = 0;
