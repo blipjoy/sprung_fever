@@ -54,9 +54,14 @@ game.Kid = game.Person.extend({
                 me.game.HUD.reset("attention");
             else if (attn > 128) {
                 game.playscreen.bindKeys(false, false);
+                game.playscreen.red.alpha = 0;
             }
             else if (attn > 64) {
                 game.playscreen.bindKeys(true, false);
+            }
+
+            if (attn < 128) {
+                game.playscreen.red.alpha = (128 - attn) / 128;
             }
         }
         else {
@@ -74,6 +79,7 @@ game.Kid = game.Person.extend({
             }
             else if (attn < 128) {
                 me.game.viewport.shake(4, 50);
+                game.playscreen.red.alpha = (128 - attn) / 128;
             }
 
             // Emit a random heart

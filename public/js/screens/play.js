@@ -18,6 +18,8 @@ game.PlayScreen = me.ScreenObject.extend({
         me.game.HUD.addItem("stamina", new game.HUD_Item(
             "Stamina", c.WIDTH - 300, 15, 255
         ));
+        this.red = new game.Overlay("overlay-red", 0);
+        me.game.add(this.red, Infinity);
 
         // Load level
         me.levelDirector.loadLevel("grocery");
@@ -26,6 +28,7 @@ game.PlayScreen = me.ScreenObject.extend({
     "onLevelLoaded" : function (name) {
         // Reset HUD
         me.game.HUD.reset();
+        this.red.alpha = 0;
 
         // Rebind keys
         this.invertX = null;

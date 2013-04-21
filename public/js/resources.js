@@ -3,6 +3,7 @@ game.resources = {
     "img" : [
         "note",
         "overlay",
+        "overlay-red",
         "texture",
         "tileset"
     ],
