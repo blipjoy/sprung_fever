@@ -14,7 +14,8 @@ game.resources = {
 
     /* Maps. */
     "map" : [
-        "grocery"
+        "grocery",
+        "library"
     ],
 
     /* Sound effects. */
@@ -31,6 +32,7 @@ game.resources = {
 
     /* Background music. */
     "bgm" : [
-        "grocery"
+        "grocery",
+        "library"
     ]
 };

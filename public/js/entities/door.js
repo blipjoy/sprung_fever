@@ -43,5 +43,7 @@ game.Door = me.ObjectEntity.extend({
                 .easing(me.Tween.Easing.Sinusoidal.EaseOut)
                 .start();
         }
+
+        return this.open === 1;
     }
 });

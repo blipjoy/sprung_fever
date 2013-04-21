@@ -56,6 +56,40 @@ game.Errands = me.Renderable.extend({
         this.red.bold();
         this.green = new me.Font("Verdana", 18, "#3f0");
         this.green.bold();
+
+        // Animation! :D
+        new me.Tween(this)
+            .to({
+                "angle" : 0
+            }, 1000)
+            .delay(500)
+            .easing(me.Tween.Easing.Back.EaseOut)
+            .start();
+
+        new me.Tween(this.pos)
+            .to({
+                "x" : 150
+            }, 1000)
+            .delay(500)
+            .easing(me.Tween.Easing.Back.EaseOut)
+            .onComplete((function () {
+                new me.Tween(this)
+                    .to({
+                        "ratio" : 3
+                    }, 500)
+                    .easing(me.Tween.Easing.Quartic.EaseIn)
+                    .delay(1000)
+                    .start();
+
+                new me.Tween(this.pos)
+                    .to({
+                        "x" : 20,
+                        "y" : 70
+                    }, 500)
+                    .delay(1000)
+                    .start();
+            }).bind(this))
+            .start();
     },
 
     "set" : function (item, value) {

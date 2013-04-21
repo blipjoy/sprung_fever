@@ -25,10 +25,12 @@ game.Girl = game.Person.extend({
 
             me.game.HUD.updateItemValue("attention", -0.5);
             if (me.game.HUD.getItemValue("attention") <= 0 &&
-                !game.playscreen.ending) {
+                !game.playscreen.restart) {
                 // End game.
-                game.playscreen.ending = true;
-                me.state.change(me.state.MENU);
+                game.playscreen.restart = true;
+                me.game.viewport.fadeIn("#000", 500, function () {
+                    me.levelDirector.reloadLevel.defer();
+                });
             }
         }
 

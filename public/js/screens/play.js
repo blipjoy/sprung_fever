@@ -5,14 +5,10 @@ game.PlayScreen = me.ScreenObject.extend({
         this.invertY = null;
         this.bindKeys(false, false);
 
-        this.ending = false;
+        this.exit = false;
+        this.restart = false;
 
-        // Load level
-        me.levelDirector.loadLevel("grocery");
-
-        // Start music
-        if (!me.audio.getCurrentTrack())
-            me.audio.playTrack("grocery");
+        me.game.onLevelLoaded = this.onLevelLoaded.bind(this);
 
         // Create HUD
         me.game.addHUD(0, 0, c.WIDTH, 50, "#000");
@@ -22,41 +18,35 @@ game.PlayScreen = me.ScreenObject.extend({
         me.game.HUD.addItem("stamina", new game.HUD_Item(
             "Stamina", c.WIDTH - 300, 15, 255
         ));
+
+        // Load level
+        me.levelDirector.loadLevel("grocery");
+    },
+
+    "onLevelLoaded" : function (name) {
+        // Reset HUD
+        me.game.HUD.reset();
+
+        // Rebind keys
+        this.invertX = null;
+        this.invertY = null;
+        this.bindKeys(false, false);
+
+        if (!this.restart) {
+            // Start music
+            me.audio.stopTrack();
+            me.audio.playTrack(name);
+        }
+
+        // Create errands list
         game.errands = new game.Errands();
         me.game.add(game.errands, 1000);
         me.game.sort();
 
-        // Animate errands list! :D
-        new me.Tween(game.errands)
-            .to({
-                "angle" : 0
-            }, 1000)
-            .delay(500)
-            .easing(me.Tween.Easing.Back.EaseOut)
-            .start();
-        new me.Tween(game.errands.pos)
-            .to({
-                "x" : 150
-            }, 1000)
-            .delay(500)
-            .easing(me.Tween.Easing.Back.EaseOut)
-            .onComplete(function () {
-                new me.Tween(game.errands)
-                    .to({
-                        "ratio" : 3
-                    }, 500)
-                    .easing(me.Tween.Easing.Quartic.EaseIn)
-                    .delay(1000)
-                    .start();
-                new me.Tween(game.errands.pos)
-                    .to({
-                        "x" : 20,
-                        "y" : 70
-                    }, 500)
-                    .delay(1000)
-                    .start();
-            })
-            .start();
+        this.exit = false;
+        this.restart = false;
+
+        me.game.viewport.fadeOut("#000", 500);
     },
 
     "onDestroyEvent" : function () {

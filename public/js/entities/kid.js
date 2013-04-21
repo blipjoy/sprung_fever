@@ -88,7 +88,7 @@ game.Kid = game.Person.extend({
         }
 
         var result = this.parent();
-        me.game.collide(this);
+        me.game.collide(this, true);
         return result;
     }
 });

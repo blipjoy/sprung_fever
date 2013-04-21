@@ -94,13 +94,17 @@ var game = {
         me.entityPool.add("door", game.Door);
         me.entityPool.add("exit", game.Exit);
 
+        // Errand items (grocery)
         me.entityPool.add("milk", game.Item);
         me.entityPool.add("bread", game.Item);
         me.entityPool.add("eggs", game.Item);
         me.entityPool.add("cheese", game.Item);
         me.entityPool.add("broccoli", game.Item);
         me.entityPool.add("carrots", game.Item);
+        // Errand items (Library)
+        me.entityPool.add("book return", game.Item);
 
+        // Negative items
         me.entityPool.add("cookies", game.Item);
         me.entityPool.add("icecream", game.Item);
         me.entityPool.add("cake", game.Item);

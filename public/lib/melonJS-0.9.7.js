@@ -5906,7 +5906,12 @@ var me = me || {};
 			}
 			
 			xmlhttp.open("GET", tmxData.src + me.nocache, true);
-						
+
+			// add the tmx to the levelDirector
+			if (tmxData.type === "tmx") {
+				me.levelDirector.addTMXLevel(tmxData.name);
+			}
+
 			// set the callbacks
 			xmlhttp.ontimeout = onerror;
 			xmlhttp.onreadystatechange = function() {
@@ -5948,10 +5953,6 @@ var me = me || {};
 							format : format
 						};
 						
-						// add the tmx to the levelDirector
-						if (tmxData.type === "tmx") {
-							me.levelDirector.addTMXLevel(tmxData.name);
-						}
 						// fire the callback
 						onload();
 					} else {
@@ -9918,13 +9919,13 @@ var me = me || {};
 		function setTMXValue(value) {
 			if (!value || value.isBoolean()) {
 				// if value not defined or boolean
-				value = value ? (value == "true") : true;
+				value = value ? (value === "true") : true;
 			} else if (value.isNumeric()) {
 				// check if numeric
 				value = Number(value);
-			} else if (value.match(/json:/i)) {
+			} else if (value.match(/^json:/i)) {
 				// try to parse it
-				var match = value.split(/json:/i)[1];
+				var match = value.split(/^json:/i)[1];
 				try {
 					value = JSON.parse(match);
 				}
@@ -12549,7 +12550,7 @@ var me = me || {};
 				// set the name of the level
 				levels[levelId].name = levelId;
 				// level index
-				levelIdx[levelIdx.length] = levelId;
+				levelIdx.push(levelId);
 			} 
 			else  {
 				//console.log("level %s already loaded", levelId);
