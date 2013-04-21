@@ -11,15 +11,19 @@ game.PlayScreen = me.ScreenObject.extend({
         me.game.onLevelLoaded = this.onLevelLoaded.bind(this);
 
         // Create HUD
-        me.game.addHUD(0, 0, c.WIDTH, 50, "#000");
-        me.game.HUD.addItem("attention", new game.HUD_Item(
-            "Attention", 100, 15, 255
+        me.game.addHUD(0, 0, c.WIDTH, 50, "rgba(0, 0, 0, 0.5)");
+        me.game.HUD.addItem("attention", new game.HUD_Meter(
+            "Attention", 20, 25, 256, "#AC0028", "#FC589C"
         ));
-        me.game.HUD.addItem("stamina", new game.HUD_Item(
-            "Stamina", c.WIDTH - 300, 15, 255
+        me.game.HUD.addItem("stamina", new game.HUD_Meter(
+            "Stamina", c.WIDTH - 256 - 20, 25, 256, "#AC8000", "#FCB800"
         ));
+        this.heart = new game.HUD_Heart(c.WIDTH / 2 - 17, 15);
+        me.game.add(this.heart, 1000);
+
+        // Red overlay
         this.red = new game.Overlay("overlay-red", 0);
-        me.game.add(this.red, Infinity);
+        me.game.add(this.red, 9999);
 
         // Load level
         me.levelDirector.loadLevel("grocery");
@@ -28,6 +32,8 @@ game.PlayScreen = me.ScreenObject.extend({
     "onLevelLoaded" : function (name) {
         // Reset HUD
         me.game.HUD.reset();
+        this.heart.rate = 1000;
+        this.heart.minSize = 0.9;
         this.red.alpha = 0;
 
         // Rebind keys
@@ -38,7 +44,7 @@ game.PlayScreen = me.ScreenObject.extend({
         if (!this.restart) {
             // Start music
             me.audio.stopTrack();
-            me.audio.playTrack(name);
+            me.audio.playTrack(name, 0.5);
         }
 
         // Create errands list
@@ -68,6 +74,8 @@ game.PlayScreen = me.ScreenObject.extend({
 
         // Disable HUD
         me.game.disableHUD();
+        me.game.remove(this.heart);
+        me.game.remove(this.red);
     },
 
     "bindKeys" : function (invertX, invertY) {

@@ -1,13 +1,23 @@
-game.HUD_Item = me.HUD_Item.extend({
-    "init" : function (name, x, y, val) {
+game.HUD_Meter = me.HUD_Item.extend({
+    "init" : function (name, x, y, val, bg, fg) {
         this.parent(x, y, val);
 
+        this.bg = bg;
+        this.fg = fg;
+
         // Cache image for item name
-        var font = new me.Font("Verdana", 16, "#fff", "left");
+        var font = new me.Font("Verdana", 18, "#fff", "left");
+        font.bold();
         var ctx = me.video.createCanvasSurface(100, 20);
-        this.image = ctx.canvas;
-        this.image.width = font.measureText(ctx, name + ":").width;
-        this.image.height = 20;
+        this.label = ctx.canvas;
+        this.label.width = font.measureText(ctx, name + ":").width;
+        this.label.height = 20;
+
+        ctx.shadowBlur = 3;
+        ctx.shadowColor = "#000";
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+
         font.draw(ctx, name + ":", 0, 0);
     },
 
@@ -15,20 +25,35 @@ game.HUD_Item = me.HUD_Item.extend({
         var x = this.pos.x;
         var y = this.pos.y;
 
-        context.strokeStyle = "#fff";
+        context.save();
+
+        // Draw border
+        context.strokeStyle = context.fillStyle = "#004058";
         context.lineJoin = "round";
         context.lineWidth = 3;
+        context.strokeRect(x + 0.5, y + 0.5, this.defaultvalue, 20);
+        context.fillRect(x + 2, y + 2, this.defaultvalue, 17);
 
-        context.strokeRect(x, y, 261, 20);
+        // Setup clipping region for meter segments
+        context.beginPath();
+        for (var i = 0; i < this.defaultvalue; i += 16) {
+            context.rect(x + 2 + i, y + 2, 13, 17);
+        }
+        context.clip();
 
-        context.fillStyle = "rgb(" +
-            Math.min((this.defaultvalue - ~~this.value) * 2, 255) + "," + // Red
-            (this.value > 127 ? 255 : ~~this.value * 2) + "," + // Green
-            0 + // Blue
-            ")";
-        context.fillRect(x + 3, y + 3, ~~this.value, 14);
+        // Draw background color
+        context.fillStyle = this.bg;
+        context.fillRect(x + 2, y + 2, this.defaultvalue, 17);
 
-        context.drawImage(this.image, x - this.image.width - 10, y);
+        // Draw foreground color
+        context.fillStyle = this.fg;
+        context.fillRect(x + 2, y + 2, ~~this.value, 17);
+
+        // Destroy clipping region
+        context.restore();
+
+        // Draw label
+        context.drawImage(this.label, x, y - 24);
     }
 });
 
@@ -150,5 +175,73 @@ game.Errands = me.Renderable.extend({
 
         if (this.angle)
             context.rotate(-this.angle);
+    }
+});
+
+game.HUD_Heart = me.SpriteObject.extend({
+    "init" : function (x, y) {
+        var heart = game.texture.atlas["heart.png"];
+
+        this.parent(
+            x,
+            y,
+            game.texture.texture,
+            heart.frame.width,
+            heart.frame.height
+        );
+        this.offset.setV(heart.frame.pos);
+        if (heart.rotated) {
+            this._sourceAngle = -(Math.PI / 2);
+        }
+
+        this.isPersistent = true;
+        this.floating = true;
+
+        // Animation!
+        this.size = 1;
+        this.minSize = 0.9
+        this.rate = 1000;
+
+        this.beat = function () {
+            me.audio.play("heartbeat1", false, null, (800 - this.rate) / 800);
+
+            new me.Tween(this)
+                .to({
+                    "size" : this.minSize
+                }, this.rate / 5)
+                .delay(this.rate)
+                .easing(me.Tween.Easing.Bounce.EaseOut)
+                .onUpdate((function () {
+                    this.resize(this.size);
+                }).bind(this))
+                .onComplete((function () {
+                    var volume = (800 - this.rate) / 800; // Don't cache
+                    me.audio.play("heartbeat2", false, null, volume);
+
+                    new me.Tween(this)
+                        .to({
+                            "size" : 1
+                        }, this.rate / 5)
+                        .easing(me.Tween.Easing.Back.EaseOut)
+                        .onUpdate((function () {
+                            this.resize(this.size);
+                        }).bind(this))
+                        .onComplete((function () {
+                            this.beat();
+                        }).bind(this))
+                        .start();
+                }).bind(this))
+                .start();
+        };
+
+        me.event.subscribe(me.event.LEVEL_LOADED, this.beat.bind(this));
+    },
+
+    "onDestroyEvent" : function () {
+        me.event.unsubscribe(me.event.LEVEL_LOADED, this.beat.bind(this));
+    },
+
+    "update" : function () {
+        return true;
     }
 });

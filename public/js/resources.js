@@ -28,7 +28,9 @@ game.resources = {
         "blip5",
         "blip6",
         "blip7",
-        "collect"
+        "collect",
+        "heartbeat1",
+        "heartbeat2"
     ],
 
     /* Background music. */

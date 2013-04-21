@@ -6,7 +6,7 @@ game.Item = me.CollectableEntity.extend({
     },
 
     "onCollision" : function (res, obj) {
-        me.audio.play("collect");
+        me.audio.play("collect", false, null, 0.3);
 
         game.errands.set(this.name, true);
 

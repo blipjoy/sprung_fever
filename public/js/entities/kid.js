@@ -40,35 +40,31 @@ game.Kid = game.Person.extend({
         }
         else {
             me.game.HUD.updateItemValue("stamina", 0.5);
-            if (me.game.HUD.getItemValue("stamina") >= 255) {
+            if (me.game.HUD.getItemValue("stamina") >= 256) {
                 me.game.HUD.reset("stamina");
                 this.cansprint = true;
             }
         }
 
         // Attention
+        var attn = 0;
         if (!this.attentionDeficit) {
             me.game.HUD.updateItemValue("attention", 0.25);
-            var attn = me.game.HUD.getItemValue("attention");
-            if (attn >= 255)
+            attn = me.game.HUD.getItemValue("attention");
+            if (attn >= 256)
                 me.game.HUD.reset("attention");
             else if (attn > 128) {
                 game.playscreen.bindKeys(false, false);
-                game.playscreen.red.alpha = 0;
             }
             else if (attn > 64) {
                 game.playscreen.bindKeys(true, false);
-            }
-
-            if (attn < 128) {
-                game.playscreen.red.alpha = (128 - attn) / 128;
             }
         }
         else {
             this.attentionDeficit = false;
 
             // "Nervous" effects
-            var attn = me.game.HUD.getItemValue("attention");
+            attn = me.game.HUD.getItemValue("attention");
             if (attn < 32) {
                 game.playscreen.bindKeys(true, true);
                 me.game.viewport.shake(12, 50);
@@ -79,7 +75,6 @@ game.Kid = game.Person.extend({
             }
             else if (attn < 128) {
                 me.game.viewport.shake(4, 50);
-                game.playscreen.red.alpha = (128 - attn) / 128;
             }
 
             // Emit a random heart
@@ -92,6 +87,24 @@ game.Kid = game.Person.extend({
                 me.game.sort();
             }
         }
+
+        if (attn < 256) {
+            // Emit a random sweat drop
+            if (!~~(Math.random() * attn * 0.3)) {
+                me.game.add(new game.Sweat(
+                    this.pos.x + (Math.random() - 0.5) * 15,
+                    this.pos.y - (this.renderable.height - 20)
+                ), this.z + 1);
+                me.game.sort();
+            }
+        }
+
+        // HUD Heartbeat
+        game.playscreen.heart.rate = attn * 3 + 150;
+        game.playscreen.heart.minSize = (0.2 / 256) * attn + 0.7;
+
+        // Red overlay opacity
+        game.playscreen.red.alpha = (attn < 128) ? (128 - attn) / 128 : 0;
 
         var result = this.parent();
         me.game.collide(this, true);
