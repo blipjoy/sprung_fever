@@ -10107,7 +10107,7 @@ var me = me || {};
 			this.width = me.mapReader.TMXParser.getIntAttribute(tmxObj, me.TMX_TAG_WIDTH, 0);
 			this.height = me.mapReader.TMXParser.getIntAttribute(tmxObj, me.TMX_TAG_HEIGHT, 0);
 			this.gid = me.mapReader.TMXParser.getIntAttribute(tmxObj, me.TMX_TAG_GID, null);
-			
+
 			// check if the object has an associated gid	
 			if (this.gid) {
 				this.setImage(this.gid, tilesets);
@@ -10129,6 +10129,10 @@ var me = me || {};
 					}
 				}
 			}
+			
+			// Adjust the Position to match Tiled
+			me.game.renderer.adjustPosition(this);
+			
 			// set the object properties
 			me.TMXUtils.applyTMXPropertiesFromXML(this, tmxObj);
 		},
@@ -10166,6 +10170,10 @@ var me = me || {};
 					});
 				}
 			}
+			
+			// Adjust the Position to match Tiled
+			me.game.renderer.adjustPosition(this);
+			
 			// set the object properties
 			me.TMXUtils.applyTMXPropertiesFromJSON(this, tmxObj);
 		},
@@ -10177,13 +10185,9 @@ var me = me || {};
 			// set width and height equal to tile size
 			this.width = tileset.tilewidth;
 			this.height = tileset.tileheight;
-
+			
 			// force spritewidth size
 			this.spritewidth = this.width;
-			
-			// Offset the object position by the tileheight
-			// (Objects origin point is "bottom-left" in Tiled, "top-left" in melonJS)
-			this.y -= tileset.tileheight;
 
 			// the object corresponding tile 
 			var tmxTile = new me.Tile(this.x, this.y, tileset.tilewidth, tileset.tileheight, this.gid);
@@ -10736,6 +10740,20 @@ var me = me || {};
 			return new me.Vector2d(x * this.tilewidth,
 								   y * this.tileheight);		
 		},
+
+		/**
+		 * fix the position of Objects to match
+		 * the way Tiled places them
+		 * @private
+		 */
+		adjustPosition: function(obj) {
+			// only adjust position if obj.gid is defined
+			if (obj.gid) {
+				 // Tiled objects origin point is "bottom-left" in Tiled, 
+				 // "top-left" in melonJS)
+				obj.y -= obj.height;
+			}
+		},
 		
 		/**
 		 * draw the tile map
@@ -10839,6 +10857,23 @@ var me = me || {};
 								   (x + y) * this.hTileheight);
 		},
 
+		/**
+		 * fix the position of Objects to match
+		 * the way Tiled places them
+		 * @private
+		 */
+		adjustPosition: function(obj){
+			var tilex = obj.x/this.hTilewidth;
+			var tiley = obj.y/this.tileheight;
+			var isoPos = this.tileToPixelCoords(tilex, tiley);
+			isoPos.x -= obj.width/2;
+			isoPos.y -= obj.height;
+			
+			obj.x = isoPos.x;
+			obj.y = isoPos.y;
+
+			//return isoPos;
+		},
 		
 		/**
 		 * draw the tile map
