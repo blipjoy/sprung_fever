@@ -184,7 +184,7 @@ game.BlipjoyScreen = me.ScreenObject.extend({
 
         function animate() {
             if (self.state) {
-                me.audio.play("blip" + self.state);
+                me.audio.play("blip" + self.state, false, null, 0.25);
             }
             self.state++;
             var r = self.regions[self.state];

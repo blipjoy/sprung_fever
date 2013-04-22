@@ -1,6 +1,8 @@
 game.resources = {
     /* Graphics. */
     "img" : [
+        "clouds",
+        "logo",
         "note",
         "overlay",
         "overlay-red",

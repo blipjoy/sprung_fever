@@ -87,6 +87,10 @@ var game = {
         game.playscreen = new game.PlayScreen();
         me.state.set(me.state.PLAY, game.playscreen);
 
+        // Bind global keys
+        me.input.bindKey(me.input.KEY.ENTER, "action");
+        me.input.bindKey(me.input.KEY.SHIFT, "sprint");
+
         // Add object classes to entity pool.
         me.entityPool.add("kid", game.Kid);
         me.entityPool.add("girl", game.Girl);

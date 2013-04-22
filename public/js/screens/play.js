@@ -6,7 +6,7 @@ game.PlayScreen = me.ScreenObject.extend({
         this.bindKeys(false, false);
 
         this.exit = false;
-        this.restart = false;
+        this.restart = true; // Prevent restarting music from title screen
 
         me.game.onLevelLoaded = this.onLevelLoaded.bind(this);
 
@@ -70,8 +70,6 @@ game.PlayScreen = me.ScreenObject.extend({
         me.input.unbindKey(me.input.KEY.W);
         me.input.unbindKey(me.input.KEY.S);
 
-        me.input.unbindKey(me.input.KEY.SHIFT);
-
         // Disable HUD
         me.game.disableHUD();
         me.game.remove(this.heart);
@@ -110,7 +108,5 @@ game.PlayScreen = me.ScreenObject.extend({
             me.input.bindKey(me.input.KEY.W, "up");
             me.input.bindKey(me.input.KEY.S, "down");
         }
-
-        me.input.bindKey(me.input.KEY.SHIFT, "sprint");
     }
 });
