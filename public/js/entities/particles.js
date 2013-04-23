@@ -73,7 +73,7 @@ game.Sweat = me.ObjectEntity.extend({
         }
 
         this.vel.y += 0.098;
-        this.updateMovement();
+        this.pos.add(this.vel);
 
         return this.renderable.update();
     }
