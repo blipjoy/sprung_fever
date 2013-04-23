@@ -21,6 +21,13 @@ game.PlayScreen = me.ScreenObject.extend({
         this.heart = new game.HUD_Heart(c.WIDTH / 2 - 17, 15);
         me.game.add(this.heart, 1000);
 
+        // Mobile UI
+        this.mobile_ui = null;
+        if (me.sys.isMobile) {
+            this.mobile_ui = new game.UI();
+            me.game.add(this.mobile_ui, Infinity);
+        }
+
         // Red overlay
         this.red = new game.Overlay("overlay-red", 0);
         me.game.add(this.red, 9999);
@@ -74,6 +81,12 @@ game.PlayScreen = me.ScreenObject.extend({
         me.game.disableHUD();
         me.game.remove(this.heart);
         me.game.remove(this.red);
+
+        // Disable mobile UI
+        if (me.sys.isMobile) {
+            me.game.remove(this.mobile_ui, true);
+            this.mobile_ui = null;
+        }
     },
 
     "bindKeys" : function (invertX, invertY) {

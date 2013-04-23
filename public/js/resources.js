@@ -7,7 +7,9 @@ game.resources = {
         "overlay",
         "overlay-red",
         "texture",
-        "tileset"
+        "tileset",
+        "ui-button",
+        "ui-dpad"
     ],
 
     /* Atlases */

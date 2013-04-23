@@ -121,7 +121,8 @@ var game = {
         );
 
         // Overlay.
-        me.game.add(new game.Overlay("overlay"), Infinity);
+        me.game.add(new game.Overlay("overlay"), 10000);
+        me.game.sort();
 
         // Start the game.
         me.state.change(c.DEBUG ? me.state.PLAY : me.state.BLIPJOY);

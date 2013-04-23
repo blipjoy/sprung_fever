@@ -32,8 +32,28 @@ game.TitleScreen = me.ScreenObject.extend({
 
         me.game.add(clouds, 1);
         me.game.add(logo, 2);
+        me.game.sort();
 
         me.game.viewport.fadeOut("#000", 250);
+
+        if (me.sys.isMobile) {
+            var vp = me.game.viewport;
+            me.input.registerMouseEvent("mousedown", vp, function () {
+                me.input.triggerKeyEvent(me.input.KEY.ENTER, true);
+            }, true);
+            me.input.registerMouseEvent("mouseup", vp, function () {
+                me.input.triggerKeyEvent(me.input.KEY.ENTER, false);
+            }, true);
+        }
+    },
+
+    "onDestroyEvent" : function () {
+        if (me.sys.isMobile) {
+            me.input.triggerKeyEvent(me.input.KEY.ENTER, false);
+            var vp = me.game.viewport;
+            me.input.releaseMouseEvent("mousedown", vp);
+            me.input.releaseMouseEvent("mouseup", vp);
+        }
     },
 
     "update" : function () {
