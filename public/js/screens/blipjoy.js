@@ -1,4 +1,4 @@
-game.LoadBlipjoyLogo = function LoadBlipjoyLogo(callback) {
+game.LoadBlipjoyLogo = function (callback) {
     game.BlipjoyLogo = new Image();
     game.BlipjoyLogo.onload = callback
     game.BlipjoyLogo.src = (
@@ -32,7 +32,7 @@ game.LoadBlipjoyLogo = function LoadBlipjoyLogo(callback) {
 
 // Simple image resize function using "nearest neighbor"
 // Only works for scaling up
-game.resize = function resize(image, scale) {
+game.resize = function (image, scale) {
     var iw = image.width,
         ih = image.height,
         ipitch = iw * 4,
@@ -95,22 +95,22 @@ game.LoadingScreen = me.ScreenObject.extend({
         this.loadPercent = 0;
     },
 
-    "onResetEvent" : function onResetEvent() {
+    "onResetEvent" : function () {
         this.handler = me.event.subscribe(
             me.event.LOADER_PROGRESS, this.onProgressUpdate.bind(this)
         );
     },
 
-    "onDestroyEvent" : function onDestroyEvent() {
+    "onDestroyEvent" : function () {
         me.event.unsubscribe(this.handler);
     },
 
-    "onProgressUpdate" : function onProgressUpdate(progress) {
+    "onProgressUpdate" : function (progress) {
         this.loadPercent = progress;
         this.invalidate = true;
     },
 
-    "update" : function update() {
+    "update" : function () {
         if (this.invalidate) {
             this.invalidate = false;
             return true;
@@ -119,7 +119,7 @@ game.LoadingScreen = me.ScreenObject.extend({
         return false;
     },
 
-    "draw" : function draw(context) {
+    "draw" : function (context) {
         var img = this.logo,
             x = (c.WIDTH - img.width) / 2,
             y = (c.HEIGHT - img.height) / 2;
@@ -152,7 +152,7 @@ game.BlipjoyScreen = me.ScreenObject.extend({
         { t: 500, x: 21, y: 9, w: 3, h: 5 }     // Y
     ],
 
-    "init" : function init() {
+    "init" : function () {
         var img = game.BlipjoyLogo,
             scale = Math.round(Math.min(
                 c.WIDTH / img.width / 3,
@@ -174,7 +174,7 @@ game.BlipjoyScreen = me.ScreenObject.extend({
         this.parent(true);
     },
 
-    "onResetEvent" : function onResetEvent() {
+    "onResetEvent" : function () {
         var self = this;
 
         // There are better ways to do this. :)
@@ -200,15 +200,15 @@ game.BlipjoyScreen = me.ScreenObject.extend({
         }, 5000);
     },
 
-    "onDestroyEvent" : function onDestroyEvent() {
+    "onDestroyEvent" : function () {
         clearTimeout(this.timeout);
     },
 
-    "update" : function update() {
+    "update" : function () {
         return true;
     },
 
-    "draw" : function draw(context) {
+    "draw" : function (context) {
         var img = this.logo,
             x = (c.WIDTH - img.width) / 2,
             y = (c.HEIGHT - img.height) / 2,
