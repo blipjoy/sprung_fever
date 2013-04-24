@@ -1469,7 +1469,7 @@ var me = me || {};
 				);
 
 				// update our object
-				var updated = obj.update();
+				var updated = (obj.inViewport || obj.alwaysUpdate) && obj.update();
 
 				// add it to the draw manager
 				drawManager.makeDirty(obj, updated, updated ? oldRect : null);
@@ -1649,7 +1649,7 @@ var me = me || {};
 			// this should be replace by a list of the 4 adjacent cell around the object requesting collision
 			for ( var i = gameObjects.length, obj; i--, obj = gameObjects[i];)//for (var i = objlist.length; i-- ;)
 			{
-				if (obj.inViewport && obj.visible && obj.collidable && (obj!=objA))
+				if ((obj.inViewport || obj.alwaysUpdate) && obj.collidable && (obj!=objA))
 				{
 					res = obj.collisionBox.collideVsAABB.call(obj.collisionBox, objA.collisionBox);
 					if (res.x != 0 || res.y != 0) {
@@ -1691,7 +1691,7 @@ var me = me || {};
 			// this should be replace by a list of the 4 adjacent cell around the object requesting collision
 			for ( var i = gameObjects.length, obj; i--, obj = gameObjects[i];)//for (var i = objlist.length; i-- ;)
 			{
-				if (obj.inViewport && obj.visible && obj.collidable && (obj.type === type) && (obj!=objA))
+				if ((obj.inViewport || obj.alwaysUpdate) && obj.collidable && (obj.type === type) && (obj!=objA))
 				{
 					res = obj.collisionBox.collideVsAABB.call(obj.collisionBox, objA.collisionBox);
 					if (res.x != 0 || res.y != 0) {
@@ -2625,7 +2625,16 @@ var me = me || {};
 		 * @name me.Renderable#inViewport
 		 */
 		inViewport : false,
-		
+
+		/**
+		 * Whether the renderable object will always update, even when outside of the viewport<br>
+		 * default value : false
+		 * @public
+		 * @type Boolean
+		 * @name me.Renderable#alwaysUpdate
+		 */
+		alwaysUpdate : false,
+
 		/**
 		 * make the renderable object persistent over level changes
 		 * default value : false
@@ -3236,7 +3245,7 @@ var me = me || {};
 		 */
 		update : function() {
 			// update animation if necessary
-			if (this.visible && !this.animationpause && (this.fpscount++ > this.current.animationspeed)) {
+			if (!this.animationpause && (this.fpscount++ > this.current.animationspeed)) {
 				this.setAnimationFrame(++this.current.idx);
 				this.fpscount = 0;
 
@@ -12863,6 +12872,12 @@ var me = me || {};
 			_chainedTween = null,
 			_onUpdateCallback = null,
 			_onCompleteCallback = null;
+
+		/**
+		 * Always update the tween (it's never in viewport)
+		 * @private
+		 */
+		this.alwaysUpdate = true;
 
 		/**
 		 * object properties to be updated and duration
