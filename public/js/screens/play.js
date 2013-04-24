@@ -23,7 +23,7 @@ game.PlayScreen = me.ScreenObject.extend({
 
         // Mobile UI
         this.mobile_ui = null;
-        if (me.sys.isMobile) {
+        if (me.sys.isMobile || c.DEBUG) {
             this.mobile_ui = new game.UI();
             me.game.add(this.mobile_ui, Infinity);
         }
@@ -83,7 +83,7 @@ game.PlayScreen = me.ScreenObject.extend({
         me.game.remove(this.red);
 
         // Disable mobile UI
-        if (me.sys.isMobile) {
+        if (this.mobile_ui) {
             me.game.remove(this.mobile_ui, true);
             this.mobile_ui = null;
         }
