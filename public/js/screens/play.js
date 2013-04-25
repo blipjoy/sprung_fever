@@ -57,7 +57,7 @@ game.PlayScreen = me.ScreenObject.extend({
         // Create errands list
         game.errands = new game.Errands();
         me.game.add(game.errands, 1000);
-        me.game.sort();
+        me.game.sort(game.sort);
 
         this.exit = false;
         this.restart = false;

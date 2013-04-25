@@ -32,7 +32,7 @@ game.TitleScreen = me.ScreenObject.extend({
 
         me.game.add(clouds, 1);
         me.game.add(logo, 2);
-        me.game.sort();
+        me.game.sort(game.sort);
 
         me.game.viewport.fadeOut("#000", 250);
 

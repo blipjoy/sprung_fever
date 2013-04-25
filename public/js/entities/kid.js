@@ -79,23 +79,23 @@ game.Kid = game.Person.extend({
 
             // Emit a random heart
             if (!~~(Math.random() * attn * 0.2)) {
-                me.game.add(new game.Heart(
+                me.game.add(me.entityPool.newInstanceOf("heart",
                     this.pos.x + (Math.random() - 0.5) * 15,
                     this.pos.y - (this.renderable.height - 10),
                     ~~(Math.random() * 60)
                 ), this.z + 1);
-                me.game.sort();
+                me.game.sort(game.sort);
             }
         }
 
         if (attn < 256) {
             // Emit a random sweat drop
             if (!~~(Math.random() * attn * 0.3)) {
-                me.game.add(new game.Sweat(
+                me.game.add(me.entityPool.newInstanceOf("sweat",
                     this.pos.x + (Math.random() - 0.5) * 15,
                     this.pos.y - (this.renderable.height - 20)
                 ), this.z + 1);
-                me.game.sort();
+                me.game.sort(game.sort);
             }
         }
 

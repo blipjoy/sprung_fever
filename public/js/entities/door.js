@@ -7,8 +7,7 @@ game.Door = me.ObjectEntity.extend({
             me.loader.getImage("tileset"),
             48, 48
         );
-        this.renderable.offset.x = 513;
-        this.renderable.offset.y = 156;
+        this.renderable.offset.set(513, 156);
 
         this.open = 0;
         this.which = settings.which;

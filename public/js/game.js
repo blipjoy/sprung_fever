@@ -114,6 +114,10 @@ var game = {
         me.entityPool.add("cake", game.Item);
         me.entityPool.add("candy", game.Item);
 
+        // Entity pool for particles.
+        me.entityPool.add("heart", game.Heart, true);
+        me.entityPool.add("sweat", game.Sweat, true);
+
         // Load texture.
         game.texture = new me.TextureAtlas(
             me.loader.getAtlas("texture"),
@@ -122,7 +126,7 @@ var game = {
 
         // Overlay.
         me.game.add(new game.Overlay("overlay"), 10000);
-        me.game.sort();
+        me.game.sort(game.sort);
 
         // Start the game.
         me.state.change(c.DEBUG ? me.state.PLAY : me.state.BLIPJOY);
