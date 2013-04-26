@@ -70,7 +70,7 @@ game.Errands = me.Renderable.extend({
 
         // Animation
         this.angle = -0.3;
-        this.ratio = 16;
+        this.ratio = 1;
 
         this.floating = true;
         this.invalidated = true;
@@ -100,7 +100,7 @@ game.Errands = me.Renderable.extend({
             .onComplete((function () {
                 new me.Tween(this)
                     .to({
-                        "ratio" : 3
+                        "ratio" : 0.1875
                     }, 500)
                     .easing(me.Tween.Easing.Quartic.EaseIn)
                     .delay(1000)
@@ -145,8 +145,8 @@ game.Errands = me.Renderable.extend({
             this.image,
             0, 0,
             this.image.width, this.image.height,
-            ~~(this.pos.x - this.ratio * 3),
-            ~~(this.pos.y - this.ratio * 4),
+            ~~(this.pos.x - this.ratio * 45),
+            ~~(this.pos.y - this.ratio * 70),
             ~~(this.image.width * this.ratio),
             ~~(this.image.height * this.ratio)
         );

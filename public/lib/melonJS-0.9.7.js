@@ -5723,6 +5723,11 @@ var me = me || {};
 		 */
 
 		obj.change = function(state) {
+			// Protect against undefined ScreenObject
+			if (typeof(_screenObject[state]) === "undefined") {
+				throw "melonJS : Undefined ScreenObject for state '" + state + "'";
+			}
+
 			_extraArgs = null;
 			if (arguments.length > 1) {
 				// store extra arguments if any

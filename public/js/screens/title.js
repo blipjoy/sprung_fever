@@ -14,6 +14,81 @@ game.ScrollingImage = me.ImageLayer.extend({
     }
 });
 
+game.Flower = me.Renderable.extend({
+    "init" : function (x, y, size, loops, left) {
+        this.parent(new me.Vector2d(x, y), 200, 200);
+        this.loops = loops;
+        this.size = size;
+        this.swing = (size * loops) / 500;
+        this.weight = (size * loops) / 400;
+        this.image = me.loader.getImage("flower");
+
+        this.rotate = Math.random() * Math.PI * 2;
+        this.scale = size / 50;
+
+        if (left) {
+            this.size = -size;
+            this.swing = -this.swing;
+        }
+
+        this.step = ~~(Math.random() * 40);
+    },
+
+    "update" : function () {
+        this.step++;
+
+        this.weight += Math.sin(this.step * 0.0513536) * 0.06;
+        this.swing += Math.cos(this.step * 0.0612234) * 0.004;
+        this.rotate += Math.cos(this.step * 0.0472234) * 0.007;
+
+        return true;
+    },
+
+    "draw" : function (context) {
+        var x = this.pos.x;
+        var y = this.pos.y;
+        var v = 0;
+        var w = 0;
+        var size = Math.abs(this.size);
+
+        context.save();
+
+        context.beginPath();
+        context.moveTo(x, y);
+        for (var i = 0; i < this.loops; i++) {
+            y += this.weight * i;
+            v = i * size * this.swing;
+            w = this.weight * (i + 1);
+
+            context.bezierCurveTo(
+                x + this.size + v, y,
+                x + this.size + v, y + size + this.weight,
+                x + this.size / 2 + v, y + size
+            );
+            context.bezierCurveTo(
+                x + v, y + size - this.weight,
+                x + v, y - w,
+                x + this.size + v, y
+            );
+        }
+        context.lineCap = "round";
+        context.strokeStyle = "#0a2";
+        context.lineWidth = 6;
+        context.stroke();
+
+        context.translate( x + this.size + v, y);
+        context.rotate(this.rotate);
+        context.scale(this.scale, this.scale);
+        context.drawImage(
+            this.image,
+            -this.image.width / 2,
+            -this.image.height / 2
+        );
+
+        context.restore();
+    }
+});
+
 game.TitleScreen = me.ScreenObject.extend({
     "init" : function () {
         this.parent(true);
@@ -27,11 +102,17 @@ game.TitleScreen = me.ScreenObject.extend({
         this.font = new me.Font("Verdana", 32, "#5d4", "center");
         this.font.bold();
 
-        var clouds = new game.ScrollingImage("clouds", 1, 0.3);
+        var clouds = new game.ScrollingImage("clouds", 0.6, 0.3);
         var logo = new me.ImageLayer("logo", 0, 0, "logo", 2, 1);
+        var flower1 = new game.Flower(650, 330, 50, 5, false);
+        var flower2 = new game.Flower(200, 180, 35, 6, true);
+        var flower3 = new game.Flower(380, 450, 43, 8, false);
 
         me.game.add(clouds, 1);
         me.game.add(logo, 2);
+        me.game.add(flower1, 3);
+        me.game.add(flower2, 3);
+        me.game.add(flower3, 3);
         me.game.sort(game.sort);
 
         me.game.viewport.fadeOut("#000", 250);
