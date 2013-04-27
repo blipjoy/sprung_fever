@@ -167,7 +167,8 @@ game.Errands = me.Renderable.extend({
                 font = this.red;
                 check = "\u2612 ";
             }
-            font.draw(context, check + item, this.pos.x, y);
+            var name = check + game.capitalize(item);
+            font.draw(context, name, this.pos.x, y);
             y += font.height;
         }
 

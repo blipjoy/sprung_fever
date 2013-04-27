@@ -106,7 +106,9 @@ var game = {
         me.entityPool.add("broccoli", game.Item);
         me.entityPool.add("carrots", game.Item);
         // Errand items (Library)
-        me.entityPool.add("book return", game.Item);
+        me.entityPool.add("return books", game.Item);
+        me.entityPool.add("war and peace", game.Item);
+        me.entityPool.add("mastering calculus", game.Item);
 
         // Negative items
         me.entityPool.add("cookies", game.Item);
@@ -138,6 +140,11 @@ var game = {
         return (
             result ? result : ((b.pos && b.pos.y) - (a.pos && a.pos.y)) || 0
         );
-    }
+    },
 
+    "capitalize" : function (str) {
+        return str.split(/\s/).map(function (s) {
+            return s[0].toUpperCase() + s.substr(1).toLowerCase();
+        }).join(" ");
+    }
 };
