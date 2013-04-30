@@ -1,16 +1,8 @@
-game.Item = me.CollectableEntity.extend({
+game.ItemBase = me.CollectableEntity.extend({
     "init" : function (x, y, settings) {
         this.parent(x, y, settings);
         this.font = new me.Font("Verdana", 20, "#f0f", "center");
         this.font.bold();
-    },
-
-    "onCollision" : function (res, obj) {
-        me.audio.play("collect", false, null, 0.3);
-
-        game.errands.set(this.name, true);
-
-        this.parent(res, obj);
     },
 
     "draw" : function (context) {
@@ -20,7 +12,17 @@ game.Item = me.CollectableEntity.extend({
     }
 });
 
-game.BadItem = game.Item.extend({
+game.Item = game.ItemBase.extend({
+    "onCollision" : function (res, obj) {
+        me.audio.play("collect", false, null, 0.3);
+
+        game.errands.set(this.name, true);
+
+        this.parent(res, obj);
+    }
+});
+
+game.BadItem = game.ItemBase.extend({
     "onCollision" : function (res, obj) {
         me.audio.play("baditem", false, null, 0.3);
 

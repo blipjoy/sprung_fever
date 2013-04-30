@@ -566,7 +566,7 @@
  "properties":
     {
      "background_color":"#000",
-     "items":"json:[\"return books\",\"war and peace\",\"mastering calculus\",\"american revolution\",\"biography: jack the ripper\",\"call of cthulhu\"]"
+     "items":"json:[\"return books\",\"war and peace\",\"mastering calculus\",\"american revolution\",\"biography: jack the ripper\",\"modern psychology\",\"geologic times\",\"call of cthulhu\"]"
     },
  "tileheight":24,
  "tilesets":[
