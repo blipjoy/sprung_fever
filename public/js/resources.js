@@ -35,7 +35,11 @@ game.resources = {
         "blip7",
         "collect",
         "heartbeat1",
-        "heartbeat2"
+        "heartbeat2",
+        "step1",
+        "step2",
+        "baditem",
+        "sweatdrop"
     ],
 
     /* Background music. */

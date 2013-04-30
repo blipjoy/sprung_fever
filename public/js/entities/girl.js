@@ -24,14 +24,6 @@ game.Girl = game.Person.extend({
             game.kid.attentionDeficit = true;
 
             me.game.HUD.updateItemValue("attention", -0.5);
-            if (me.game.HUD.getItemValue("attention") <= 0 &&
-                !game.playscreen.restart) {
-                // End game.
-                game.playscreen.restart = true;
-                me.game.viewport.fadeIn("#000", 500, function () {
-                    me.levelDirector.reloadLevel.defer();
-                });
-            }
         }
 
         return this.parent();

@@ -6,6 +6,8 @@ game.Kid = game.Person.extend({
         game.kid = this;
 
         me.game.viewport.follow(this, me.game.viewport.AXIS.BOTH);
+
+        this.step = 0;
     },
 
     "update" : function () {
@@ -32,7 +34,7 @@ game.Kid = game.Person.extend({
 
         // Sprinting
         this.sprinting = this.cansprint && me.input.isKeyPressed("sprint");
-        if (this.sprinting) {
+        if (this.sprinting && this.moving) {
             me.game.HUD.updateItemValue("stamina", -1);
             if (me.game.HUD.getItemValue("stamina") <= 0) {
                 this.cansprint = false;
@@ -59,6 +61,15 @@ game.Kid = game.Person.extend({
             else if (attn > 64) {
                 game.playscreen.bindKeys(true, false);
             }
+        }
+        else if (me.game.HUD.getItemValue("attention") <= 0 &&
+            !game.playscreen.restart) {
+            // End game.
+            game.playscreen.restart = true;
+            me.game.viewport.fadeIn("#000", 500, function () {
+                me.levelDirector.reloadLevel.defer();
+            });
+            return;
         }
         else {
             this.attentionDeficit = false;
@@ -91,6 +102,7 @@ game.Kid = game.Person.extend({
         if (attn < 256) {
             // Emit a random sweat drop
             if (!~~(Math.random() * attn * 0.3)) {
+                me.audio.play("sweatdrop", false, null, 0.1);
                 me.game.add(me.entityPool.newInstanceOf("sweat",
                     this.pos.x + (Math.random() - 0.5) * 15,
                     this.pos.y - (this.renderable.height - 20)
@@ -108,6 +120,30 @@ game.Kid = game.Person.extend({
 
         var result = this.parent();
         me.game.collide(this, true);
+
+        // Stepping sound effects
+        if (this.moving && (this.vel.x || this.vel.y)) {
+            if (this.step === 0) {
+                me.audio.play(
+                    "step" + (Math.round(Math.random()) + 1),
+                    false,
+                    null,
+                    0.1
+                );
+            }
+
+            this.step++;
+            if (this.sprinting) {
+                this.step++;
+            }
+            if (this.step >= 16) {
+                this.step = 0;
+            }
+        }
+        else {
+            this.step = 0;
+        }
+
         return result;
     }
 });

@@ -72,8 +72,11 @@ game.Flower = me.Renderable.extend({
             );
         }
         context.lineCap = "round";
-        context.strokeStyle = "#0a2";
+        context.strokeStyle = "#071";
         context.lineWidth = 6;
+        context.stroke();
+        context.strokeStyle = "#0a2";
+        context.lineWidth = 3;
         context.stroke();
 
         context.translate( x + this.size + v, y);
@@ -97,7 +100,7 @@ game.TitleScreen = me.ScreenObject.extend({
     },
 
     "onResetEvent" : function () {
-        me.audio.playTrack("grocery", 0.5);
+        me.audio.playTrack("grocery", 0.75);
 
         this.font = new me.Font("Verdana", 32, "#5d4", "center");
         this.font.bold();

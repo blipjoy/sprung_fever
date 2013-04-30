@@ -86,6 +86,7 @@ var game = {
         me.state.set(me.state.MENU, new game.TitleScreen());
         game.playscreen = new game.PlayScreen();
         me.state.set(me.state.PLAY, game.playscreen);
+        me.state.set(me.state.GAME_END, new game.EndScreen());
 
         // Bind global keys
         me.input.bindKey(me.input.KEY.ENTER, "action");
@@ -109,12 +110,20 @@ var game = {
         me.entityPool.add("return books", game.Item);
         me.entityPool.add("war and peace", game.Item);
         me.entityPool.add("mastering calculus", game.Item);
+        me.entityPool.add("american revolution", game.Item);
+        me.entityPool.add("biography: jack the ripper", game.Item);
+        me.entityPool.add("modern psychology", game.Item);
+        me.entityPool.add("geologic times", game.Item);
+        me.entityPool.add("call of cthulhu", game.Item);
 
-        // Negative items
-        me.entityPool.add("cookies", game.Item);
-        me.entityPool.add("icecream", game.Item);
-        me.entityPool.add("cake", game.Item);
-        me.entityPool.add("candy", game.Item);
+        // Negative items (grocery)
+        me.entityPool.add("cookies", game.BadItem);
+        me.entityPool.add("icecream", game.BadItem);
+        me.entityPool.add("cake", game.BadItem);
+        me.entityPool.add("candy", game.BadItem);
+        // Negative items (library)
+        me.entityPool.add("comics", game.BadItem);
+        me.entityPool.add("bible", game.BadItem);
 
         // Entity pool for particles.
         me.entityPool.add("heart", game.Heart, true);

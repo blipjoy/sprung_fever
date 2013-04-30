@@ -19,3 +19,14 @@ game.Item = me.CollectableEntity.extend({
         this.font.draw(context, this.name, this.pos.x, this.pos.y);
     }
 });
+
+game.BadItem = game.Item.extend({
+    "onCollision" : function (res, obj) {
+        me.audio.play("baditem", false, null, 0.3);
+
+        game.kid.attentionDeficit = true;
+        me.game.HUD.updateItemValue("attention", -128);
+
+        this.parent(res, obj);
+    }
+})

@@ -51,7 +51,7 @@ game.PlayScreen = me.ScreenObject.extend({
         if (!this.restart) {
             // Start music
             me.audio.stopTrack();
-            me.audio.playTrack(name, 0.5);
+            me.audio.playTrack(name, 0.75);
         }
 
         // Create errands list

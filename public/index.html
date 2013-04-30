@@ -3,7 +3,8 @@
     <head>
         <title>Sprung Fever</title>
         <link rel="stylesheet" type="text/css" media="screen" href="index.css">
-        <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta id="viewport" name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
     </head>
@@ -19,6 +20,7 @@
             <script type="text/javascript" src="js/screens/blipjoy.js"></script>
             <script type="text/javascript" src="js/screens/title.js"></script>
             <script type="text/javascript" src="js/screens/play.js"></script>
+            <script type="text/javascript" src="js/screens/end.js"></script>
 
             <script type="text/javascript" src="js/entities/door.js"></script>
             <script type="text/javascript" src="js/entities/exit.js"></script>
@@ -32,39 +34,40 @@
             <script type="text/javascript" src="js/entities/ui.js"></script>
 
             <script type="text/javascript">
-/* Bootstrap */
-window.onReady(function () {
-    game.onload();
+                /* Bootstrap */
+                window.onReady(function () {
+                    game.onload();
 
-    // Mobile browser hacks
-    if (me.sys.isMobile && !navigator.isCocoonJS) {
-        // Prevent the webview from moving on a swipe
-        document.addEventListener("touchmove", function (e) {
-            e.preventDefault();
-            window.scroll(0, 0);
-            return false;
-        }, false);
+                    // Mobile browser hacks
+                    if (me.sys.isMobile && !navigator.isCocoonJS) {
+                        // Prevent the webview from moving on a swipe
+                        document.addEventListener("touchmove", function (e) {
+                            e.preventDefault();
+                            window.scroll(0, 0);
+                            return false;
+                        }, false);
 
-        // Scroll away mobile GUI
-        (function () {
-            window.scrollTo(0, 1);
-        }).defer();
+                        // Scroll away mobile GUI
+                        (function () {
+                            window.scrollTo(0, 1);
+                        }).defer();
 
-        me.event.subscribe(
-            me.event.WINDOW_ONRESIZE, function (e) {
-                window.scrollTo(0, 1);
-            }
-        );
+                        me.event.subscribe(
+                            me.event.WINDOW_ONRESIZE, function (e) {
+                                window.scrollTo(0, 1);
+                            }
+                        );
 
-        // Retina viewport settings
-        if (window.devicePixelRatio > 1) {
-            document.getElementById("viewport").setAttribute(
-                "content",
-                "width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0"
-            );
-        }
-    }
-});
+                        // Retina viewport settings
+                        if (window.devicePixelRatio > 1) {
+                            document.getElementById("viewport").setAttribute(
+                                "content",
+                                "width=device-width, initial-scale=0.5, " +
+                                "maximum-scale=0.5, user-scalable=0"
+                            );
+                        }
+                    }
+                });
             </script>
         </div>
     </body>

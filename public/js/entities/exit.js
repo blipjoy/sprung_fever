@@ -4,7 +4,13 @@ game.Exit = me.ObjectEntity.extend({
         if (game.errands.complete && !game.playscreen.exit) {
             game.playscreen.exit = true;
             me.game.viewport.fadeIn("#000", 500, function () {
-                me.levelDirector.nextLevel.defer();
+                if (me.levelDirector.getCurrentLevelId() === "library") {
+                    // End of game?
+                    me.state.change(me.state.GAME_END);
+                }
+                else {
+                    me.levelDirector.nextLevel.defer();
+                }
             });
         }
     }
