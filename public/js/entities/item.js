@@ -1,14 +1,38 @@
 game.ItemBase = me.CollectableEntity.extend({
     "init" : function (x, y, settings) {
+        this.shadow = game.texture.createSpriteFromName("shadow.png");
+
+        this.renderable = game.texture.createSpriteFromName(
+            (settings.image ? settings.image : settings.name) + ".png"
+        );
+        delete settings.image;
+        settings.width = this.renderable.width;
+        settings.height = this.renderable.height;
+
+        this.shadow.pos.y += ~~(this.renderable.height * 0.666);
+        this.shadow.pos.x -= this.shadow.hWidth - this.renderable.hWidth;
+
         this.parent(x, y, settings);
-        this.font = new me.Font("Verdana", 20, "#f0f", "center");
-        this.font.bold();
+
+        this.step = 0;
+        this.hPI = Math.PI / 2;
+    },
+
+    "update" : function () {
+        this.step += 0.0324;
+        return true;
     },
 
     "draw" : function (context) {
-        context.fillStyle = "#000";
-        context.fillRect(this.pos.x, this.pos.y, this.width, this.height);
-        this.font.draw(context, this.name, this.pos.x, this.pos.y);
+        var x = this.pos.x;
+        var y = this.pos.y;
+        var offset = (Math.sin(this.step) + this.hPI) * 8;
+
+        context.translate(x, y);
+        this.shadow.draw(context);
+        context.translate(0, -offset);
+        this.renderable.draw(context);
+        context.translate(-x, -y + offset);
     }
 });
 

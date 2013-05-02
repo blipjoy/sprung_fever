@@ -41,14 +41,14 @@
   <object name="girl" x="912" y="840" width="24" height="24"/>
   <object name="milk" x="1776" y="336" width="24" height="24"/>
   <object name="bread" x="648" y="960" width="24" height="24"/>
-  <object name="eggs" x="1440" y="504" width="24" height="24"/>
+  <object name="eggs" x="1416" y="504" width="24" height="24"/>
   <object name="cheese" x="1416" y="624" width="24" height="24"/>
-  <object name="broccoli" x="1272" y="984" width="24" height="24"/>
-  <object name="carrots" x="624" y="336" width="24" height="24"/>
+  <object name="broccoli" x="1273" y="962" width="24" height="24"/>
+  <object name="carrots" x="610" y="318" width="24" height="24"/>
   <object name="cookies" x="1536" y="744" width="24" height="24"/>
   <object name="icecream" x="1032" y="624" width="24" height="24"/>
   <object name="cake" x="1776" y="504" width="24" height="24"/>
-  <object name="candy" x="648" y="840" width="24" height="24"/>
+  <object name="candy" x="624" y="840" width="24" height="24"/>
   <object name="exit" x="1536" y="24" width="336" height="24"/>
   <object name="exit" x="624" y="24" width="192" height="24"/>
   <object name="exit" x="24" y="1392" width="1848" height="24"/>

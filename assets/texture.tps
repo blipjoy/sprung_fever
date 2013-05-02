@@ -10,7 +10,7 @@
         <key>autoSDSettings</key>
         <array/>
         <key>allowRotation</key>
-        <true/>
+        <false/>
         <key>quiet</key>
         <false/>
         <key>premultiplyAlpha</key>
@@ -87,7 +87,7 @@
             <key>basic</key>
             <struct type="AlgorithmBasicSettings">
                 <key>sortBy</key>
-                <enum type="AlgorithmBasicSettings::SortBy">Best</enum>
+                <enum type="AlgorithmBasicSettings::SortBy">Height</enum>
                 <key>order</key>
                 <enum type="AlgorithmBasicSettings::Order">Ascending</enum>
             </struct>
@@ -271,6 +271,23 @@
             <filename>sweat-2.png</filename>
             <filename>sweat-3.png</filename>
             <filename>sweat-4.png</filename>
+            <filename>book1.png</filename>
+            <filename>book2.png</filename>
+            <filename>book3.png</filename>
+            <filename>bread.png</filename>
+            <filename>broccoli.png</filename>
+            <filename>carrots.png</filename>
+            <filename>cheese.png</filename>
+            <filename>eggs.png</filename>
+            <filename>milk.png</filename>
+            <filename>shadow.png</filename>
+            <filename>comics.png</filename>
+            <filename>book_return.png</filename>
+            <filename>bible.png</filename>
+            <filename>cookies.png</filename>
+            <filename>candy.png</filename>
+            <filename>icecream.png</filename>
+            <filename>cake.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
