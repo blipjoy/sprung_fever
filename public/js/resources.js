@@ -14,7 +14,7 @@ game.resources = {
     ],
 
     /* Atlases */
-    "tps" : [
+    "tex" : [
         "texture"
     ],
 

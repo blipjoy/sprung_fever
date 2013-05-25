@@ -122,10 +122,10 @@ game.TitleScreen = me.ScreenObject.extend({
 
         if (me.sys.isMobile) {
             var vp = me.game.viewport;
-            me.input.registerMouseEvent("mousedown", vp, function () {
+            me.input.registerPointerEvent("mousedown", vp, function () {
                 me.input.triggerKeyEvent(me.input.KEY.ENTER, true);
             }, true);
-            me.input.registerMouseEvent("mouseup", vp, function () {
+            me.input.registerPointerEvent("mouseup", vp, function () {
                 me.input.triggerKeyEvent(me.input.KEY.ENTER, false);
             }, true);
         }
@@ -135,8 +135,8 @@ game.TitleScreen = me.ScreenObject.extend({
         if (me.sys.isMobile) {
             me.input.triggerKeyEvent(me.input.KEY.ENTER, false);
             var vp = me.game.viewport;
-            me.input.releaseMouseEvent("mousedown", vp);
-            me.input.releaseMouseEvent("mouseup", vp);
+            me.input.releasePointerEvent("mousedown", vp);
+            me.input.releasePointerEvent("mouseup", vp);
         }
     },
 

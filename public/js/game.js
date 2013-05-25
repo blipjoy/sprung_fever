@@ -37,10 +37,10 @@ var game = {
         });
 
         // Atlases.
-        this.resources["tps"].forEach(function forEach(value) {
+        this.resources["tex"].forEach(function forEach(value) {
             resources.push({
                 "name"  : value,
-                "type"  : "tps",
+                "type"  : "json",
                 "src"   : "resources/img/" + value + ".json"
             })
         });
@@ -131,7 +131,7 @@ var game = {
 
         // Load texture.
         game.texture = new me.TextureAtlas(
-            me.loader.getAtlas("texture"),
+            me.loader.getJSON("texture"),
             me.loader.getImage("texture")
         );
 

@@ -26,15 +26,15 @@ game.Triangle = Object.extend({
      * @return {Boolean}
      * @see http://goo.gl/6sAFR
      */
-    "containsPoint" : function (p) {
-        function sign(t, u, v) {
-            return (t.x - v.x) * (u.y - v.y) - (u.x - v.x) * (t.y - v.y);
+    "containsPoint" : function (x, y) {
+        function sign(u, v) {
+            return (x - v.x) * (u.y - v.y) - (u.x - v.x) * (y - v.y);
         }
 
         return (
-            sign(p, this.a, this.b) > 0 &&
-            sign(p, this.b, this.c) > 0 &&
-            sign(p, this.c, this.a) > 0
+            sign(this.a, this.b) > 0 &&
+            sign(this.b, this.c) > 0 &&
+            sign(this.c, this.a) > 0
         );
     },
 
@@ -100,77 +100,64 @@ game.UI = me.Renderable.extend({
         buttons.b.key       = me.input.KEY.SHIFT;
         buttons.a.key       = me.input.KEY.SHIFT;
 
-        var tracked = {};
+        // Set default button properties
+        for (var name in buttons) {
+            buttons[name].pressed = false;
+            buttons[name].id = 0;
+        }
 
         // Event handlers
-        function touchmove() {
-            var touches = me.input.touches;
-
-            // Update tracked touches list
-            for (var i = 0; i < touches.length; i++) {
-                tracked[touches[i].id] = touches[i];
-            }
-
+        function mousemove(e) {
             // Iterate each button
             for (var name in buttons) {
+                var button = buttons[name];
 
-                // Check if button is pressed by any touch
-                var pressed = false;
-                for (var id in tracked) {
-                    if (tracked[id] &&
-                        (pressed = buttons[name].containsPoint(tracked[id]))
-                    ) break;
-                }
+                // Check if button is pressed by this touch
+                var pressed = button.containsPoint(e.localX, e.localY);
 
-                if (!buttons[name].pressed && pressed) {
+                if (pressed && !button.pressed) {
                     // Button down
-                    buttons[name].pressed = true;
-                    me.input.triggerKeyEvent(buttons[name].key, true);
+                    button.pressed = true;
+                    button.id = e.pointerId;
+                    me.input.triggerKeyEvent(button.key, true);
                 }
-                else if (buttons[name].pressed && !pressed) {
+                else if ((button.id === e.pointerId) &&
+                    !pressed && button.pressed) {
                     // Button up
-                    buttons[name].pressed = false;
-                    me.input.triggerKeyEvent(buttons[name].key, false);
+                    button.pressed = false;
+                    button.id = 0;
+                    me.input.triggerKeyEvent(button.key, false);
                 }
             }
         }
 
-        function touchend() {
-            var touches = me.input.touches;
-
-            // Update tracked touches list
-            for (var i = 0; i < touches.length; i++) {
-                tracked[touches[i].id] = null;
-            }
-
+        function mouseup(e) {
             // Iterate each button
             for (var name in buttons) {
+                var button = buttons[name];
 
-                // Check if button is released by any touch
-                var released = false;
-                for (var i = 0; i < touches.length; i++) {
-                    if ((released = buttons[name].containsPoint(touches[i])))
-                        break;
-                }
+                // Check if button is released by this touch
+                var released = (button.id === e.pointerId);
 
-                if (buttons[name].pressed && released) {
+                if (button.pressed && released) {
                     // Button up
-                    buttons[name].pressed = false;
-                    me.input.triggerKeyEvent(buttons[name].key, false);
+                    button.pressed = false;
+                    button.id = 0;
+                    me.input.triggerKeyEvent(button.key, false);
                 }
             }
         }
 
         this.vp = me.game.viewport.getRect();
-        me.input.registerMouseEvent("touchstart", this.vp, touchmove, true);
-        me.input.registerMouseEvent("touchmove", this.vp, touchmove, true);
-        me.input.registerMouseEvent("touchend", this.vp, touchend, true);
+        me.input.registerPointerEvent("mousedown", this.vp, mousemove, true);
+        me.input.registerPointerEvent("mousemove", this.vp, mousemove, true);
+        me.input.registerPointerEvent("mouseup", this.vp, mouseup, true);
     },
 
     "destroy" : function () {
-        me.input.releaseMouseEvent("touchstart", this.vp);
-        me.input.releaseMouseEvent("touchmove", this.vp);
-        me.input.releaseMouseEvent("touchend", this.vp);
+        me.input.releasePointerEvent("mousedown", this.vp);
+        me.input.releasePointerEvent("mousemove", this.vp);
+        me.input.releasePointerEvent("mouseup", this.vp);
     },
 
     "draw" : function (context) {
