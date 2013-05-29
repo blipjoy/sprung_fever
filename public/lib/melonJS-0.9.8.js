@@ -5862,8 +5862,8 @@ window.me = window.me || {};
 		 * @ignore
 		 */
 		function _startRunLoop() {
-			// ensure nothing is running first
-			if (_animFrameId === -1) {
+			// ensure nothing is running first && valid state
+			if ((_animFrameId === -1) && (_state !== -1)) {
 
 				// reset the timer
 				me.timer.reset();
@@ -7329,13 +7329,15 @@ window.me = window.me || {};
 				for ( var c = 0,len = string.length; c < len; c++) {
 					// calculate the char index
 					var idx = string.charCodeAt(c) - this.firstChar;
-					// draw it
-					context.drawImage(this.font,
+					if (idx >= 0) {
+						// draw it
+						context.drawImage(this.font,
 							this.size.x * (idx % this.charCount), 
 							this.size.y * ~~(idx / this.charCount), 
 							this.size.x, this.size.y, 
 							~~x, ~~y, 
 							this.sSize.x, this.sSize.y);
+					}
 					x += this.sSize.x;
 				}
 				// increment line
@@ -9351,7 +9353,17 @@ window.me = window.me || {};
 				    }
 				}
 				// set the PointerMove/touchMove/MouseMove event
-				me.video.getScreenCanvas().addEventListener(activeEventList[1], throttle(100, false, function(e){onMoveEvent(e)}), false);
+				if (obj.throttlingInterval === undefined) {
+					// set the default value
+					obj.throttlingInterval = Math.floor(1000/me.sys.fps);
+				}
+				// if time interval <= 16, disable the feature
+				if (obj.throttlingInterval < 17) {
+					me.video.getScreenCanvas().addEventListener(activeEventList[1], onMoveEvent, false);
+				}
+				else {
+					me.video.getScreenCanvas().addEventListener(activeEventList[1], throttle(100, false, function(e){onMoveEvent(e)}), false);
+				}
 				pointerInitialized = true;
 			}
 		}
@@ -9444,25 +9456,29 @@ window.me = window.me || {};
 						lastTimeStamp = e.timeStamp;
 					}
 
-					// Update pointerId
-					e.pointerId = obj.changedTouches[t].id;
+					// if PointerEvent is not supported 
+					if (!navigator.pointerEnabled) {	
+						// -> define pointerId to simulate the PointerEvent standard
+						e.pointerId = obj.changedTouches[t].id;
+					}
 
-					// set two new properties in the Event object containing
-					// the touch/click position translated in local coordinates
-					e.localX = obj.changedTouches[t].x;
-					e.localY = obj.changedTouches[t].y;
+					/* Initialize the two coordinate space properties. */
+					e.gameScreenX = obj.changedTouches[t].x;
+					e.gameScreenY = obj.changedTouches[t].y;
+					e.gameWorldX = e.gameScreenX + offset.x;
+					e.gameWorldY = e.gameScreenY + offset.y;
+					// parse all handlers
 					for (var i = handlers.length, handler; i--, handler = handlers[i];) {
-						if (handler.floating===true) {
-							// set to screen coordinates
-							e.worldX = e.localX;
-							e.worldY = e.localY;
+						/* Set gameX and gameY depending on floating. */
+						if (handler.floating === true) {
+							e.gameX = e.gameScreenX;
+							e.gameY = e.gameScreenY;
 						} else {
-							// adjust coordinates with viewport/map pos
-							e.worldX = e.localX + offset.x;
-							e.worldY = e.localY + offset.y;
+							e.gameX = e.gameWorldX;
+							e.gameY = e.gameWorldY;
 						}
 						// call the defined handler
-						if ((handler.rect === null) || handler.rect.containsPoint(e.worldX, e.worldY)) {
+						if ((handler.rect === null) || handler.rect.containsPoint(e.gameX, e.gameY)) {
 							// trigger the corresponding callback
 							if (handler.cb(e) === false) {
 								// stop propagating the event if return false 
@@ -9626,6 +9642,17 @@ window.me = window.me || {};
 		 * @private
 		 */
 		obj.offset = null;
+		
+		/**
+		 * time interval for event throttling in milliseconds<br>
+		 * default value : "1000/me.sys.fps" ms<br>
+		 * set to 0 ms to disable the feature
+		 * @public
+		 * @type Number
+		 * @name throttlingInterval
+		 * @memberOf me.input
+		 */
+		obj.throttlingInterval = undefined;
 			
 		/**
 		 * Array of object containing changed touch information (iOS event model)<br>
@@ -9957,7 +9984,7 @@ window.me = window.me || {};
 		    enablePointerEvent();
 
 		    // convert mouse events to iOS/PointerEvent equivalent
-		    if ((mouseEventList.indexOf(eventType) !== -1) && (me.sys.touch || window.navigator.msPointerEnabled)) {
+		    if ((mouseEventList.indexOf(eventType) !== -1) && (me.sys.touch || window.navigator.pointerEnabled)) {
 		        eventType = activeEventList[mouseEventList.indexOf(eventType)];
 		    }
 			// >>>TODO<<< change iOS touch event to their PointerEvent equivalent & vice-versa
@@ -9997,7 +10024,7 @@ window.me = window.me || {};
 		 */
 		obj.releasePointerEvent = function(eventType, rect) {
 			// convert mouse events to iOS/MSPointer equivalent
-		    if ((mouseEventList.indexOf(eventType) !== -1) && (me.sys.touch || window.navigator.msPointerEnabled)) {
+		    if ((mouseEventList.indexOf(eventType) !== -1) && (me.sys.touch || window.navigator.pointerEnabled)) {
 		        eventType = activeEventList[mouseEventList.indexOf(eventType)];
 		    }
 			// >>>TODO<<< change iOS touch event to their PointerEvent equivalent & vice-versa

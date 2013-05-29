@@ -15,7 +15,6 @@ game.Triangle = Object.extend({
         this.a = a;
         this.b = b;
         this.c = c;
-        this.fill = false
     },
 
     /**
@@ -113,7 +112,7 @@ game.UI = me.Renderable.extend({
                 var button = buttons[name];
 
                 // Check if button is pressed by this touch
-                var pressed = button.containsPoint(e.localX, e.localY);
+                var pressed = button.containsPoint(e.gameX, e.gameY);
 
                 if (pressed && !button.pressed) {
                     // Button down
@@ -148,16 +147,15 @@ game.UI = me.Renderable.extend({
             }
         }
 
-        this.vp = me.game.viewport.getRect();
-        me.input.registerPointerEvent("mousedown", this.vp, mousemove, true);
-        me.input.registerPointerEvent("mousemove", this.vp, mousemove, true);
-        me.input.registerPointerEvent("mouseup", this.vp, mouseup, true);
+        me.input.registerPointerEvent("mousedown", this, mousemove, true);
+        me.input.registerPointerEvent("mousemove", this, mousemove, true);
+        me.input.registerPointerEvent("mouseup", this, mouseup, true);
     },
 
     "destroy" : function () {
-        me.input.releasePointerEvent("mousedown", this.vp);
-        me.input.releasePointerEvent("mousemove", this.vp);
-        me.input.releasePointerEvent("mouseup", this.vp);
+        me.input.releasePointerEvent("mousedown", this);
+        me.input.releasePointerEvent("mousemove", this);
+        me.input.releasePointerEvent("mouseup", this);
     },
 
     "draw" : function (context) {
