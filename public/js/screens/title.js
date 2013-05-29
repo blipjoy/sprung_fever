@@ -7,8 +7,8 @@ game.ScrollingImage = me.ImageLayer.extend({
     },
 
     "update" : function () {
-        this.pos.x += this.scrollX;
-        this.pos.y += this.scrollY;
+        this.pos.x = (this.pos.x + this.scrollX) % this.imagewidth;
+        this.pos.y = (this.pos.y + this.scrollY) % this.imageheight;
 
         return true;
     }
