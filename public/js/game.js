@@ -134,21 +134,15 @@ var game = {
             me.loader.getJSON("texture"),
             me.loader.getImage("texture")
         );
+		
+		// sort objects based on y order
+		me.game.propertyToSortOn = "y";
 
         // Overlay.
         me.game.add(new game.Overlay("overlay"), 10000);
-        me.game.sort(game.sort);
 
         // Start the game.
         me.state.change(c.DEBUG ? me.state.PLAY : me.state.BLIPJOY);
-    },
-
-    // Top-down perspective sort function.
-    "sort" : function (a, b) {
-        var result = (b.z - a.z);
-        return (
-            result ? result : ((b.pos && b.pos.y) - (a.pos && a.pos.y)) || 0
-        );
     },
 
     "capitalize" : function (str) {
