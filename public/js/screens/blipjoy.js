@@ -39,7 +39,7 @@ game.resize = function (image, scale) {
         ow = iw * scale,
         oh = ih * scale,
         opitch = ow * 4,
-        context = me.video.createCanvasSurface(ow, oh);
+        context = me.video.getContext2d(me.video.createCanvas(ow, oh));
 
     // Get original pixels
     context.drawImage(image, 0, 0);

@@ -8,7 +8,7 @@ game.HUD_Meter = me.HUD_Item.extend({
         // Cache image for item name
         var font = new me.Font("Verdana", 18, "#fff", "left");
         font.bold();
-        var ctx = me.video.createCanvasSurface(100, 20);
+        var ctx = me.video.getContext2d(me.video.createCanvas(100, 20));
         this.label = ctx.canvas;
         this.label.width = font.measureText(ctx, name + ":").width;
         this.label.height = 20;

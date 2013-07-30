@@ -27,7 +27,7 @@ window.me = window.me || {};
 		// settings & configuration
 		// library name & version
 		mod : "melonJS",
-		version : "0.9.8",
+		version : "0.9.9",
 		nocache : '',
 
 		// Public Object (To be completed)
@@ -168,12 +168,29 @@ window.me = window.me || {};
 		stopOnAudioError : true,
 
 		/**
-		 * Specify either to pause the game when losing focus or not<br>
+		 * Specify whether to pause the game when losing focus.<br>
 		 * default value : true<br>
 		 * @type Boolean
 		 * @memberOf me.sys
 		 */
 		pauseOnBlur : true,
+
+		/**
+		 * Specify whether to unpause the game when gaining focus.<br>
+		 * default value : true<br>
+		 * @type Boolean
+		 * @memberOf me.sys
+		 */
+		resumeOnFocus : true,
+
+		/**
+		 * Specify whether to stop the game when losing focus or not<br>
+		 * The engine restarts on focus if this is enabled.
+		 * default value : true<br>
+		 * @type Boolean
+		 * @memberOf me.sys
+		 */
+		stopOnBlur : true,
 
 		/**
 		 * Specify the rendering method for layers <br>
@@ -194,7 +211,7 @@ window.me = window.me || {};
 		 * @public
 		 * @function
 		 * @param {String} first First version string to compare
-		 * @param {String} [second="0.9.8"] Second version string to compare 
+		 * @param {String} [second="0.9.9"] Second version string to compare 
 		 * @return {Integer} comparison result <br>&lt; 0 : first &lt; second <br>0 : first == second <br>&gt; 0 : first &gt; second
 		 * @example
 		 * if (me.sys.checkVersion("0.9.5") > 0) {
@@ -476,6 +493,11 @@ window.me = window.me || {};
 		};
 	};
 
+	/**
+	 * The built in Function Object
+	 * @external Function
+	 * @see {@link https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function|Function}
+	 */
 	
 	if (!Function.prototype.bind) {
 		/** @ignore */
@@ -485,6 +507,8 @@ window.me = window.me || {};
 		 * Binds this function to the given context by wrapping it in another function and returning the wrapper.<p>
 		 * Whenever the resulting "bound" function is called, it will call the original ensuring that this is set to context. <p>
 		 * Also optionally curries arguments for the function.
+		 * @memberof! external:Function#
+		 * @alias bind
 		 * @param {Object} context the object to bind to.
 		 * @param {} [arguments...] Optional additional arguments to curry for the function.
 		 * @example
@@ -579,13 +603,13 @@ window.me = window.me || {};
 
 	/**
 	 * Executes a function as soon as the interpreter is idle (stack empty).
+	 * @memberof! external:Function#
+	 * @alias defer
 	 * @param {} [arguments...] Optional additional arguments to curry for the function.
 	 * @return {Int} id that can be used to clear the deferred function using clearTimeout
 	 * @example
-	 *
-	 *   // execute myFunc() when the stack is empty, with 'myArgument' as parameter
-	 *   myFunc.defer('myArgument');
-	 *
+	 * // execute myFunc() when the stack is empty, with 'myArgument' as parameter
+	 * myFunc.defer('myArgument');
 	 */
 	Function.prototype.defer = function() {
 		var fn = this, args = Array.prototype.slice.call(arguments);
@@ -618,11 +642,17 @@ window.me = window.me || {};
 		}
 	};
 
-
+	/**
+	 * The built in String Object
+	 * @external String
+	 * @see {@link https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String|String}
+	 */
+	
 	if(!String.prototype.trim) {  
 		/**
 		 * returns the string stripped of whitespace from both ends
-		 * @extends String
+		 * @memberof! external:String#
+		 * @alias trim
 		 * @return {String} trimmed string
 		 */
 		String.prototype.trim = function () {  
@@ -632,7 +662,8 @@ window.me = window.me || {};
 	
 	/**
 	 * add isNumeric fn to the string object
-	 * @extends String
+	 * @memberof! external:String#
+	 * @alias isNumeric
 	 * @return {Boolean} true if string contains only digits
 	 */
 	String.prototype.isNumeric = function() {
@@ -641,7 +672,8 @@ window.me = window.me || {};
 
 	/**
 	 * add a isBoolean fn to the string object
-	 * @extends String
+	 * @memberof! external:String#
+	 * @alias isBoolean
 	 * @return {Boolean} true if the string is either true or false
 	 */
 	String.prototype.isBoolean = function() {
@@ -650,8 +682,9 @@ window.me = window.me || {};
 
 	/**
 	 * add a contains fn to the string object
+	 * @memberof! external:String#
+	 * @alias contains
 	 * @param {String} string to test for
-	 * @extends String
 	 * @return {Boolean} true if contains the specified string
 	 */
 	String.prototype.contains = function(word) {
@@ -660,7 +693,8 @@ window.me = window.me || {};
 
 	/**
 	 * convert the string to hex value
-	 * @extends String
+	 * @memberof! external:String#
+	 * @alias toHex
 	 * @return {String}
 	 */
 	String.prototype.toHex = function() {
@@ -671,12 +705,18 @@ window.me = window.me || {};
 		return res;
 	};
 
-
+	/**
+	 * The built in Number Object
+	 * @external Number
+	 * @see {@link https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number|Number}
+	 */
+	 
 	/**
 	 * add a clamp fn to the Number object
+	 * @memberof! external:Number#
+	 * @alias clamp
 	 * @param {Number} low lower limit
 	 * @param {Number} high higher limit
-	 * @extends Number
 	 * @return {Number} clamped value
 	 */
 	Number.prototype.clamp = function(low, high) {
@@ -685,9 +725,10 @@ window.me = window.me || {};
 
 	/**
 	 * return a random between min, max
+	 * @memberof! external:Number#
+	 * @alias random
 	 * @param {Number} min minimum value.
 	 * @param {Number} max maximum value.
-	 * @extends Number
 	 * @return {Number} random value
 	 */
 	Number.prototype.random = function(min, max) {
@@ -696,9 +737,10 @@ window.me = window.me || {};
 
 	/**
 	 * round a value to the specified number of digit
+	 * @memberof! external:Number#
+	 * @alias round
 	 * @param {Number} [num="Object value"] value to be rounded.
 	 * @param {Number} dec number of decimal digit to be rounded to.
-	 * @extends Number
 	 * @return {Number} rounded value
 	 * @example
 	 * // round a specific value to 2 digits
@@ -717,7 +759,8 @@ window.me = window.me || {};
 	/**
 	 * a quick toHex function<br>
 	 * given number <b>must</b> be an int, with a value between 0 and 255
-	 * @extends Number
+	 * @memberof! external:Number#
+	 * @alias toHex
 	 * @return {String} converted hexadecimal value
 	 */
 	Number.prototype.toHex = function() {
@@ -726,7 +769,8 @@ window.me = window.me || {};
 
 	/**
 	 * Returns a value indicating the sign of a number<br>
-	 * @extends Number
+	 * @memberof! external:Number#
+	 * @alias sign
 	 * @return {Number} sign of a the number
 	 */
 	Number.prototype.sign = function() {
@@ -735,8 +779,9 @@ window.me = window.me || {};
 
 	/**
 	 * Converts an angle in degrees to an angle in radians
+	 * @memberof! external:Number#
+	 * @alias degToRad
 	 * @param {Number} [angle="angle"] angle in degrees
-	 * @extends Number
 	 * @return {Number} corresponding angle in radians
 	 * @example
 	 * // convert a specific angle
@@ -751,8 +796,9 @@ window.me = window.me || {};
 
 	/**
 	 * Converts an angle in radians to an angle in degrees.
+	 * @memberof! external:Number#
+	 * @alias radToDeg
 	 * @param {Number} [angle="angle"] angle in radians
-	 * @extends Number
 	 * @return {Number} corresponding angle in degrees
 	 * @example
 	 * // convert a specific angle
@@ -765,10 +811,18 @@ window.me = window.me || {};
 		return (angle||this) * (180.0 / Math.PI);
 	};
 	
+	
+	/**
+	 * The built in Array Object
+	 * @external Array
+	 * @see {@link https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array|Array}
+	 */
+	
 	/**
 	 * Remove the specified object from the Array<br>
+	 * @memberof! external:Array#
+	 * @alias remove
 	 * @param {Object} object to be removed
-	 * @extends Array
 	 */
 	Array.prototype.remove = function(obj) {
 		var i = Array.prototype.indexOf.call(this, obj);
@@ -847,202 +901,6 @@ window.me = window.me || {};
 
 	}
 
-	/******************************************/
-	/*		OBJECT DRAWING MANAGEMENT           */
-	/*		hold & manage app/game objects		*/
-	/******************************************/
-
-	/**
-	 * a object drawing manager
-	 * only used by the game manager
-	 * @ignore
-	 */
-	var drawManager = (function() {
-		// hold public stuff in our singletong
-		var api = {};
-
-		// list of region to redraw
-		// valid for any updated object
-		var dirtyRects = [];
-
-		// cache the full screen area rect
-		var fullscreen_rect;
-
-		// list of object to redraw
-		// only valid for visible and update object
-		var dirtyObjects = [];
-		
-		var drawCount = 0;
-
-		// a flag indicating if we need a redraw
-		api.isDirty = false;
-
-		/**
-		 * init function
-		 */
-		api.reset = function() {
-			// make sure it's empty
-			dirtyRects.length = 0;
-			dirtyObjects.length = 0;
-
-			// set our cached rect to the actual screen size
-			fullscreen_rect = me.game.viewport.getRect();
-
-			// make everything dirty
-			api.makeAllDirty();
-		};
-
-		/**
-		 * add a dirty object
-		 * I should find a cleaner way to manage old/new object rect
-		 */
-		api.makeDirty = function(obj, updated, oldRect) {
-			// object updated ?
-			if (updated) {
-				// yeah some drawing job to do !
-				api.isDirty = true;
-
-				// add a dirty rect if feature enable
-				if (me.sys.dirtyRegion) {
-					// TODO : HOW DO WE MANAGE COORDINATES 
-					// OF FLOATING OBJECT'S RECTS ?
-					
-					// some stuff to optimize the amount
-					// of dirty rect would be nice here
-					// instead of adding everything :)
-					// this is for later I guess !
-					if (oldRect) {
-						// merge both rect, and add it to the list
-						// directly pass object, since anyway it inherits from rect
-						dirtyRects.push(oldRect.union(obj));
-					} else if (obj.getRect) {
-						dirtyRects.push(obj.getRect());
-					}
-				}
-			}
-
-			// if obj is in the viewport add it to the list of obj to draw
-			if (obj.inViewport) {
-				// add obj at index 0, so that we can keep
-				// our inverted loop later
-				dirtyObjects.unshift(obj);
-			}
-		};
-
-		/**
-		 * make all object dirty
-		 */
-		api.makeAllDirty = function() {
-			//empty the dirty rect list
-			dirtyRects.length = 0;
-			//and add a dirty region with the screen area size
-			dirtyRects.push(fullscreen_rect);
-			// make sure it's dirty
-			api.isDirty = true;
-			// they are maybe too much call to this function
-			// to be checked later...
-			//console.log("making everything dirty!");
-		};
-
-		/**
-		 * remove an object
-		 */
-		api.remove = function(obj) {
-			var idx = dirtyObjects.indexOf(obj);
-			if (idx !== -1) {
-				// remove the object from the list of obj to draw
-				dirtyObjects.splice(idx, 1);
-
-				// mark the object as not within the viewport
-				// so it won't be added (again) in the list object to be draw
-				obj.inViewport = false;
-
-				// and flag the area as dirty
-				api.makeDirty(obj, true);
-			}
- 		};
-		
-		/**
-		 * return the amount of draw object per frame
-		 */
-		api.getDrawCount = function() {
-			return drawCount;
- 		};
-		
-		/**
-		 * draw all dirty objects/regions
-		 */
-		api.draw = function(context) {
-			// cache viewport position vector
-			var posx = me.game.viewport.pos.x + ~~me.game.viewport.offset.x;
-			var posy = me.game.viewport.pos.y + ~~me.game.viewport.offset.y;
-						
-			// save the current context
-			context.save();
-			// translate by default to screen coordinates
-			context.translate(-posx, -posy);
-			
-			// substract the map offset to current the current pos
-			posx -= me.game.currentLevel.pos.x;
-			posy -= me.game.currentLevel.pos.y;
-			
-			// if feature disable, we only have one dirty rect (the viewport area)
-			for ( var r = dirtyRects.length, rect; r--, rect = dirtyRects[r];) {
-				// parse all objects
-				for ( var o = dirtyObjects.length, obj; o--, obj = dirtyObjects[o];) {
-					// if dirty region enabled, make sure the object is in the area to be refreshed
-					if (me.sys.dirtyRegion && obj.isSprite && !obj.overlaps(rect)) {
-						continue;
-					}
-
-					if (obj.floating===true) {
-						context.save();
-						// cancel the previous translate
-						context.translate(posx, posy);
-					}
-
-					// draw the object using the dirty area to be updated
-					obj.draw(context, rect);
-
-					if (obj.floating===true) {
-						context.restore();
-					}
-
-					drawCount++;
-				}
-				// some debug stuff
-				if (me.debug.renderDirty) {
-					rect.draw(context, "white");
-				}
-			}
-			
-			// restore initial context
-			context.restore();
-		};
-
-		/**
-		 * flush all rect
-		 */
-		api.flush = function() {
-			// only empty dirty area list if dirtyRec feature is enable
-			// allows to keep the viewport area as a default dirty rect
-			if (me.sys.dirtyRegion) {
-				dirtyRects.length = 0;
-			}
-			// empty the dirty object list
-			dirtyObjects.length = 0;
-
-			// clear the flag
-			api.isDirty = false;
-
-			// reset draw count for debug panel
-			drawCount = 0;
-		};
-
-		return api;
-
-	})();
-
 	/**
 	 * me.game represents your current game, it contains all the objects, tilemap layers,<br>
 	 * HUD information, current viewport, collision map, etc..<br>
@@ -1063,26 +921,17 @@ window.me = window.me || {};
 		// ref to the "system" context
 		var frameBuffer = null;
 
-		// hold all the objects
-		var gameObjects = [];
-
 		// flag to redraw the sprites
 		var initialized = false;
 
 		// to keep track of deferred stuff
 		var pendingRemove = null;
-		var pendingSort = null;
-		
-		/**
-		 * a default sort function
-		 * @private
-		 * @ignore
-		 */
-		var default_sort_func = function(a, b) {
-			// sort order is inverted,
-			// since we use a reverse loop for the display
-			return (b.z - a.z);
-		};
+
+		// to know when we have to refresh the display
+		var isDirty = true;
+
+		// cached value of the full screen rect
+		var fullscreen_rect;
 
 		/*---------------------------------------------
 
@@ -1105,6 +954,7 @@ window.me = window.me || {};
 		 * @memberOf me.game
 		 */
 		api.HUD = null;
+		
 		/**
 		 * a reference to the game collision Map
 		 * @public
@@ -1113,6 +963,7 @@ window.me = window.me || {};
 		 * @memberOf me.game
 		 */
 		api.collisionMap = null;
+		
 		/**
 		 * a reference to the game current level
 		 * @public
@@ -1122,6 +973,26 @@ window.me = window.me || {};
 		 */
 		api.currentLevel = null;
 
+		/**
+		 * a reference to the game objects
+		 * @public
+		 * @type me.EntityContainer
+		 * @name container
+		 * @memberOf me.game
+		 */
+		api.container = null;
+
+
+		/**
+		 * The property of should be used when sorting entities <br>
+		 * value : "x", "y", "z" (default: "z")
+		 * @public
+		 * @type String
+		 * @name propertyToSortOn
+		 * @memberOf me.game
+		 */
+		api.propertyToSortOn = "z";
+		
 		/**
 		 * default layer renderer
 		 * @private
@@ -1197,12 +1068,22 @@ window.me = window.me || {};
 				// create a defaut viewport of the same size
 				api.viewport = new me.Viewport(0, 0, width, height);
 
+				// set our cached rect to the actual screen size
+				fullscreen_rect = me.game.viewport.getRect();
+
+				//entity container
+				api.container = new me.EntityContainer(0,0, width, height);
+
 				// get a ref to the screen buffer
 				frameBuffer = me.video.getSystemContext();
 
 				// publish init notification
 				me.event.publish(me.event.GAME_INIT);
 
+				// make display dirty by default
+				isDirty = true;
+
+				// set as initialized
 				initialized = true;
 			}
 		};
@@ -1230,9 +1111,9 @@ window.me = window.me || {};
 			if (api.viewport) {
 				api.viewport.reset();
 			}
-			
-			// also reset the draw manager
-			drawManager.reset();
+
+			// make sure the object container is empty too
+			api.container.reset();
 
 			// reset the transform matrix to the normal one
 			frameBuffer.setTransform(1, 0, 0, 1, 0, 0);
@@ -1251,6 +1132,10 @@ window.me = window.me || {};
 		 */
 
 		api.loadTMXLevel = function(level) {
+			
+			// disable auto-sort
+			api.container.autoSort = false;
+			
 			// load our map
 			api.currentLevel = level;
 
@@ -1291,7 +1176,10 @@ window.me = window.me || {};
 			}
 
 			// sort all our stuff !!
-			api.sort();
+			api.container.sort();
+			
+			// re-enable auto-sort
+			api.container.autoSort = true;
 
 			// fire the callback if defined
 			if (api.onLevelLoaded) {
@@ -1313,16 +1201,15 @@ window.me = window.me || {};
 		 * @example
 		 * // create a new object
 		 * var obj = new MyObject(x, y)
-		 * // add the object and give the z index of the current object
+		 * // add the object and force the z index of the current object
 		 * me.game.add(obj, this.z);
-		 * // sort the object list (to ensure the object is properly displayed)
-		 * me.game.sort();
 		 */
 		api.add = function(object, zOrder) {
-			object.z = (zOrder) ? zOrder : object.z;
-
+			if (typeof(zOrder) !== 'undefined') {
+				object.z = zOrder;
+			}
 			// add the object in the game obj list
-			gameObjects.push(object);
+			api.container.addChild(object);
 
 		};
 
@@ -1342,30 +1229,6 @@ window.me = window.me || {};
 		};
 
 		/**
-		 * returns the list of entities with the specified name<br>
-		 * as defined in Tiled (Name field of the Object Properties)<br>
-		 * note : avoid calling this function every frame since
-		 * it parses the whole object list each time
-		 * @name getEntityByName
-		 * @memberOf me.game
-		 * @public
-		 * @function
-		 * @param {String} entityName entity name
-		 * @return {me.ObjectEntity[]} Array of object entities
-		 */
-		api.getEntityByName = function(entityName)
-		{
-			var objList = [];
-			entityName = entityName.toLowerCase();
-			for (var i = gameObjects.length, obj; i--, obj = gameObjects[i];) {
-				if(obj.name && obj.name.toLowerCase() === entityName) {
-					objList.push(obj);
-				}
-			}
-			return objList;
-		};
-
-		/**
 		 * returns the amount of existing objects<br>
 		 * @name getObjectCount
 		 * @memberOf me.game
@@ -1376,7 +1239,7 @@ window.me = window.me || {};
 		 */
 		api.getObjectCount = function()
 		{
-			return gameObjects.length;
+			return api.container.children.length;
 		};
 
 		/**
@@ -1390,9 +1253,24 @@ window.me = window.me || {};
 		 */
 		api.getDrawCount = function()
 		{
-			return drawManager.getDrawCount();
+			return api.container.drawCount;
 		};
-
+	
+		/**
+		 * returns the list of entities with the specified name<br>
+		 * as defined in Tiled (Name field of the Object Properties)<br>
+		 * note : avoid calling this function every frame since
+		 * it parses the whole object list each time
+		 * @name getEntityByName
+		 * @memberOf me.game
+		 * @public
+		 * @function
+		 * @param {String} entityName entity name
+		 * @return {me.ObjectEntity[]} Array of object entities
+		 */
+		api.getEntityByName = function(entityName) {
+			return api.container.getEntityByProp("name", entityName);
+		};
 		
 		/**
 		 * return the entity corresponding to the specified GUID<br>
@@ -1405,14 +1283,9 @@ window.me = window.me || {};
 		 * @param {String} GUID entity GUID
 		 * @return {me.ObjectEntity} Object Entity (or null if not found)
 		 */
-		api.getEntityByGUID = function(guid)
-		{
-			for (var i = gameObjects.length, obj; i--, obj = gameObjects[i];) {
-				if(obj.isEntity && obj.GUID == guid) {
-					return obj;
-				}
-			}
-			return null;
+		api.getEntityByGUID = function(guid) {
+			var obj = api.container.getEntityByProp("GUID", guid);
+			return (obj.length>0)?obj[0]:null;
 		};
 		
 		/**
@@ -1427,17 +1300,10 @@ window.me = window.me || {};
 		 * @param {String} value Value of the property
 		 * @return {me.ObjectEntity[]} Array of object entities
 		 */
-		api.getEntityByProp = function(prop, value)
-		{
-			var objList = [];
-			for (var i = gameObjects.length, obj; i--, obj = gameObjects[i];) {
-				if(obj.isEntity && obj[prop] == value) {
-					objList.push(obj);
-				}
-			}
-			return objList;
+		api.getEntityByProp = function(prop, value) {
+			return api.container.getEntityByProp(prop, value);
 		};
-
+		
 		/**
 		 * add a HUD obj to the game manager
 		 * @name addHUD
@@ -1478,41 +1344,6 @@ window.me = window.me || {};
 			}
 		};
 
-		/**
-		 * update all objects of the game manager
-		 * @name update
-		 * @memberOf me.game
-		 * @private
-		 * @ignore
-		 * @function
-		 */
-		api.update = function() {
-			
-			// previous rect (if any)
-			var oldRect = null;
-			// loop through our objects
-			for ( var i = gameObjects.length, obj; i--, obj = gameObjects[i];) {
-				// check for previous rect before position change
-				oldRect = (me.sys.dirtyRegion && obj.isSprite) ? obj.getRect() : null;
-
-				// check if object is visible
-				obj.inViewport = obj.visible && (
-					obj.floating || (obj.getRect && api.viewport.isVisible(obj))
-				);
-
-				// update our object
-				var updated = (obj.inViewport || obj.alwaysUpdate) && obj.update();
-
-				// add it to the draw manager
-				drawManager.makeDirty(obj, updated, updated ? oldRect : null);
-			}
-			// update the camera/viewport
-			if (api.viewport.update(drawManager.isDirty)) {
-				drawManager.makeAllDirty();
-			}
-			
-		};
-		
 		
 		/**
 		 * remove an object
@@ -1533,23 +1364,20 @@ window.me = window.me || {};
 					target.destroy();
 				}
 
-				// remove the object from the object to draw
-				drawManager.remove(target);
-
 				// Remove the object
-				gameObjects.remove(target);
+				api.container.removeChild(target);
 				me.entityPool.freeInstance(target);
 			}
 
-			if (gameObjects.indexOf(obj) > -1) {
+			if (api.container.children.indexOf(obj) > -1) {
 				// remove the object from the object list
 				if (force===true) {
 					// force immediate object deletion
 					removeNow(obj);
 				} else {
 					// make it invisible (this is bad...)
-					obj.visible = false;
-					// else wait the end of the current loop
+					obj.visible = obj.inViewport = false;
+					// wait the end of the current loop
 					/** @ignore */
 					pendingRemove = (function (obj) {
 						removeNow(obj);
@@ -1574,64 +1402,40 @@ window.me = window.me || {};
 				clearTimeout(pendingRemove);
 				pendingRemove = null;
 			}
-			if (pendingSort) {
-				clearTimeout(pendingSort);
-				pendingSort = null;
+			// TODO : not good !
+			if (api.container.pendingSort) {
+				clearTimeout(api.container.pendingSort);
+				api.container.pendingSort = null;
 			}
 			
 			// inform all object they are about to be deleted
-			for (var i = gameObjects.length ; i-- ;) {
-				if (gameObjects[i].isPersistent) {
+			var children = api.container.children;
+			for (var i = children.length ; i-- ;) {
+				if (children[i].isPersistent) {
                    // don't remove persistent objects
 				   continue;
 				}
 				// remove the entity
-				api.remove(gameObjects[i], force);
+				api.remove(children[i], force);
 			}
-			// make sure it's empty there as well
-			if (force === true)
-				drawManager.flush();
 		};
 
 		/**
-		 * <p>Sort all the game objects.</p>
-		 * <p>Normally all objects loaded through the LevelDirector are automatically sorted.
-		 * this function is however usefull if you create and add object during the game,
-		 * or need a specific sorting algorithm.<p>
+		 * Manually trigger the sort all the game objects.</p>
+		 * Since version 0.9.9, all objects are automatically sorted, <br>
+		 * except if a container autoSort property is set to false.
 		 * @name sort
 		 * @memberOf me.game
 		 * @public
 		 * @function
-		 * @param {Function} [sort_func="sorted on z property value"] sort function
 		 * @example
-		 * // user defined sort funtion (Z sort based on Y value)
-		 * function mySort(a, b) {
-		 *    var result = (b.z - a.z);
-		 *    return (result ? result : ((b.pos && b.pos.y) - (a.pos && a.pos.y)) || 0);
-		 * } </p>
+		 * // change the default sort property
+		 * me.game.propertyToSortOn = "y";
 		 * // call me.game.sort with our sorting function
-		 * me.game.sort(mySort);
+		 * me.game.sort();
 		 */
-
-		api.sort = function(sort_func) {
-			// do nothing if there is already 
-			// a previous pending sort
-			if (pendingSort === null) {
-				// use the default sort function if
-				// the specified one is not valid
-				if (typeof(sort_func) !== "function") {
-					sort_func = default_sort_func;
-				}
-				/** @ignore */
-				pendingSort = (function (sort_func) {
-					// sort everything
-					gameObjects.sort(sort_func);
-					// clear the defer id
-					pendingSort = null;
-					// make sure we redraw everything
-					me.game.repaint();
-				}).defer(sort_func);
-			};
+		api.sort = function() {
+			api.container.sort();
 		};
 
 		/**
@@ -1678,8 +1482,9 @@ window.me = window.me || {};
 			if (multiple===true) {
 				var mres = [], r = 0;
 			} 
+			var children = api.container.children;
 			// this should be replace by a list of the 4 adjacent cell around the object requesting collision
-			for ( var i = gameObjects.length, obj; i--, obj = gameObjects[i];)//for (var i = objlist.length; i-- ;)
+			for ( var i = children.length, obj; i--, obj = children[i];)//for (var i = objlist.length; i-- ;)
 			{
 				if ((obj.inViewport || obj.alwaysUpdate) && obj.collidable && (obj!=objA))
 				{
@@ -1720,8 +1525,9 @@ window.me = window.me || {};
 			if (multiple===true) {
 				var mres = [], r = 0;
 			} 
+			var children = api.container.children;
 			// this should be replace by a list of the 4 adjacent cell around the object requesting collision
-			for ( var i = gameObjects.length, obj; i--, obj = gameObjects[i];)//for (var i = objlist.length; i-- ;)
+			for ( var i = children.length, obj; i--, obj = children[i];)//for (var i = objlist.length; i-- ;)
 			{
 				if ((obj.inViewport || obj.alwaysUpdate) && obj.collidable && (obj.type === type) && (obj!=objA))
 				{
@@ -1753,8 +1559,30 @@ window.me = window.me || {};
 		 */
 
 		api.repaint = function() {
-			drawManager.makeAllDirty();
+			isDirty = true;
 		};
+
+
+		/**
+		 * update all objects of the game manager
+		 * @name update
+		 * @memberOf me.game
+		 * @private
+		 * @ignore
+		 * @function
+		 */
+		api.update = function() {
+			
+			// update all objects
+			isDirty = api.container.update();
+			
+			// update the camera/viewport
+			isDirty |= api.viewport.update(isDirty);
+
+			return isDirty;
+			
+		};
+		
 
 		/**
 		 * draw all existing objects
@@ -1766,15 +1594,31 @@ window.me = window.me || {};
 		 */
 
 		api.draw = function() {
-			if (drawManager.isDirty) {
-				// draw our objects
-				drawManager.draw(frameBuffer);
+			if (isDirty) {
+				// cache the viewport rendering position, so that other object
+				// can access it later (e,g. entityContainer when drawing floating objects)
+				api.viewport.screenX = api.viewport.pos.x + ~~api.viewport.offset.x;
+				api.viewport.screenY = api.viewport.pos.y + ~~api.viewport.offset.y;
+							
+				// save the current context
+				frameBuffer.save();
+				// translate by default to screen coordinates
+				frameBuffer.translate(-api.viewport.screenX, -api.viewport.screenY);
+				
+				// substract the map offset to current the current pos
+				api.viewport.screenX -= api.currentLevel.pos.x;
+				api.viewport.screenY -= api.currentLevel.pos.y;
 
+				// update all objects
+				api.container.draw(frameBuffer, fullscreen_rect);
+
+				//restore context
+				frameBuffer.restore();
+				
 				// call the viewport draw function (for effects)
-				api.viewport.draw(frameBuffer)
+				api.viewport.draw(frameBuffer);
 			}
-			// clean everything for next frame
-			drawManager.flush();
+			isDirty = false;
 		};
 
 		// return our object
@@ -2776,7 +2620,7 @@ window.me = window.me || {};
 		 * to identify the object as a renderable object
 		 * @ignore
 		 */
-		isRenderable: true,
+		isRenderable : true,
 		
 		/**
 		 * the visible state of the renderable object<br>
@@ -2810,10 +2654,19 @@ window.me = window.me || {};
 		alwaysUpdate : false,
 
 		/**
+		 * Whether to update this object when the game is paused.
+		 * default value : false
+		 * @public
+		 * @type Boolean
+		 * @name updateWhenPaused
+		 * @memberOf me.Renderable
+		 */
+		updateWhenPaused: false,
+
+		/**
 		 * make the renderable object persistent over level changes<br>
 		 * default value : false
 		 * @public
-		 * @readonly
 		 * @type Boolean
 		 * @name isPersistent
 		 * @memberOf me.Renderable
@@ -2829,7 +2682,17 @@ window.me = window.me || {};
 		 * @name floating
 		 * @memberOf me.Renderable
 		 */
-		floating: false,
+		floating : false,
+
+		/**
+		 * Z-order for object sorting<br>
+		 * default value : 0
+		 * @private
+		 * @type Number
+		 * @name z
+		 * @memberOf me.Renderable
+		 */
+		z : 0,
 
 		/**
 		 * @ignore
@@ -3853,6 +3716,10 @@ window.me = window.me || {};
 		_limitwidth : 0,
 		_limitheight : 0,
 
+		// cache the screen rendering position
+		screenX : 0,
+		screenY : 0,
+
 		/** @ignore */
 		init : function(minX, minY, maxX, maxY, realw, realh) {
 			// viewport coordinates
@@ -4196,7 +4063,33 @@ window.me = window.me || {};
 		},
 
 		/**
-		 *	render the camera effects
+		 * convert the given screen coordinates into world coordinates
+		 * @name screenToWorld
+		 * @memberOf me.Viewport
+		 * @function
+		 * @param {Number} x
+		 * @param {Number} y
+		 * @return {me.Vector2d}
+		 */
+		screenToWorld : function(x, y) {
+			return (new me.Vector2d(x,y)).add(this.pos).sub(me.game.currentLevel.pos);
+		},
+		
+		/**
+		 * convert the given world coordinates into screen coordinates
+		 * @name worldToScreen
+		 * @memberOf me.Viewport
+		 * @function
+		 * @param {Number} x
+		 * @param {Number} y
+		 * @return {me.Vector2d}
+		 */
+		worldToScreen : function(x, y) {
+			return (new me.Vector2d(x,y)).add(this.pos).add(me.game.currentLevel.pos);
+		},
+		
+		/**
+		 * render the camera effects
 		 * @ignore
 		 */
 		draw : function(context) {
@@ -4223,7 +4116,7 @@ window.me = window.me || {};
 					this._fadeOut.tween = null;
 			}
 		}
-
+		
 	});
 
 	/*---------------------------------------------------------*/
@@ -4541,7 +4434,7 @@ window.me = window.me || {};
 	 * or when calling the parent constructor
 	 *
 	 * @class
-	 * @extends me.Rect
+	 * @extends me.Renderable
 	 * @memberOf me
 	 * @constructor
 	 * @param {int} x the x coordinates of the sprite object
@@ -4598,9 +4491,6 @@ window.me = window.me || {};
 		 * @memberOf me.ObjectEntity
 		 */
 		renderable : null,
-		
-		// z position (for ordering display)
-		z : 0,
 		
 		// just to keep track of when we flip
 		lastflipX : false,
@@ -5514,6 +5404,444 @@ window.me = window.me || {};
 
 /*
  * MelonJS Game Engine
+ * Copyright (C) 2011 - 2013, Olivier Biot, Jason Oster
+ * http://www.melonjs.org
+ *
+ */
+
+(function(window) {
+
+	/**
+	 * EntityContainer represents a collection of entity objects.<br>	 *
+	 * @class
+	 * @extends me.Renderable
+	 * @memberOf me
+	 * @constructor
+	 * @param {Number} [x=0] position of the container
+	 * @param {Number} [y=0] position of the container
+	 * @param {Number} [w=me.game.viewport.width] width of the container
+	 * @param {number} [h=me.game.viewport.height] height of the container
+	 */
+
+	me.EntityContainer = me.Renderable.extend(
+		/** @scope me.EntityContainer.prototype */ {
+
+		/**
+		 * The property of entity that should be used to sort on <br>
+		 * value : "x", "y", "z" (default: me.game.propertyToSortOn)
+		 * @public
+		 * @type String
+		 * @name propertyToSortOn
+		 * @memberOf me.EntityContainer
+		 */
+		propertyToSortOn : "z",
+		
+		/** 
+		 * Specify if the entity list should be automatically sorted when adding a new child
+		 * @public
+		 * @type String
+		 * @name autoSort
+		 * @memberOf me.EntityContainer
+		 */
+		autoSort : true,
+		
+		/** 
+		 * keep track of pending sort
+		 * @private
+		 */
+		pendingSort : null,
+
+		/**
+		 * [read-only] The array of children of this container.
+		 * @property children {Array}
+		 */	
+		children : null,
+		
+
+		// constructor
+		init : function(x, y, width, height) {
+			// call the parent constructor
+			this.parent(
+				new me.Vector2d(x || 0, y || 0),
+				width || me.game.viewport.width,  // which default value here ?
+				height || me.game.viewport.height 
+			);
+			// reset everything
+			this.reset();
+		},
+
+		/**
+		 * reset the container.
+		 * @name reset
+		 * @memberOf me.EntityContainer
+		 * @function
+		 */
+		reset : function() {
+			this.children = [];
+			// by default reuse the global me.game.setting
+			this.propertyToSortOn = me.game.propertyToSortOn;
+			this.autoSort = true;
+		},
+
+		/**
+		 * Add a child to the container <br>
+		 * if auto-sort is disable, the object will be appended at the bottom of the list
+		 * @name addChild
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @param {me.ObjectEntity} child
+		 */
+		addChild : function(child) {
+			if(typeof(child.ancestor) !== 'undefined') {
+				child.ancestor.removeChild(child);
+			}
+
+			child.ancestor = this;
+			
+			this.children[this.children.length] = child;
+			
+			this.sort(this.autoSort===false);
+		},
+		
+		/**
+		 * Add a child to the container at the specified index<br>
+		 * (the list won't be sorted after insertion)
+		 * @name addChildAt
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @param {me.ObjectEntity} child
+		 */
+		addChildAt : function(child, index) {
+			if((index >= 0) && (index < this.children.length)) {
+				
+				if(typeof(child.ancestor) !== 'undefined') {
+					child.ancestor.removeChild(child);
+				}
+				
+				child.ancestor = this;
+				
+				this.children.splice(index, 0, child);
+			
+			} else {
+				throw "melonJS (me.EntityContainer): Index (" + index + ") Out Of Bounds for addChildAt()";
+			}
+		},
+
+		/**
+		 * Swaps the depth of 2 childs
+		 * @name swapChildren
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @param {me.ObjectEntity} child
+		 * @param {me.ObjectEntity} child
+		 */
+		swapChildren : function(child, child2) {
+			var index = this.getChildIndex( child );
+			var index2 = this.getChildIndex( child2 );
+			
+			if ((index !== -1) && (index2 !== -1)) {
+				
+				// swap the positions..
+				this.children[index] = child2;
+				this.children[index2] = child;
+				
+			} else {
+				throw "melonJS (me.EntityContainer): " + child + " Both the supplied entities must be a child of the caller " + this;
+			}
+		},
+
+		/**
+		 * Returns the Child at the specified index
+		 * @name getChildAt
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @param {Number} index
+		 */
+		getChildAt : function(index) {
+			if((index >= 0) && (index < this.children.length)) {
+				return this.children[index];
+			} else {
+				throw "melonJS (me.EntityContainer): Index (" + index + ") Out Of Bounds for getChildAt()";
+			}
+		},
+		
+		/**
+		 * Returns the index of the Child
+		 * @name getChildAt
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @param {me.ObjectEntity} child
+		 */
+		getChildIndex : function(child) {
+			return this.children.indexOf( child );
+		},
+
+		/**
+		 * Returns true if contains the specified Child
+		 * @name hasChild
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @return {Boolean}
+		 */
+		hasChild : function(child) {
+			return (this.children.indexOf( child ) !== -1);
+		},
+
+		/**
+		 * Returns the Parent of the specified Child
+		 * @name getParent
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @return {me.ObjectEntity}
+		 */
+		getParent : function(child) {
+			return child.ancestor;
+		},
+		
+		/**
+		 * return the entity corresponding to the property and value<br>
+		 * note : avoid calling this function every frame since
+		 * it parses the whole object tree each time
+		 * @name getEntityByProp
+		 * @memberOf me.EntityContainer
+		 * @public
+		 * @function
+		 * @param {String} prop Property name
+		 * @param {String} value Value of the property
+		 * @return {me.ObjectEntity[]} Array of object entities
+		 */
+		getEntityByProp : function(prop, value)	{
+			var objList = [];	
+			// for string comparaisons
+			var _regExp = new RegExp(value, "i");
+			for (var i = this.children.length, obj; i--, obj = this.children[i];) {
+				if (obj instanceof me.EntityContainer) {
+					objList = objList.concat(obj.getEntityByProp(prop, value));
+				} else if (obj.isEntity) {
+					if (typeof (obj[prop]) === 'string') {
+						if (obj[prop].match(_regExp)) {
+							objList.push(obj);
+						}
+					} else if (obj[prop] == value) {
+						objList.push(obj);
+					}
+				}
+			}
+			return objList;
+		},
+		
+		/**
+		 * Removes a child from the container.
+		 * @name removeChild
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @param  {me.ObjectEntity} child
+		 */
+		removeChild : function(child) {
+			var index = this.children.indexOf( child );
+			
+			if ( index !== -1 )  {
+				
+				child.ancestor = undefined;
+
+				this.children.splice( index, 1 );
+			
+			} else {
+				throw "melonJS (me.EntityContainer): " + child + " The supplied entity must be a child of the caller " + this;
+			}
+		},
+
+		/**
+		 * Move the child in the group one step forward (depth).
+		 * @name moveUp
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @param  {me.ObjectEntity} child
+		 */
+		moveUp : function(child) {
+			// TODO : move one depth to the front
+			throw "melonJS (me.EntityContainer): function moveUp() not implemented";
+		},
+
+		/**
+		 * Move the child in the group one step backward (depth).
+		 * @name moveDown
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @param  {me.ObjectEntity} child
+		 */
+		moveDown : function(child) {
+			// TODO : move one depth to the back
+			throw "melonJS (me.EntityContainer): function moveDown() not implemented";
+		},
+
+		/**
+		 * Move the child in the group to the front(depth).
+		 * @name moveToTop
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @param  {me.ObjectEntity} child
+		 */
+		moveToTop : function(child) {
+			// TODO : move to the top
+			throw "melonJS (me.EntityContainer): function moveToTop() not implemented";
+		},
+
+		/**
+		 * Move the child in the group to the back(depth).
+		 * @name moveToBottom
+		 * @memberOf me.EntityContainer
+		 * @function
+		 * @param  {me.ObjectEntity} child
+		 */
+		moveToBottom : function(child) {
+			// TODO : move to the bottom
+			throw "melonJS (me.EntityContainer): function moveToBottom() not implemented";
+		},
+		
+		/**
+		 * Sort the object list in the current container
+		 * @name add
+		 * @memberOf me.game
+		 * @param {me.ObjectEntity} obj Object to be added
+		 * @param {int} [z="obj.z"] z index
+		 * @public
+		 * @function
+		 * @example
+		 * // create a new object
+		 * var obj = new MyObject(x, y)
+		 * // add the object and give the z index of the current object
+		 * me.game.add(obj, this.z);
+		 * // sort the object list (to ensure the object is properly displayed)
+		 * me.game.sort();
+		 */
+		sort : function(force) {
+			if (force===false && this.autoSort===true) {
+				// don't do anything if not an "internal" call
+				// and if auto-sort is enabled
+				return;
+			}
+			// do nothing if there is already 
+			// a previous pending sort
+			if (this.pendingSort === null) {
+				/** @ignore */
+				this.pendingSort = (function (self) {
+					// sort everything
+					self.children.sort(self["_sort"+self.propertyToSortOn.toUpperCase()]);
+					// clear the defer id
+					self.pendingSort = null;
+					// make sure we redraw everything
+					me.game.repaint();
+				}).defer(this);
+			};
+		},
+		
+		/**
+		 * Z Sorting function
+		 * @private
+		 */
+		_sortZ : function (a,b) {
+			return (b.z) - (a.z);
+		},
+		/**
+		 * X Sorting function
+		 * @private
+		 */
+		_sortX : function(a,b) { 
+			/* ? */
+			var result = (b.z - a.z);
+			return (result ? result : ((b.pos && b.pos.x) - (a.pos && a.pos.x)) || 0);
+		},
+		/**
+		 * Y Sorting function
+		 * @private
+		 */
+		_sortY : function(a,b) {
+			var result = (b.z - a.z);
+			return (result ? result : ((b.pos && b.pos.y) - (a.pos && a.pos.y)) || 0);
+		},
+		
+
+		/**
+		 * @private
+		 */
+		update : function() {
+			var isDirty = false;
+
+			if (me.state.isPaused()) {
+				// game is paused so include an extra check
+				for ( var i = this.children.length, obj; i--, obj = this.children[i];) {
+					if (obj.updateWhenPaused)
+						continue;
+			
+					// check if object is visible
+					obj.inViewport = obj.visible && (
+						obj.floating || (obj.getRect && me.game.viewport.isVisible(obj))
+					);
+
+					// update our object
+					isDirty |= (obj.inViewport || obj.alwaysUpdate) && obj.update();
+				}
+			} else {
+				// normal loop, game isn't paused
+				for ( var i = this.children.length, obj; i--, obj =this.children[i];) {
+
+					// check if object is visible
+					obj.inViewport = obj.visible && (
+						obj.floating || (obj.getRect && me.game.viewport.isVisible(obj))
+					);
+
+					// update our object
+					isDirty |= (obj.inViewport || obj.alwaysUpdate) && obj.update();
+				}
+			}
+
+			return isDirty;
+
+		},
+
+		/**
+		 * @private
+		 */
+		draw : function(context, rect) {
+			this.drawCount = 0;			
+			
+			// translate to the container position
+			context.translate(this.pos.x, this.pos.y);
+			
+			for ( var i = this.children.length, obj; i--, obj = this.children[i];) {
+				
+				if (obj.inViewport && obj.isRenderable) {
+
+					if (obj.floating==true) {
+						context.save();
+						// translate back object
+						context.translate(me.game.viewport.screenX -this.pos.x, me.game.viewport.screenY -this.pos.y);
+					}
+
+					// draw the object
+					obj.draw(context, rect);
+
+					if (obj.floating==true) {
+						context.restore();
+					}
+
+					this.drawCount++;
+				}
+			}
+			
+			// translate back to origin
+			context.translate(-this.pos.x, -this.pos.y);
+		}
+
+	});
+	/*---------------------------------------------------------*/
+	// END END END
+	/*---------------------------------------------------------*/
+})(window);
+
+/*
+ * MelonJS Game Engine
  * Copyright (C) 2011 - 2013, Olivier BIOT
  * http://www.melonjs.org
  *
@@ -5532,7 +5860,7 @@ window.me = window.me || {};
 	 * @memberOf me
 	 * @constructor
 	 * @param {Boolean} [addAsObject] add the object in the game manager object pool<br>
-	 * @param {Boolean} [isPersistent] make the screen persistent over level changes<br>
+	 * @param {Boolean} [isPersistent] make the screen persistent over level changes; requires addAsObject=true<br>
 	 * @see me.state
 	 * @example
 	 * // create a custom loading screen
@@ -5615,12 +5943,22 @@ window.me = window.me || {};
 	/** @scope me.ScreenObject.prototype */	
 	{
 		/** @ignore */
-		addAsObject	: false,
+		addAsObject : false,
 		/** @ignore */
-		z : 999,
-		/**@ignore*/
+		visible : false,
+		/** @ignore */
 		frame : 0,
-		maxfps : 0,
+
+		/**
+		 * Z-order for object sorting<br>
+		 * only used by the engine if the object has been initialized using addAsObject=true<br>
+		 * default value : 999
+		 * @private
+		 * @type Number
+		 * @name z
+		 * @memberOf me.ScreenObject
+		 */
+		z : 999,
 
 		/**
 		 * initialization function
@@ -5676,7 +6014,7 @@ window.me = window.me || {};
 		/**
 		 * update function<br>
 		 * optional empty function<br>
-		 * only used by the engine if the object has been initialized using addAsObject parameter set to true<br>
+		 * only used by the engine if the object has been initialized using addAsObject=true<br>
 		 * @name update
 		 * @memberOf me.ScreenObject
 		 * @function
@@ -5690,10 +6028,9 @@ window.me = window.me || {};
 		 *       //call the parent constructor giving true
 		 *       //as parameter, so that we use the update & draw functions
 		 *       this.parent(true);
-		 *       ...
-		 *       ...
+		 *       // ...
 		 *     },
-		 *     ...
+		 *     // ...
 		 * });
 		 */
 		update : function() {
@@ -5727,7 +6064,7 @@ window.me = window.me || {};
 		/**
 		 * draw function<br>
 		 * optional empty function<br>
-		 * only used by the engine if the object has been initialized using addAsObject parameter set to true<br>
+		 * only used by the engine if the object has been initialized using addAsObject=true<br>
 		 * @name draw
 		 * @memberOf me.ScreenObject
 		 * @function
@@ -5741,10 +6078,9 @@ window.me = window.me || {};
 		 *       //call the parent constructor giving true
 		 *       //as parameter, so that we use the update & draw functions
 		 *       this.parent(true);
-		 *       ...
-		 *       ...
+		 *       // ...
 		 *     },
-		 *     ...
+		 *     // ...
 		 * });
 		 */
 		draw : function() {
@@ -5839,6 +6175,9 @@ window.me = window.me || {};
 		// requestAnimeFrame Id
 		var _animFrameId = -1;
 
+		// whether the game state is "paused"
+		var _isPaused = false;
+
 		// list of screenObject
 		var _screenObject = {};
 
@@ -5862,9 +6201,8 @@ window.me = window.me || {};
 		 * @ignore
 		 */
 		function _startRunLoop() {
-			// ensure nothing is running first && valid state
+			// ensure nothing is running first and in valid state
 			if ((_animFrameId === -1) && (_state !== -1)) {
-
 				// reset the timer
 				me.timer.reset();
 
@@ -5874,12 +6212,37 @@ window.me = window.me || {};
 		};
 
 		/**
+		 * Resume the game loop after a pause.
+		 * @ignore
+		 */
+		function _resumeRunLoop() {
+			// ensure game is actually paused and in valid state
+			if (_isPaused && (_state !== -1)) {
+				// reset the timer
+				me.timer.reset();
+
+				_isPaused = false;
+			}
+		};
+
+		/**
+		 * Pause the loop for most screen objects.
+		 * @ignore
+		 */
+		function _pauseRunLoop() {
+			// Set the paused boolean to stop updates on (most) entities
+			_isPaused = true;
+		};
+
+		/**
 		 * this is only called when using requestAnimFrame stuff
 		 * @ignore
 		 */
 		function _renderFrame() {
 			_activeUpdateFrame();
-			_animFrameId = window.requestAnimationFrame(_renderFrame);
+			if (_animFrameId != -1) {
+		           _animFrameId = window.requestAnimationFrame(_renderFrame);
+		    }
 		};
 
 		/**
@@ -6034,43 +6397,101 @@ window.me = window.me || {};
 		obj.onResume = null;
 
 		/**
+		 * onStop callback
+		 * @callback
+		 * @name onStop
+		 * @memberOf me.state
+		 */
+		obj.onStop = null;
+
+		/**
+		 * onRestart callback
+		 * @callback
+		 * @name onRestart
+		 * @memberOf me.state
+		 */
+		obj.onRestart = null;
+
+		/**
 		 * @ignore
 		 */
 		obj.init = function() {
 			// set the embedded loading screen
 			obj.set(obj.LOADING, me.loadingScreen);
 
-			// set pause action on losing focus
+			// set pause/stop action on losing focus
 			$.addEventListener("blur", function() {
 				// only in case we are not loading stuff
-				if (me.sys.pauseOnBlur && (_state != obj.LOADING)) {
-					obj.pause(true);
+				if (_state != obj.LOADING) {
+					if (me.sys.stopOnBlur) {
+						obj.stop(true);	
+
+						// callback?
+						if (obj.onStop)
+							obj.onStop();
+
+						// publish the pause notification
+						me.event.publish(me.event.STATE_STOP);
+					}
+					if (me.sys.pauseOnBlur) {
+							obj.pause(true);	
+						// callback?
+						if (obj.onPause)
+							obj.onPause();
+
+						// publish the pause notification
+						me.event.publish(me.event.STATE_PAUSE);
+					}
 				}
-				// callback?
-				if (obj.onPause)
-					obj.onPause();
-
-				// publish the pause notification
-				me.event.publish(me.event.STATE_PAUSE);
-
 			}, false);
-			// set play action on gaining focus
+			// set restart/resume action on gaining focus
 			$.addEventListener("focus", function() {
 				// only in case we are not loading stuff
-				if (me.sys.pauseOnBlur && (_state != obj.LOADING)) {
-					obj.resume(true);
+				if (_state != obj.LOADING) {
+					// note: separate boolean so we can stay paused if user prefers
+					if (me.sys.resumeOnFocus) {
+						obj.resume(true);
 
-					// force repaint
-					me.game.repaint();
+						// callback?
+						if (obj.onResume)
+							obj.onResume();
+
+						// publish the resume notification
+						me.event.publish(me.event.STATE_RESUME);
+					}
+					if (me.sys.stopOnBlur) {
+						obj.restart(true);
+
+						// force repaint
+						me.game.repaint();
+
+						// callback?
+						if (obj.onRestart)
+							obj.onRestart();
+
+						// publish the resume notification
+						me.event.publish(me.event.STATE_RESTART);
+					}
 				}
-				// callback?
-				if (obj.onResume)
-					obj.onResume();
-
-				// publish the resume notification
-				me.event.publish(me.event.STATE_RESUME);
 
 			}, false);
+
+		};
+
+		/**
+		 * Stop the current screen object.
+		 * @name stop
+		 * @memberOf me.state
+		 * @public
+		 * @function
+		 * @param {Boolean} pauseTrack pause current track on screen stop.
+		 */
+		obj.stop = function(music) {
+			// stop the main loop
+			_stopRunLoop();
+			// current music stop
+			if (music)
+				me.audio.pauseTrack();
 
 		};
 
@@ -6084,7 +6505,7 @@ window.me = window.me || {};
 		 */
 		obj.pause = function(music) {
 			// stop the main loop
-			_stopRunLoop();
+			_pauseRunLoop();
 			// current music stop
 			if (music)
 				me.audio.pauseTrack();
@@ -6092,7 +6513,23 @@ window.me = window.me || {};
 		};
 
 		/**
-		 * resume the resume screen object
+		 * Restart the screen object from a full stop.
+		 * @name restart
+		 * @memberOf me.state
+		 * @public
+		 * @function
+		 * @param {Boolean} resumeTrack resume current track on screen resume
+		 */
+		obj.restart = function(music) {
+			// restart the main loop
+			_startRunLoop();
+			// current music stop
+			if (music)
+				me.audio.resumeTrack();
+		};
+
+		/**
+		 * resume the screen object
 		 * @name resume
 		 * @memberOf me.state
 		 * @public
@@ -6100,8 +6537,8 @@ window.me = window.me || {};
 		 * @param {Boolean} resumeTrack resume current track on screen resume
 		 */
 		obj.resume = function(music) {
-			// start the main loop
-			_startRunLoop();
+			// resume the main loop
+			_resumeRunLoop();
 			// current music stop
 			if (music)
 				me.audio.resumeTrack();
@@ -6117,6 +6554,18 @@ window.me = window.me || {};
 		 */
 		obj.isRunning = function() {
 			return (_animFrameId !== -1)
+		};
+
+		/**
+		 * Return the pause state of the state manager
+		 * @name isPaused
+		 * @memberOf me.state
+		 * @public
+		 * @function
+		 * @param {Boolean} true if the game is paused
+		 */
+		obj.isPaused = function() {
+			return _isPaused;
 		};
 
 		/**
@@ -6279,9 +6728,16 @@ window.me = window.me || {};
 		onResetEvent : function() {
 			// melonJS logo
 			this.logo1 = new me.Font('century gothic', 32, 'white', 'middle');
-			this.logo2 = new me.Font('century gothic', 32, '#89b002', 'middle');
+			this.logo2 = new me.Font('century gothic', 32, '#55aa00', 'middle');
 			this.logo2.bold();
 			this.logo1.textBaseline = this.logo2.textBaseline = "alphabetic";
+
+			// generated from /src/loader/logo.png
+			this.imgLogo = new Image();
+			this.imgLogo.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABVCAMAAACIGrFuAAADAFBMVEXu7u7t7e37+/v39/f4+Pjp6en7+/v7+/v////r6+v09PTs7Oz4+Pju7u7f39/19fX39/fs7Oz09PTr6+v6+vrx8fH09PT5+fn6+vrs7Oz5+fnw8PDy8vL////4+Pj6+vqZmZnt7e3z8/Pt7e3x8fHq6ury8vL////t7e34+Pju7u7////u7u7t7e3w8PDz7/P/zP/w8PDw8PD6+vr9/f3r6+vt7e3u7u739/f29vb19fXs7Ozw8PD29vb4+fjr6+u5ubn6+vr7+/v////x8fHw8PD////q6ur7+/ny8vL39/fw8PD29vb////39/fp6en09PTr6+v39/ft7e3////////6+vr6+vrs7Oz4+Pj////39/f29vb8/Pz39/f8/Pz19fXu7u75+fn6+vrw8PD4+Pj8/Pzu7+7s7Ozt7u3+/v7x8fH4+Pj+/v7////t7e34+Pjx8fHs7Ozu7u7v7+/4+Pj5+fnz8/P////u7u719fX////19fX4+Pj39/f29vZAQEDo6Ojv7+/////39/cAAADv7+/v7+/z8/P9/f3z8/Py8vLw8PDy8vLy8vL7+/v29vbr6+v6+vr4+Pjy8vL39/fr6+v////4+Pjz8/Pu7u739/fu7u739/f09PT5+fn9/f39/f3t7e37+/vy8vLw8PAAAAD9/f3r6+vu7u73+Pf+/v729vb5+fn4+Pizs7Pz8/P19fX09PT09PT6+vr9/f37+/v4+Pj8/Pz4+Pjr6+v9/f37+/v5+fnz8/P5+fn7+/v19fX7+/v////////+/v7///+/v7/Gxsbv7+/9/f3w8PDv7+/w8PDz8/P7+/vs7Oz39/f8/Pzj4+P29vb////6+vr////u7u7w8PD9/f3////7+/v////////+/v79/f3v7+/MzMyAgICqqqr////7+/u/v7////////////////8AAADs7Oz19vXy8vLu7+7z8/Px8fH4+Pj29vb19fX39/f5+fn09PTt7e36+vr8/Pz9/f37+/v+/v7////sE5ywAAAA7XRSTlP+4aarSutFgI7oXv9z8RC9hflg+zjXcHde/Hu7yUCJswXAKsUk8T2EVCZaJvzbRUAFQumbZ8zB9GGiSt3dt6znC6itQdPSbO9+yGLUx52G8r78X/ZKlzOOXY0tmlJ0uU1kJodM5Faj1/n5f0d9a5n7u+fpD/MQtstC7CcpC2inwATR2w4+AtL3xm1taENfTpBZ7bFX2F0NlUfD3cJcwLFcnHncPivUAXz+95NxERmCBhZmwRcwJxSdrJMIHpWhajYSUY0XOo0MCAnYoewZ7lYN4740BhOARivzIS4YgTgiHHIKBQIDKgUEAwIEAQAGaxhqAAAGjUlEQVR42u2Zd3RURRTGYy8RFcTee++9N7Bhj1iQjuhRQIpKXYp0QSnSQToHFBJACL13CCWEhJp6slnyylVCErLJvnKdO2/hsXm7+3ZIDn94+M7JSXY3M7/5vpk7782+ODgNOgM5AzkDOW0QVZUlRTlMyldktdohqiopUuX3FLUaIQwAXJ6czpOv+o5p79XXZF/K3pCqB6LK1ngzpjea0qnmMR2PK/DnZd1TwatWHVKgcECTm26o0NCSfowUQFKNpmwUVYPIRJjZIC8tHrmOXNTxwkta3rjf59vfbePky9PKEXETqDPFIM5Zrd38yhI+/AM3t26Rmw8hajbbQJwF0qlCZGq5aFYdnlFRz+ume4Lkw5Ikcylks1U5+m8D+VQgqsSa/XRxWikRrkiZnGn1L6lqpZGkw2rE1qCIQ1Rqkzz7LyLU/LplYhAQ9l+hT00cCKoohBDehu1o8ZQ1rrWWT78NcEDm7UbMBkkIQojUNruRqUNWVyq2QiJEhqTfiZgiBCHEwgt2MoK2YNdy7sFlecC9fsT4+YxGkBgR87PaMkTxkj3stSK7NlFgDhoaPgOKDXFFzL2WIb5tfpCN0Y4pWlr5u1E38CWQY4FQqp6pVNjbZy1kr6iRu/KhKWpoYvwPoLpD5ALw/l2DIRLmbHbPyZ6RjKdRZxDcyK3EuSW17xuG+CdrMYA92e7uV6GByH7yQHGBsKSaTULEkmVJIgg4DLWYDw55D6SoEFWCgqm0f0yaIYRgY08usyAavsv6iQwhm9Op9qadz+cidhXChp2oEYORPtgaGUKz4VlJ2+wcLxQIICjjrdNYTlwmFqdGhkhswrtQUiv430I+0n/GAB6HlOWAHAGiwC3r6RK6S2wyeMstNoNBAg3CQ6g2fL0RcVWio/bc19XibcSwIb4gxBnV4H9ZaZANEGXc354x3CEK9JqCiLcnidqgNf9oBWfYEL8TwhmZVOJTxW1QAlR/IZDyDL66KjPuasu221agitmgPRFWUvmFQj7yOCDM8H3Mbv8NoouK6iq3P2omhkjHbQWVIDT6XxCxRz/BqHi0uypYVJVk4NJKuzD5yEPEvSxeYRuvrEQnAwP4fuguTD6I8QT7Q9hG35dR19EhHUdAYQjE8vGH6HTIEmz5wmEjOO8lOaFxKTQfxBBNCsZ2QFNDDGfkBa99+eWMexDxczEGZbFjFbNholPkbn3I3YoEh8oQBwsx6BrQr02FbcMZ11iQbIgKnvaId0Oh4O39c89HtEFpdfHYN3dkZArirQwmdAw61JEh+KKKlFZw1HEW41zEAxkgiyAOPmugTklFDMtMDvYYx8MqPAuxISgiiNnlNNYo0nDByYcgBZoinhNrnUsSQywjhInRIetAOgFhx8e6WDaDYWM8L85wRxBj28lHbBn2GHg2SDEeeje+6ndDkHRmpNCGKNAIsYkrRKW7r+XD3kZ3BF9a40LO8RJ8j0WZoEYl0ExA16ztiKY7gi+tT0GyIaz3xnjePFCjEMh3n2EvlrCorUXrbuQzkELnZCk/SIQHqAr987zO9X9Eu/TcpJ0odntO5iK2gHQnwDr3w+Z9Q4dTSzsnt7BM/JV1G+pkDeJXqWztyKoaHD7rP99a0iveSalB7YImYgwrizNsCGkao/R1OEnPGbGpXpkoga66T7GBVoJIsA79iAsG7RldYF0mlm/IHjV36fASnq8YgXw8lsjiCYVQYNejnwWux/dOmzix54TxCaVW/LqhmygoDYu7UVhOyB3lqGtGSMUGLIA4w/8wYzgh7M3VaNCq0DWSrpt2/6IMfAgeASeEe+nB5qvqMtA/hHxEgGx5EI1qYJRRgYSH0ApLGlBlSgAHJEM+RIQwvi++ahRdw3qZ5CMihCjdHsBAVaLCx3sRIwqEDmOLumDAPEUbBhb/RqlHh5CXxU+SaXGZzMbAHJBUcIWQ16FIZsSTil/Nm7tDuNshB9DUxFyYaC5JinbiiHOcYBO/NFlmIkHh72ssG+4QO7LaE2K9kmscke32jV5c2BvpfeOQLuemO6GIvvqUJPHHTbRIslOKglt9GJJpsg/o47pv7LBGJQaxMQu7f3jUSt2gbTkoXdcCBieVdnrrENhBiUOCCeSOGjO+FMOofOSYj1cAxPolUpzLYxJv7id59duNTDhyzAgEAkeL36zz2qZBr2eqnEAmhCFOTjDuAs/m3AY+n2/t6K3eoFPLgwDE7QFfSH9eJfi8RBjihmKSmej3//yxbHT9B+2FgxOCDMA9AAAAAElFTkSuQmCC";
+		
+			// default progress bar height
+			this.barHeight = 4;
 
 			// setup a callback
 			this.handle = me.event.subscribe(me.event.LOADER_PROGRESS, this.onProgressUpdate.bind(this));
@@ -6299,6 +6755,12 @@ window.me = window.me || {};
 				me.event.unsubscribe(this.handle);
 				this.handle = null;
 			}
+			// free the Image ressource
+			if (this.imgLogo && (typeof(this.imgLogo.dispose) === 'function')) {
+				// cocoonJS extension
+				this.imgLogo.dispose();
+			} 
+			delete this.imgLogo;
 		},
 
 		// make sure the screen is refreshed every frame 
@@ -6329,33 +6791,49 @@ window.me = window.me || {};
 			// measure the logo size
 			var logo1_width = this.logo1.measureText(context, "melon").width;
 			var xpos = (me.video.getWidth() - logo1_width - this.logo2.measureText(context, "JS").width) / 2;
-			var ypos = me.video.getHeight() / 2;
+			var ypos = (me.video.getHeight() / 2) + (this.logo2.measureText(context, "melon").height);
 				
 			// clear surface
-			me.video.clearSurface(context, "black");
+			me.video.clearSurface(context, "#202020");
 			
 			// draw the melonJS logo
+			context.drawImage(
+					this.imgLogo, 
+					(me.video.getWidth() - this.imgLogo.width) /2 , 
+					(me.video.getHeight()/2) - (this.barHeight/2) - 4 - this.imgLogo.height
+			);
+			
+			// draw the melonJS string
 			this.logo1.draw(context, 'melon', xpos , ypos);
 			xpos += logo1_width;
 			this.logo2.draw(context, 'JS', xpos, ypos);
 			
-			ypos += this.logo1.measureText(context, "melon").height / 2;
-
 			// display a progressive loading bar
 			var progress = Math.floor(this.loadPercent * me.video.getWidth());
 
 			// draw the progress bar
-			context.strokeStyle = "silver";
-			context.strokeRect(0, ypos, me.video.getWidth(), 6);
-			context.fillStyle = "#89b002";
-			context.fillRect(2, ypos + 2, progress - 4, 2);
+			context.fillStyle = "black";
+			context.fillRect(0, (me.video.getHeight()/2)-(this.barHeight/2), me.video.getWidth(), this.barHeight);
+			context.fillStyle = "#55aa00";
+			context.fillRect(2, (me.video.getHeight()/2)-(this.barHeight/2), progress, this.barHeight);
 		}
 
 	});
 
-	/************************************************************************************/
-	/*			PRELOADER SINGLETON														*/
-	/************************************************************************************/
+
+	/*---------------------------------------------------------*/
+	// END END END
+	/*---------------------------------------------------------*/
+})(window);
+
+/*
+ * MelonJS Game Engine
+ * Copyright (C) 2011 - 2013, Olivier BIOT
+ * http://www.melonjs.org
+ *
+ */
+
+(function($) {
 
 	/**
 	 * a small class to manage loading of stuff and manage resources
@@ -6771,6 +7249,11 @@ window.me = window.me || {};
 					if (!(res.name in imgList))
 						return false;
 
+					if (typeof(imgList[res.name].dispose) === 'function') {
+						// cocoonJS implements a dispose function to free
+						// corresponding allocated texture in memory
+						imgList[res.name].dispose();
+					} 
 					delete imgList[res.name];
 					return true;
 
@@ -6911,12 +7394,16 @@ window.me = window.me || {};
 			if (elt in imgList) {
 				if (me.sys.cacheImage === true) {
 					// build a new canvas
-					var tempCanvas = me.video.createCanvasSurface(
-							imgList[elt].width, imgList[elt].height);
+					var _context = me.video.getContext2d(
+						me.video.createCanvas(
+							imgList[elt].width, 
+							imgList[elt].height
+						)
+					);
 					// draw the image into the canvas context
-					tempCanvas.drawImage(imgList[elt], 0, 0);
+					_context.drawImage(imgList[elt], 0, 0);
 					// return our canvas
-					return tempCanvas.canvas;
+					return _context.canvas;
 				} else {
 					// return the corresponding Image object
 					return imgList[elt];
@@ -7364,7 +7851,7 @@ window.me = window.me || {};
 	 * GUI Object<br>
 	 * A very basic object to manage GUI elements <br>
 	 * The object simply register on the "mousedown" <br>
-	 * or "touchstart" event and call the onClicked function" 
+	 * or "touchstart" event and call the onClick function" 
 	 * @class
 	 * @extends me.SpriteObject
 	 * @memberOf me
@@ -7389,11 +7876,11 @@ window.me = window.me || {};
 	 *	
 	 *    // output something in the console
 	 *    // when the object is clicked
-	 *    onClick:function()
+	 *    onClick:function(event)
 	 *    {
 	 *       console.log("clicked!");
 	 *       // don't propagate the event
-	 *       return true;
+	 *       return false;
 	 *    }
 	 * });
 	 * 
@@ -7449,25 +7936,25 @@ window.me = window.me || {};
 		 * function callback for the mousedown event
 		 * @ignore
 		 */
-		clicked : function() {
+		clicked : function(event) {
 			if (this.isClickable) {
 				this.updated = true;
-				return this.onClick();
+				return this.onClick(event);
 			}
 		},
 	
 		/**
 		 * function called when the object is clicked <br>
 		 * to be extended <br>
-		 * return true if we need to stop propagating the event
+		 * return false if we need to stop propagating the event
 		 * @name onClick
 		 * @memberOf me.GUI_Object
 		 * @public
 		 * @function
+		 * @param {Event} event the event object
 		 */
-		onClick : function() {
-			
-			return true;
+		onClick : function(event) {
+			return false;
 		},
 		
 		/**
@@ -7690,9 +8177,7 @@ window.me = window.me || {};
 
 			// create a canvas where to draw everything
 			this.HUDCanvas = me.video.createCanvas(this.width, this.height);
-			this.HUDCanvasSurface = this.HUDCanvas.getContext('2d');
-			// set scaling interpolation filter
-			me.video.setImageSmoothing(this.HUDCanvasSurface, me.sys.scalingInterpolation);
+			this.HUDCanvasSurface = me.video.getContext2d(this.HUDCanvas);
 			
 			// this is a little hack to ensure the HUD is always the first draw
 			this.z = 999;
@@ -8732,6 +9217,7 @@ window.me = window.me || {};
 		var backBufferCanvas = null;
 		var backBufferContext2D = null;
 		var wrapper = null;
+
 		
 		var deferResizeId = -1;
 
@@ -8740,6 +9226,11 @@ window.me = window.me || {};
 		var game_height_zoom = 0;
 		var auto_scale = false;
 		var maintainAspectRatio = true;
+		var devicePixelRatio = null;
+		
+		// max display size
+		var maxWidth = Infinity;
+		var maxHeight = Infinity;
 		
 		/**
 		 * return a vendor specific canvas type
@@ -8831,31 +9322,25 @@ window.me = window.me || {};
 				return false;
 				
 			// get the 2D context
-			context2D = canvas.getContext('2d');
-			if (!context2D.canvas) {
-				context2D.canvas = canvas;
-			}
-			// set scaling interpolation filter
-			me.video.setImageSmoothing(context2D, me.sys.scalingInterpolation);
+			context2D = api.getContext2d(canvas);
 
 			// create the back buffer if we use double buffering
 			if (double_buffering) {
 				backBufferCanvas = api.createCanvas(game_width, game_height, false);
-				backBufferContext2D = backBufferCanvas.getContext('2d');
-				if (!backBufferContext2D.canvas) {
-					backBufferContext2D.canvas = backBufferCanvas;
-				}
-				// set scaling interpolation filter
-				me.video.setImageSmoothing(backBufferContext2D, me.sys.scalingInterpolation);
+				backBufferContext2D = api.getContext2d(backBufferCanvas);
 			} else {
 				backBufferCanvas = canvas;
 				backBufferContext2D = context2D;
 			}
 			
-			// trigger an initial resize();
-			if (auto_scale) {
-				me.video.onresize(null);
+			// set max the canvas max size if CSS values are defined 
+			if (window.getComputedStyle) {
+				var style = window.getComputedStyle(canvas, null);
+				me.video.setMaxSize(parseInt(style.maxWidth), parseInt(style.maxHeight));
 			}
+			
+			// trigger an initial resize();
+			me.video.onresize(null);
 			
 			return true;
 		};
@@ -8906,6 +9391,21 @@ window.me = window.me || {};
 		api.getHeight = function() {
 			return backBufferCanvas.height;
 		};
+		
+		/**
+		 * set the max canvas display size (when scaling)
+		 * @name setMaxSize
+		 * @memberOf me.video
+		 * @function
+		 * @param {Int} width width
+		 * @param {Int} height height
+		 */
+		api.setMaxSize = function(w, h) {
+			// max display size
+			maxWidth = w || Infinity;
+			maxHeight = h || Infinity;
+		};
+
 
 		/**
 		 * Create and return a new Canvas
@@ -8931,20 +9431,23 @@ window.me = window.me || {};
 		};
 
 		/**
-		 * Create and return a new 2D Context
-		 * @name createCanvasSurface
+		 * Returns the 2D Context object of the given Canvas
+		 * `getContext2d` will also enable/disable antialiasing features based on global settings.
+		 * @name getContext2D
 		 * @memberOf me.video
 		 * @function
-		 * @deprecated
-		 * @param {Int} width width
-		 * @param {Int} height height
+		 * @param {Canvas}
 		 * @return {Context2D}
 		 */
-		api.createCanvasSurface = function(width, height) {
-			var _canvas = api.createCanvas(width, height, false);
-			var _context = _canvas.getContext('2d');
+		api.getContext2d = function(canvas) {
+			if (navigator.isCocoonJS) {
+				// cocoonJS specific extension
+				var _context = canvas.getContext('2d', { "antialias" : me.sys.scalingInterpolation });
+			} else {
+				var _context = canvas.getContext('2d');				
+			}
 			if (!_context.canvas) {
-				_context.canvas = _canvas;
+				_context.canvas = canvas;
 			}
 			me.video.setImageSmoothing(_context, me.sys.scalingInterpolation);
 			return _context;
@@ -9000,39 +9503,64 @@ window.me = window.me || {};
 		};
 		
 		/**
+		 * return the device pixel ratio
+		 * @name getDevicePixelRatio
+		 * @memberOf me.video
+		 * @function
+		 */
+		api.getDevicePixelRatio = function() {
+			
+			if (devicePixelRatio===null) {
+				var _context = me.video.getScreenContext();
+				var _devicePixelRatio = window.devicePixelRatio || 1,
+					_backingStoreRatio = _context.webkitBackingStorePixelRatio ||
+										_context.mozBackingStorePixelRatio ||
+										_context.msBackingStorePixelRatio ||
+										_context.oBackingStorePixelRatio ||
+										_context.backingStorePixelRatio || 1;
+				devicePixelRatio = _devicePixelRatio / _backingStoreRatio;
+			}
+			return devicePixelRatio;
+		};
+		
+		/**
 		 * callback for window resize event
 		 * @ignore
 		 */
 		api.onresize = function(event){
+			// default (no scaling)
+			var scaleX = 1, scaleY = 1;
+			
 			if (auto_scale) {
 				// get the parent container max size
 				var parent = me.video.getScreenCanvas().parentNode;
-				var max_width = parent.width || window.innerWidth;
-				var max_height = parent.height || window.innerHeight;
-				
-				if (deferResizeId) {
-					// cancel any previous pending resize
-					clearTimeout(deferResizeId);
-				}
+				var _max_width = Math.min(maxWidth, parent.width || window.innerWidth);
+				var _max_height = Math.min(maxHeight, parent.height || window.innerHeight);
 
 				if (maintainAspectRatio) {
 					// make sure we maintain the original aspect ratio
 					var designRatio = me.video.getWidth() / me.video.getHeight();
-					var screenRatio = max_width / max_height;
+					var screenRatio = _max_width / _max_height;
 					if (screenRatio < designRatio)
-						var scale = max_width / me.video.getWidth();
+						scaleX = scaleY = _max_width / me.video.getWidth();
 					else
-						var scale = max_height / me.video.getHeight();
-		
-					// update the "front" canvas size
-					deferResizeId = me.video.updateDisplaySize.defer(scale,scale);
+						scaleX = scaleY = _max_height / me.video.getHeight();
 				} else {
 					// scale the display canvas to fit with the parent container
-					deferResizeId = me.video.updateDisplaySize.defer( 
-						max_width / me.video.getWidth(),
-						max_height / me.video.getHeight()
-					);
+					scaleX = _max_width / me.video.getWidth();
+					scaleY = _max_height / me.video.getHeight();
 				}
+			}
+			// adjust scaling ratio based on the device pixel ratio
+			scaleX *= me.video.getDevicePixelRatio();
+			scaleY *= me.video.getDevicePixelRatio();
+			// scale if required
+			if (scaleX!==1 || scaleY !==1) {
+				if (deferResizeId) {
+					// cancel any previous pending resize
+					clearTimeout(deferResizeId);
+				}
+				deferResizeId = me.video.updateDisplaySize.defer(scaleX , scaleY);
 				return;
 			}
 			// make sure we have the correct relative canvas position cached
@@ -9050,10 +9578,16 @@ window.me = window.me || {};
 		api.updateDisplaySize = function(scaleX, scaleY) {
 			// update the global scale variable
 			me.sys.scale.set(scaleX,scaleY);
+			
 			// apply the new value
 			canvas.width = game_width_zoom = backBufferCanvas.width * scaleX;
 			canvas.height = game_height_zoom = backBufferCanvas.height * scaleY;
-			
+			// adjust CSS style for High-DPI devices
+			if (me.video.getDevicePixelRatio()>1) {
+				canvas.style.width = (canvas.width / me.video.getDevicePixelRatio()) + 'px';
+				canvas.style.height = (canvas.height / me.video.getDevicePixelRatio()) + 'px';
+			}
+			 
 			// make sure we have the correct relative canvas position cached
 			me.input.offset = me.video.getPos();
 
@@ -9084,23 +9618,6 @@ window.me = window.me || {};
 			context.fillStyle = col;
 			context.fillRect(0, 0, w, h);
 			context.restore();
-		};
-
-		/**
-		 * scale & keep canvas centered<p>
-		 * useful for zooming effect
-		 * @name scale
-		 * @memberOf me.video
-		 * @function
-		 * @param {Context2D} context Canvas context
-		 * @param {Number} scale Scaling multiplier
-		 */
-		api.scale = function(context, scale) {
-			context.translate(
-							-(((context.canvas.width * scale) - context.canvas.width) >> 1),
-							-(((context.canvas.height * scale) - context.canvas.height) >> 1));
-			context.scale(scale, scale);
-
 		};
 		
 		/**
@@ -9176,7 +9693,7 @@ window.me = window.me || {};
 		 */
 		api.applyRGBFilter = function(object, effect, option) {
 			//create a output canvas using the given canvas or image size
-			var fcanvas = api.createCanvasSurface(object.width, object.height, false);
+			var _context = api.getContext2d(api.createCanvas(object.width, object.height, false));
 			// get the pixels array of the give parameter
 			var imgpix = me.utils.getPixels(object);
 			// pointer to the pixels data
@@ -9220,10 +9737,10 @@ window.me = window.me || {};
 			}
 
 			// put our modified image back in the new filtered canvas
-			fcanvas.putImageData(imgpix, 0, 0);
+			_context.putImageData(imgpix, 0, 0);
 
 			// return it
-			return fcanvas;
+			return _context;
 		};
 
 		// return our api
@@ -9244,6 +9761,37 @@ window.me = window.me || {};
  */
 
 (function(window) {
+	
+	/**
+	 * The built in Event Object
+	 * @external Event
+	 * @see {@link https://developer.mozilla.org/en/docs/Web/API/Event|Event}
+	 */
+	 
+	 /**
+	  * Event normalized X coordinates whithin the game canvas itself<br>
+	  * <img src="images/event_coord.png"/>
+	  * @memberof! external:Event#
+	  * @name external:Event#gameX
+	  * @type {Number}
+	  */
+	  
+	 /**
+	  * Event normalized Y coordinates whithin the game canvas itself<br>
+	  * <img src="images/event_coord.png"/>
+	  * @memberof! external:Event#
+	  * @name external:Event#gameY
+	  * @type {Number}
+	  */
+	  
+	 /**
+	  * The unique identifier of the contact for a touch, mouse or pen <br>
+	  * (This id is also defined on non Pointer Event Compatible platform like pure mouse or iOS-like touch event) 
+	  * @memberof! external:Event#
+	  * @name external:Event#pointerId
+	  * @type {Number}
+	  * @see http://msdn.microsoft.com/en-us/library/windows/apps/hh466123.aspx
+	  */
 
 	/**
 	 * There is no constructor function for me.input.
@@ -9327,6 +9875,13 @@ window.me = window.me || {};
 				obj.mouse.pos = new me.Vector2d(0,0);
 				// get relative canvas position in the page
 				obj.offset = me.video.getPos();
+				// Automatically update relative canvas position on scroll
+				window.addEventListener("scroll", throttle(100, false,
+					function (e) {
+						obj.offset = me.video.getPos();
+						me.event.publish(me.event.WINDOW_ONSCROLL, [ e ]);
+					}
+				), false);
 				
 			    // MSPointer can hold Mouse & Touch events
 				if (window.navigator.pointerEnabled) {
@@ -9362,7 +9917,7 @@ window.me = window.me || {};
 					me.video.getScreenCanvas().addEventListener(activeEventList[1], onMoveEvent, false);
 				}
 				else {
-					me.video.getScreenCanvas().addEventListener(activeEventList[1], throttle(100, false, function(e){onMoveEvent(e)}), false);
+					me.video.getScreenCanvas().addEventListener(activeEventList[1], throttle(obj.throttlingInterval, false, function(e){onMoveEvent(e)}), false);
 				}
 				pointerInitialized = true;
 			}
@@ -9448,7 +10003,8 @@ window.me = window.me || {};
 			var handled = false;
 			var handlers = evtHandlers[e.type];
 			if (handlers) {
-				var offset = me.game.viewport.pos.clone().sub(me.game.currentLevel.pos);
+				// get the current screen to world offset 
+				var offset = me.game.viewport.screenToWorld(0,0);
 				for(var t=0, l=obj.changedTouches.length; t<l; t++) {
 					// Do not fire older events
 					if (typeof(e.timeStamp) !== "undefined") {
@@ -9574,7 +10130,7 @@ window.me = window.me || {};
 
 			// check if mapped to a key
 			if (keycode) {
-				if (e.type === activeEventList[3])
+				if (e.type === activeEventList[2])
 					return keydown(e, keycode);
 				else // 'mouseup' or 'touchend'
 					return keyup(e, keycode);
@@ -9879,8 +10435,8 @@ window.me = window.me || {};
 			y -= offset.top;
 			var scale = me.sys.scale;
 			if (scale.x != 1.0 || scale.y != 1.0) {
-				x/=scale.x;
-				y/=scale.y;
+				x/=(scale.x / me.video.getDevicePixelRatio());
+				y/=(scale.y / me.video.getDevicePixelRatio());
 			}
 			return new me.Vector2d(x, y);
 		};
@@ -9965,8 +10521,12 @@ window.me = window.me || {};
 
 			
 		/**
-		 * allows registration of event listeners on the object target. 
-		 * note : on a touch enabled device mouse event will automatically be converted to touch event
+		 * allows registration of event listeners on the object target. <br>
+		 * (on a touch enabled device mouse event will automatically be converted to touch event)<br>
+		 * <br>
+		 * melonJS defines the additional `gameX` and `gameY` properties when passing the Event object <br>
+		 * to the defined callback (see below)<br>
+		 * @see external:Event
 		 * @name registerPointerEvent
 		 * @memberOf me.input
 		 * @public
@@ -10059,7 +10619,7 @@ window.me = window.me || {};
 		 * @return {boolean} false if not supported by the device
 		 */
 		obj.watchAccelerometer = function() {
-			if (window.sys.gyro) {
+			if (me.sys.gyro) {
 				if (!accelInitialized) {
 					// add a listener for the mouse
 					window.addEventListener('devicemotion', onDeviceMotion, false);
@@ -10374,9 +10934,11 @@ window.me = window.me || {};
 		 */
 		api.getPixels = function(arg) {
 			if (arg instanceof HTMLImageElement) {
-				var c = me.video.createCanvasSurface(arg.width, arg.height);
-				c.drawImage(arg, 0, 0);
-				return c.getImageData(0, 0, arg.width, arg.height);
+				var _context = me.video.getContext2d(
+					me.video.createCanvas(arg.width, arg.height)
+				);
+				_context.drawImage(arg, 0, 0);
+				return _context.getImageData(0, 0, arg.width, arg.height);
 			} else { 
 				// canvas !
 				return arg.getContext('2d').getImageData(0, 0, arg.width, arg.height);
@@ -11314,9 +11876,11 @@ window.me = window.me || {};
 		//return an Image Object with the specified tile
 		getTileImage : function(tmxTile) {
 			// create a new image object
-			var image = me.video.createCanvasSurface(this.tilewidth, this.tileheight);
-			this.drawTile(image, 0, 0, tmxTile);
-			return image.canvas;
+			var _context = me.video.getContext2d(
+					me.video.createCanvas(this.tilewidth, this.tileheight)
+			);
+			this.drawTile(_context, 0, 0, tmxTile);
+			return _context.canvas;
 		},
 		
 		// e.g. getTileProperty (gid)	
@@ -11358,10 +11922,11 @@ window.me = window.me || {};
 		 * @ignore
 		 */
 		getTileOffsetX : function(tileId) {
-			if (this.tileXOffset[tileId] == null) {
+			var offset = this.tileXOffset[tileId];
+			if (offset == undefined) {
 				this.tileXOffset[tileId] = this.margin + (this.spacing + this.tilewidth)  * (tileId % this.hTileCount);
 			}
-			return this.tileXOffset[tileId];
+			return offset;
 		},
 		
 		/**
@@ -11369,10 +11934,11 @@ window.me = window.me || {};
 		 * @ignore
 		 */
 		getTileOffsetY : function(tileId) {
-			if (this.tileYOffset[tileId] == null) {
+			var offset = this.tileYOffset[tileId];
+			if (offset == undefined) {
 				this.tileYOffset[tileId] = this.margin + (this.spacing + this.tileheight)	* ~~(tileId / this.hTileCount);
 			}
-			return this.tileYOffset[tileId];
+			return offset;
 		},
 
 
@@ -11893,7 +12459,7 @@ window.me = window.me || {};
 	 * @param {int}    height      layer height in pixels
 	 * @param {String} image       image name (as defined in the asset list)
 	 * @param {int}    z           z position
-	 * @param {float}  [ratio=1.0]   scrolling ratio to be applied
+	 * @param {me.Vector2d}  [ratio=1.0]   scrolling ratio to be applied
 	 */
 	 me.ImageLayer = me.Renderable.extend({
 		
@@ -11914,12 +12480,15 @@ window.me = window.me || {};
 		/**
 		 * Define the image scrolling ratio<br>
 		 * Scrolling speed is defined by multiplying the viewport delta position (e.g. followed entity) by the specified ratio<br>
-		 * Default value : 1.0 <br>
+		 * Default value : (1.0, 1.0) <br>
+		 * To specify a value through Tiled, use one of the following format : <br> 
+		 * - a number, to change the value for both axis <br>
+		 * - a json expression like `json:{"x":0.5,"y":0.5}` if you wish to specify a different value for both x and y
 		 * @public
-		 * @type float
+		 * @type me.Vector2d
 		 * @name me.ImageLayer#ratio
 		 */
-		ratio: 1.0,
+		ratio: new me.Vector2d(1.0, 1.0),
 	 
 		/**
 		 * constructor
@@ -11942,8 +12511,18 @@ window.me = window.me || {};
 			// displaying order
 			this.z = z;
 			
-			// if ratio !=0 scrolling image
-			this.ratio = ratio || 1.0;
+			// default ratio for parallax
+			this.ratio.set(1.0, 1.0);
+
+			if (ratio) {
+				// little hack for backward compatiblity
+				if (typeof(ratio) === "number") {
+					this.ratio.set(ratio, ratio);
+				} else /* vector */ {
+					this.ratio.setV(ratio);
+				}
+			}
+
 			
 			// a cached reference to the viewport
 			this.viewport = me.game.viewport;
@@ -11997,7 +12576,7 @@ window.me = window.me || {};
 			});
 			
 			// default origin position
-			this.anchorPoint.set(0,0);
+			this.anchorPoint.set(0, 0);
 			
 		},
 		
@@ -12043,7 +12622,7 @@ window.me = window.me || {};
 		 * @function
 		 */
 		update : function() {
-			if (this.ratio===0) {
+			if (0 === this.ratio.x && 0 === this.ratio.y) {
 				// static image
 				return false;
 			}
@@ -12053,9 +12632,9 @@ window.me = window.me || {};
 				// parallax / scrolling image
 				if (!this.lastpos.equals(vpos)) {
 					// viewport changed
-					this.pos.x += ((vpos.x - this.lastpos.x) * this.ratio) % this.imagewidth;
+					this.pos.x += ((vpos.x - this.lastpos.x) * this.ratio.x) % this.imagewidth;
 					this.pos.x = (this.imagewidth + this.pos.x) % this.imagewidth;
-					this.pos.y += ((vpos.y - this.lastpos.y) * this.ratio) % this.imageheight;
+					this.pos.y += ((vpos.y - this.lastpos.y) * this.ratio.y) % this.imageheight;
 					this.pos.y = (this.imageheight + this.pos.y) % this.imageheight;
 					this.lastpos.setV(vpos);
 					return true;
@@ -12085,7 +12664,7 @@ window.me = window.me || {};
 			context.globalAlpha = this.opacity;
 			
 			// if not scrolling ratio define, static image
-			if (this.ratio===0) {
+			if (0 === this.ratio.x && 0 === this.ratio.y){
 				// static image
 				var sw = Math.min(rect.width, this.imagewidth);
 				var sh = Math.min(rect.height, this.imageheight);
@@ -12273,10 +12852,8 @@ window.me = window.me || {};
 			// if pre-rendering method is use, create the offline canvas
 			if (this.preRender) {
 				this.layerCanvas = me.video.createCanvas(this.cols * this.tilewidth, this.rows * this.tileheight);
-				this.layerSurface = this.layerCanvas.getContext('2d');
-				// set scaling interpolation filter
-				me.video.setImageSmoothing(this.layerSurface, me.sys.scalingInterpolation);
-					
+				this.layerSurface = me.video.getContext2d(this.layerCanvas);
+
 				// set alpha value for this layer
 				this.layerSurface.globalAlpha = this.opacity;
 			}	
@@ -12315,9 +12892,7 @@ window.me = window.me || {};
 			// if pre-rendering method is use, create the offline canvas
 			if (this.preRender) {
 				this.layerCanvas = me.video.createCanvas(this.cols * this.tilewidth, this.rows * this.tileheight);
-				this.layerSurface = this.layerCanvas.getContext('2d');
-				// set scaling interpolation filter
-				me.video.setImageSmoothing(this.layerSurface, me.sys.scalingInterpolation);				
+				this.layerSurface = me.video.getContext2d(this.layerCanvas);
 				
 				// set alpha value for this layer
 				this.layerSurface.globalAlpha = this.opacity;
@@ -13182,6 +13757,11 @@ window.me = window.me || {};
 			
 			// check if we have any properties 
 			me.TMXUtils.applyTMXPropertiesFromXML(imageLayer, data);
+			
+			// make sure ratio is a vector (backward compatibility)
+			if (typeof(imageLayer.ratio) === "number") {
+				imageLayer.ratio = new me.Vector2d(parseFloat(imageLayer.ratio), parseFloat(imageLayer.ratio));
+			}
 
 			// add the new layer
 			return imageLayer;
@@ -13332,9 +13912,10 @@ window.me = window.me || {};
 			// check if we have any additional properties 
 			me.TMXUtils.applyTMXPropertiesFromJSON(imageLayer, data);
 			
-			// make sure ratio is a float
-			imageLayer.ratio = parseFloat(imageLayer.ratio);
-			
+			// make sure ratio is a vector (backward compatibility)
+			if (typeof(imageLayer.ratio) === "number") {
+				imageLayer.ratio = new me.Vector2d(parseFloat(imageLayer.ratio), parseFloat(imageLayer.ratio));
+			}
 			
 			return imageLayer;
 		},
@@ -13475,9 +14056,9 @@ window.me = window.me || {};
 				var wasRunning = me.state.isRunning();
 
 				if (wasRunning) {
-					// pause the game loop to avoid 
+					// stop the game loop to avoid 
 					// some silly side effects
-					me.state.pause();
+					me.state.stop();
 				}
 
 				// reset the gameObject Manager (just in case!)
@@ -13504,7 +14085,7 @@ window.me = window.me || {};
 				if (wasRunning) {
 					// resume the game loop if it was
 					// previously running
-					me.state.resume.defer();
+					me.state.restart.defer();
 				}
 			} else
 				throw "melonJS: no level loader defined";
@@ -14227,6 +14808,26 @@ window.me = window.me || {};
 		 * @name me.event#STATE_RESUME
 		 */		
 		obj.STATE_RESUME = "me.state.onResume";
+
+		/**
+		 * Channel Constant when the game is stopped <br>
+		 * Data passed : none <br>
+		 * @public
+		 * @constant
+		 * @type String
+		 * @name me.event#STATE_STOP
+		 */		
+		obj.STATE_STOP = "me.state.onStop";
+		
+		/**
+		 * Channel Constant for when the game is restarted <br>
+		 * Data passed : none <br>
+		 * @public
+		 * @constant
+		 * @type String
+		 * @name me.event#STATE_RESTART
+		 */		
+		obj.STATE_RESTART = "me.state.onRestart";
 		
 		/**
 		 * Channel Constant for when the game manager is initialized <br>
@@ -14298,7 +14899,17 @@ window.me = window.me || {};
 		 * @name me.event#WINDOW_ONRESIZE
 		 */
 		obj.WINDOW_ONRESIZE = "window.onresize";
-		
+
+		/**
+		 * Channel Constant for when the (browser) window is scrolled <br>
+		 * Data passed : {Event} Event object <br>
+		 * @public
+		 * @constant
+		 * @type String
+		 * @name me.event#WINDOW_ONSCROLL
+		 */
+		obj.WINDOW_ONSCROLL = "window.onscroll";
+
 		/**
 		 * Publish some data on a channel
 		 * @name me.event#publish
