@@ -136,7 +136,7 @@ var game = {
         );
 		
 		// sort objects based on y order
-		me.game.propertyToSortOn = "y";
+		me.game.sortOn = "y";
 
         // Overlay.
         me.game.add(new game.Overlay("overlay"), 10000);

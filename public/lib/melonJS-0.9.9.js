@@ -72,11 +72,11 @@ window.me = window.me || {};
 		 */
 		localStorage : (typeof($.localStorage) === 'object'),
 		/**
-		 * Browser Gyroscopic Motion Event capabilities (read-only) <br>
+		 * Browser accelerometer capabilities (read-only) <br>
 		 * @type Boolean
 		 * @memberOf me.sys
 		 */
-		gyro : ($.DeviceMotionEvent !== undefined),
+		hasAccelerometer : false,
 
 		/**
 		 * Browser Base64 decoding capability (read-only) <br>
@@ -879,14 +879,19 @@ window.me = window.me || {};
 		// detect platform
 		me.sys.isMobile = me.sys.ua.match(/Android|iPhone|iPad|iPod|BlackBerry|Windows Phone|Mobile/i);
 
+		// accelerometer detection
+		me.sys.hasAccelerometer = (
+			(window.DeviceMotionEvent !== undefined) || (
+				(window.Windows !== undefined) && 
+				(typeof (Windows.Devices.Sensors.Accelerometer) === 'function')
+			)
+		);
+
 		// init the FPS counter if needed
 		me.timer.init();
 
 		// create a new map reader instance
 		me.mapReader = new me.TMXMapReader();
-
-		// create a default loading screen
-		me.loadingScreen = new me.DefaultLoadingScreen();
 
 		// init the App Manager
 		me.state.init();
@@ -988,10 +993,10 @@ window.me = window.me || {};
 		 * value : "x", "y", "z" (default: "z")
 		 * @public
 		 * @type String
-		 * @name propertyToSortOn
+		 * @name sortOn
 		 * @memberOf me.game
 		 */
-		api.propertyToSortOn = "z";
+		api.sortOn = "z";
 		
 		/**
 		 * default layer renderer
@@ -1105,15 +1110,12 @@ window.me = window.me || {};
 			}
 
 			// remove all objects
-			api.removeAll(true);
+			api.removeAll();
 
 			// reset the viewport to zero ?
 			if (api.viewport) {
 				api.viewport.reset();
 			}
-
-			// make sure the object container is empty too
-			api.container.reset();
 
 			// reset the transform matrix to the normal one
 			frameBuffer.setTransform(1, 0, 0, 1, 0, 0);
@@ -1356,31 +1358,18 @@ window.me = window.me || {};
 		 * <strong>WARNING</strong>: Not safe to force asynchronously (e.g. onCollision callbacks)
 		 */
 		api.remove = function(obj, force) {
-
-			// Private function to do object removal
-			function removeNow(target) {
-				// notify the object it will be destroyed
-				if (target.destroy) {
-					target.destroy();
-				}
-
-				// Remove the object
-				api.container.removeChild(target);
-				me.entityPool.freeInstance(target);
-			}
-
-			if (api.container.children.indexOf(obj) > -1) {
+			if (api.container.hasChild(obj)) {
 				// remove the object from the object list
 				if (force===true) {
 					// force immediate object deletion
-					removeNow(obj);
+					api.container.removeChild(obj);
 				} else {
 					// make it invisible (this is bad...)
 					obj.visible = obj.inViewport = false;
 					// wait the end of the current loop
 					/** @ignore */
 					pendingRemove = (function (obj) {
-						removeNow(obj);
+						me.game.container.removeChild(obj);
 						pendingRemove = null;
 					}).defer(obj);
 				}
@@ -1396,28 +1385,14 @@ window.me = window.me || {};
 		 * @public
 		 * @function
 		 */
-		api.removeAll = function(force) {
+		api.removeAll = function() {
 			//cancel any pending tasks
 			if (pendingRemove) {
 				clearTimeout(pendingRemove);
 				pendingRemove = null;
 			}
-			// TODO : not good !
-			if (api.container.pendingSort) {
-				clearTimeout(api.container.pendingSort);
-				api.container.pendingSort = null;
-			}
-			
-			// inform all object they are about to be deleted
-			var children = api.container.children;
-			for (var i = children.length ; i-- ;) {
-				if (children[i].isPersistent) {
-                   // don't remove persistent objects
-				   continue;
-				}
-				// remove the entity
-				api.remove(children[i], force);
-			}
+			// destroy all objects in the root container
+			api.container.destroy();
 		};
 
 		/**
@@ -1430,8 +1405,8 @@ window.me = window.me || {};
 		 * @function
 		 * @example
 		 * // change the default sort property
-		 * me.game.propertyToSortOn = "y";
-		 * // call me.game.sort with our sorting function
+		 * me.game.sortOn = "y";
+		 * // manuallly call me.game.sort with our sorting function
 		 * me.game.sort();
 		 */
 		api.sort = function() {
@@ -5412,7 +5387,7 @@ window.me = window.me || {};
 (function(window) {
 
 	/**
-	 * EntityContainer represents a collection of entity objects.<br>	 *
+	 * EntityContainer represents a collection of entity objects
 	 * @class
 	 * @extends me.Renderable
 	 * @memberOf me
@@ -5428,13 +5403,13 @@ window.me = window.me || {};
 
 		/**
 		 * The property of entity that should be used to sort on <br>
-		 * value : "x", "y", "z" (default: me.game.propertyToSortOn)
+		 * value : "x", "y", "z" (default: me.game.sortOn)
 		 * @public
 		 * @type String
-		 * @name propertyToSortOn
+		 * @name sortOn
 		 * @memberOf me.EntityContainer
 		 */
-		propertyToSortOn : "z",
+		sortOn : "z",
 		
 		/** 
 		 * Specify if the entity list should be automatically sorted when adding a new child
@@ -5452,8 +5427,8 @@ window.me = window.me || {};
 		pendingSort : null,
 
 		/**
-		 * [read-only] The array of children of this container.
-		 * @property children {Array}
+		 * The array of children of this container.
+		 * @private
 		 */	
 		children : null,
 		
@@ -5466,22 +5441,13 @@ window.me = window.me || {};
 				width || me.game.viewport.width,  // which default value here ?
 				height || me.game.viewport.height 
 			);
-			// reset everything
-			this.reset();
-		},
-
-		/**
-		 * reset the container.
-		 * @name reset
-		 * @memberOf me.EntityContainer
-		 * @function
-		 */
-		reset : function() {
 			this.children = [];
 			// by default reuse the global me.game.setting
-			this.propertyToSortOn = me.game.propertyToSortOn;
+			this.sortOn = me.game.sortOn;
 			this.autoSort = true;
+
 		},
+
 
 		/**
 		 * Add a child to the container <br>
@@ -5498,7 +5464,7 @@ window.me = window.me || {};
 
 			child.ancestor = this;
 			
-			this.children[this.children.length] = child;
+			this.children.push(child);
 			
 			this.sort(this.autoSort===false);
 		},
@@ -5528,7 +5494,7 @@ window.me = window.me || {};
 		},
 
 		/**
-		 * Swaps the depth of 2 childs
+		 * Swaps the position (z depth) of 2 childs
 		 * @name swapChildren
 		 * @memberOf me.EntityContainer
 		 * @function
@@ -5541,6 +5507,10 @@ window.me = window.me || {};
 			
 			if ((index !== -1) && (index2 !== -1)) {
 				
+				// swap z index
+				var _z = child.z;
+				child.z = child2.z;
+				child2.z = _z;
 				// swap the positions..
 				this.children[index] = child2;
 				this.children[index2] = child;
@@ -5588,13 +5558,13 @@ window.me = window.me || {};
 		},
 
 		/**
-		 * Returns the Parent of the specified Child
-		 * @name getParent
+		 * Returns the container of the specified Child
+		 * @name getContainer
 		 * @memberOf me.EntityContainer
 		 * @function
-		 * @return {me.ObjectEntity}
+		 * @return {me.EntityContainer}
 		 */
-		getParent : function(child) {
+		getContainer : function(child) {
 			return child.ancestor;
 		},
 		
@@ -5635,85 +5605,99 @@ window.me = window.me || {};
 		 * @name removeChild
 		 * @memberOf me.EntityContainer
 		 * @function
-		 * @param  {me.ObjectEntity} child
+		 * @param {me.ObjectEntity} child
 		 */
 		removeChild : function(child) {
 			var index = this.children.indexOf( child );
 			
-			if ( index !== -1 )  {
+			
+			if  ( index !== -1 ) {
 				
 				child.ancestor = undefined;
-
+				
+				if (typeof (child.destroy) == 'function') {
+					child.destroy();
+				}
+				
 				this.children.splice( index, 1 );
+				
+				me.entityPool.freeInstance(child);
 			
 			} else {
 				throw "melonJS (me.EntityContainer): " + child + " The supplied entity must be a child of the caller " + this;
 			}
 		},
-
+		
 		/**
-		 * Move the child in the group one step forward (depth).
+		 * Move the child in the group one step forward (z depth).
 		 * @name moveUp
 		 * @memberOf me.EntityContainer
 		 * @function
-		 * @param  {me.ObjectEntity} child
+		 * @param {me.ObjectEntity} child
 		 */
 		moveUp : function(child) {
-			// TODO : move one depth to the front
-			throw "melonJS (me.EntityContainer): function moveUp() not implemented";
+			var childIndex = getChildIndex(child);
+			if (childIndex -1 >= 0) {
+				// note : we use an inverted loop
+				this.swapChildren(child, this.getChildAt(childIndex-1));
+			}
 		},
 
 		/**
-		 * Move the child in the group one step backward (depth).
+		 * Move the child in the group one step backward (z depth).
 		 * @name moveDown
 		 * @memberOf me.EntityContainer
 		 * @function
-		 * @param  {me.ObjectEntity} child
+		 * @param {me.ObjectEntity} child
 		 */
 		moveDown : function(child) {
-			// TODO : move one depth to the back
-			throw "melonJS (me.EntityContainer): function moveDown() not implemented";
+			var childIndex = getChildIndex(child);
+			if (childIndex+1 < this.children.length) {
+				// note : we use an inverted loop
+				this.swapChildren(child, this.getChildAt(childIndex+1));
+			}
 		},
 
 		/**
-		 * Move the child in the group to the front(depth).
+		 * Move the specified child to the top(z depth).
 		 * @name moveToTop
 		 * @memberOf me.EntityContainer
 		 * @function
-		 * @param  {me.ObjectEntity} child
+		 * @param {me.ObjectEntity} child
 		 */
 		moveToTop : function(child) {
-			// TODO : move to the top
-			throw "melonJS (me.EntityContainer): function moveToTop() not implemented";
+			var childIndex = getChildIndex(child);
+			if (childIndex > 0) {
+				// note : we use an inverted loop
+				this.splice(0, 0, this.splice(childIndex, 1)[0]);
+				// increment our child z value based on the previous child depth
+				child.z = this.children[1].z + 1;
+			}
 		},
 
 		/**
-		 * Move the child in the group to the back(depth).
+		 * Move the specified child the bottom (z depth).
 		 * @name moveToBottom
 		 * @memberOf me.EntityContainer
 		 * @function
-		 * @param  {me.ObjectEntity} child
+		 * @param {me.ObjectEntity} child
 		 */
 		moveToBottom : function(child) {
-			// TODO : move to the bottom
-			throw "melonJS (me.EntityContainer): function moveToBottom() not implemented";
+			var childIndex = getChildIndex(child);
+			if (childIndex < (this.children.length -1)) {
+				// note : we use an inverted loop
+				this.splice((this.children.length -1), 0, this.splice(childIndex, 1)[0]);
+				// increment our child z value based on the next child depth
+				child.z = this.children[(this.children.length -2)].z - 1;
+			}
 		},
 		
 		/**
-		 * Sort the object list in the current container
-		 * @name add
-		 * @memberOf me.game
-		 * @param {me.ObjectEntity} obj Object to be added
-		 * @param {int} [z="obj.z"] z index
+		 * Manually trigger the sort of all the objects in the container</p>
+		 * @name sort
+		 * @memberOf me.EntityContainer
 		 * @public
 		 * @function
-		 * @example
-		 * // create a new object
-		 * var obj = new MyObject(x, y)
-		 * // add the object and give the z index of the current object
-		 * me.game.add(obj, this.z);
-		 * // sort the object list (to ensure the object is properly displayed)
-		 * me.game.sort();
 		 */
 		sort : function(force) {
 			if (force===false && this.autoSort===true) {
@@ -5727,7 +5711,7 @@ window.me = window.me || {};
 				/** @ignore */
 				this.pendingSort = (function (self) {
 					// sort everything
-					self.children.sort(self["_sort"+self.propertyToSortOn.toUpperCase()]);
+					self.children.sort(self["_sort"+self.sortOn.toUpperCase()]);
 					// clear the defer id
 					self.pendingSort = null;
 					// make sure we redraw everything
@@ -5759,6 +5743,26 @@ window.me = window.me || {};
 		_sortY : function(a,b) {
 			var result = (b.z - a.z);
 			return (result ? result : ((b.pos && b.pos.y) - (a.pos && a.pos.y)) || 0);
+		},
+		
+		
+		/**
+		 * Destroy function<br>
+		 * @ignore
+		 */
+		destroy : function() {
+			// cancel any sort operation
+			if (this.pendingSort) {
+				clearTimeout(this.pendingSort);
+				this.pendingSort = null;
+			}
+			// delete all childs
+			for ( var i = this.children.length, obj; i--, obj = this.children[i];) {
+				// don't remove it if a persistent object
+				if ( !obj.isPersistent ) {
+					this.removeChild(obj);
+				}	
+			}
 		},
 		
 
@@ -6417,7 +6421,7 @@ window.me = window.me || {};
 		 */
 		obj.init = function() {
 			// set the embedded loading screen
-			obj.set(obj.LOADING, me.loadingScreen);
+			obj.set(obj.LOADING, new me.DefaultLoadingScreen());
 
 			// set pause/stop action on losing focus
 			$.addEventListener("blur", function() {
@@ -10146,8 +10150,15 @@ window.me = window.me || {};
 		 * @ignore		
 		 */
 		function onDeviceMotion(e) {
-			// Accelerometer information  
-			obj.accel = e.accelerationIncludingGravity;
+		    if (e.reading) {
+                // For Windows 8 devices
+		        obj.accel.x = e.reading.accelerationX;
+		        obj.accel.y = e.reading.accelerationY;
+		        obj.accel.z = e.reading.accelerationZ;
+		    } else {
+		        // Accelerometer information
+		        obj.accel = e.accelerationIncludingGravity;
+		    }
 		}
 
 		/*---------------------------------------------
@@ -10618,16 +10629,29 @@ window.me = window.me || {};
 		 * @function
 		 * @return {boolean} false if not supported by the device
 		 */
-		obj.watchAccelerometer = function() {
-			if (me.sys.gyro) {
-				if (!accelInitialized) {
-					// add a listener for the mouse
-					window.addEventListener('devicemotion', onDeviceMotion, false);
-					accelInitialized = true;
-				}
-				return true;
-			}
-			return false;
+		obj.watchAccelerometer = function () {
+		    if (me.sys.hasAccelerometer) {
+		        if (!accelInitialized) {
+		            if (typeof(Windows) == 'undefined') {
+		                // add a listener for the devicemotion event
+		                window.addEventListener('devicemotion', onDeviceMotion, false);
+		            } else {
+		                // On Windows 8 Device
+		                var accelerometer = Windows.Devices.Sensors.Accelerometer.getDefault();
+		                if (accelerometer) {
+		                    // Capture event at regular intervals
+		                    var minInterval = accelerometer.minimumReportInterval;
+		                    var Interval = minInterval >= 16 ? minInterval : 25;
+		                    accelerometer.reportInterval = Interval;
+
+		                    accelerometer.addEventListener('readingchanged', onDeviceMotion, false);
+		                }
+		            }
+		            accelInitialized = true;
+		        }
+		        return true;
+		    }
+		    return false;
 		};
 		
 		/**
@@ -10638,14 +10662,21 @@ window.me = window.me || {};
 		 * @function
 		 */
 		obj.unwatchAccelerometer = function() {
-			if (accelInitialized) {
-				// add a listener for the mouse
-				window.removeEventListener('devicemotion', onDeviceMotion, false);
-				accelInitialized = false;
-			}
+		    if (accelInitialized) {
+		        if (typeof Windows == 'undefined') {
+		            // add a listener for the mouse
+		            window.removeEventListener('devicemotion', onDeviceMotion, false);
+		        } else {
+                    // On Windows 8 Devices
+		            var accelerometer = Windows.Device.Sensors.Accelerometer.getDefault();
+
+		            accelerometer.removeEventListener('readingchanged', onDeviceMotion, false);
+		        }
+		        accelInitialized = false;
+		    }
 		};
 
-		// return our object
+	    // return our object
 		return obj;
 
 	})();
@@ -11923,7 +11954,7 @@ window.me = window.me || {};
 		 */
 		getTileOffsetX : function(tileId) {
 			var offset = this.tileXOffset[tileId];
-			if (offset == undefined) {
+			if (typeof(offset) === 'undefined') {
 				this.tileXOffset[tileId] = this.margin + (this.spacing + this.tilewidth)  * (tileId % this.hTileCount);
 			}
 			return offset;
@@ -11935,7 +11966,7 @@ window.me = window.me || {};
 		 */
 		getTileOffsetY : function(tileId) {
 			var offset = this.tileYOffset[tileId];
-			if (offset == undefined) {
+			if (typeof(offset) === 'undefined') {
 				this.tileYOffset[tileId] = this.margin + (this.spacing + this.tileheight)	* ~~(tileId / this.hTileCount);
 			}
 			return offset;
