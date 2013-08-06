@@ -149,15 +149,6 @@ window.me = window.me || {};
 		cacheImage : false,
 
 		/**
-		 * Enable dirtyRegion Feature <br>
-		 * default value : false<br>
-		 * (!) not fully implemented/supported (!)
-		 * @type Boolean
-		 * @memberOf me.sys
-		 */
-		dirtyRegion : false,
-
-		/**
 		 * Specify either to stop on audio loading error or not<br>
 		 * if me.debug.stopOnAudioLoad is true, melonJS will throw an exception and stop loading<br>
 		 * if me.debug.stopOnAudioLoad is false, melonJS will disable sounds and output a warning message in the console <br>
@@ -881,8 +872,8 @@ window.me = window.me || {};
 
 		// accelerometer detection
 		me.sys.hasAccelerometer = (
-			(window.DeviceMotionEvent !== undefined) || (
-				(window.Windows !== undefined) && 
+			(typeof (window.DeviceMotionEvent) !== 'undefined') || (
+				(typeof (window.Windows) !== 'undefined') && 
 				(typeof (Windows.Devices.Sensors.Accelerometer) === 'function')
 			)
 		);
@@ -935,9 +926,6 @@ window.me = window.me || {};
 		// to know when we have to refresh the display
 		var isDirty = true;
 
-		// cached value of the full screen rect
-		var fullscreen_rect;
-
 		/*---------------------------------------------
 
 			PUBLIC STUFF
@@ -979,14 +967,26 @@ window.me = window.me || {};
 		api.currentLevel = null;
 
 		/**
-		 * a reference to the game objects
+		 * a reference to the game world <br>
+		 * a world is a virtual environment containing all the game objects
 		 * @public
 		 * @type me.EntityContainer
-		 * @name container
+		 * @name world
 		 * @memberOf me.game
 		 */
-		api.container = null;
+		api.world = null;
 
+
+		/**
+		 * when true, all objects will be added under the root world container <br>
+		 * when false, a `me.EntityContainer` object will be created for each corresponding `TMXObjectGroup`
+		 * default value : true
+		 * @public
+		 * @type Boolean
+		 * @name mergeGroup
+		 * @memberOf me.game
+		 */
+		api.mergeGroup = true;
 
 		/**
 		 * The property of should be used when sorting entities <br>
@@ -1073,11 +1073,10 @@ window.me = window.me || {};
 				// create a defaut viewport of the same size
 				api.viewport = new me.Viewport(0, 0, width, height);
 
-				// set our cached rect to the actual screen size
-				fullscreen_rect = me.game.viewport.getRect();
-
-				//entity container
-				api.container = new me.EntityContainer(0,0, width, height);
+				//the root object of our world is an entity container
+				api.world = new me.EntityContainer(0,0, width, height);
+				// give it a name
+				api.world.name = 'rootContainer';
 
 				// get a ref to the screen buffer
 				frameBuffer = me.video.getSystemContext();
@@ -1136,7 +1135,7 @@ window.me = window.me || {};
 		api.loadTMXLevel = function(level) {
 			
 			// disable auto-sort
-			api.container.autoSort = false;
+			api.world.autoSort = false;
 			
 			// load our map
 			api.currentLevel = level;
@@ -1160,28 +1159,86 @@ window.me = window.me || {};
 			api.viewport.setBounds(Math.max(api.currentLevel.width, api.viewport.width),
 								   Math.max(api.currentLevel.height, api.viewport.height));
 
-			// load all game entities
+			// game world as default container
+			var targetContainer = api.world;
+
+			// load all ObjectGroup and Object definition
 			var objectGroups = api.currentLevel.getObjectGroups();
-			for ( var group = 0; group < objectGroups.length; group++) {
-				// only add corresponding objects it the group is visible
-				if (objectGroups[group].visible) {
-					for ( var entity = 0; entity < objectGroups[group].objects.length; entity++) {
-						api.addEntity(objectGroups[group].objects[entity], objectGroups[group].z);
-					}
+			
+			for ( var g = 0; g < objectGroups.length; g++) {
+				
+				var group = objectGroups[g];
+
+				if (api.mergeGroup === false) {
+
+					// create a new container with Infinite size (?)
+					// note: initial position and size seems to be meaningless in Tiled
+					// https://github.com/bjorn/tiled/wiki/TMX-Map-Format :
+					// x: Defaults to 0 and can no longer be changed in Tiled Qt.
+					// y: Defaults to 0 and can no longer be changed in Tiled Qt.
+					// width: The width of the object group in tiles. Meaningless.
+					// height: The height of the object group in tiles. Meaningless.
+					targetContainer = new me.EntityContainer();
+					
+					// set additional properties
+					targetContainer.name = group.name;
+					targetContainer.visible = group.visible;
+					targetContainer.z = group.z;
+
+					// disable auto-sort
+					targetContainer.autoSort = false;
 				}
-			}
+
+				// iterate through the group and add all object into their
+				// corresponding target Container
+				for ( var o = 0; o < group.objects.length; o++) {
+					
+					// TMX Object
+					var obj = group.objects[o];
+
+					// create the corresponding entity
+					var entity = me.entityPool.newInstanceOf(obj.name, obj.x, obj.y, obj);
+
+					// set the entity z order correspondingly to its parent container/group
+					entity.z = group.z;
+
+					//apply group default opacity value if defined
+					if (entity.renderable && typeof(entity.renderable.setOpacity) == 'function') {
+						entity.renderable.setOpacity(group.opacity);
+					};
+
+					// add the entity into the target container
+					targetContainer.addChild(entity);
+				}
+
+				// if we created a new container
+				if (api.mergeGroup === false) {
+					
+					// sort everything
+					targetContainer.sort();
+					
+					// re-enable auto-sort
+					targetContainer.autoSort = true;	
+				
+					// add our container to the world
+					api.world.addChild(targetContainer)
+				}
+
+			};
+
+
+			// sort all our stuff !!
+			api.world.sort();
+			
+			// re-enable auto-sort
+			api.world.autoSort = true;
+
 			
 			// check if the map has different default (0,0) screen coordinates
 			if (api.currentLevel.pos.x !== api.currentLevel.pos.y) {
 				// translate the display accordingly
 				frameBuffer.translate( api.currentLevel.pos.x , api.currentLevel.pos.y );
 			}
-
-			// sort all our stuff !!
-			api.container.sort();
-			
-			// re-enable auto-sort
-			api.container.autoSort = true;
 
 			// fire the callback if defined
 			if (api.onLevelLoaded) {
@@ -1194,6 +1251,7 @@ window.me = window.me || {};
 
 		/**
 		 * Manually add object to the game manager
+		 * @deprecated @see me.game.world.addChild()
 		 * @name add
 		 * @memberOf me.game
 		 * @param {me.ObjectEntity} obj Object to be added
@@ -1211,58 +1269,17 @@ window.me = window.me || {};
 				object.z = zOrder;
 			}
 			// add the object in the game obj list
-			api.container.addChild(object);
+			api.world.addChild(object);
 
 		};
 
-		/**
-		 * add an entity to the game manager
-		 * @name addEntity
-		 * @memberOf me.game
-		 * @private
-		 * @ignore
-		 * @function
-		 */
-		api.addEntity = function(ent, zOrder) {
-			var obj = me.entityPool.newInstanceOf(ent.name, ent.x, ent.y, ent);
-			if (obj) {
-				api.add(obj, zOrder);
-			}
-		};
 
-		/**
-		 * returns the amount of existing objects<br>
-		 * @name getObjectCount
-		 * @memberOf me.game
-		 * @protected
- 		 * @ignore
-		 * @function
-		 * @return {Number} the amount of object
-		 */
-		api.getObjectCount = function()
-		{
-			return api.container.children.length;
-		};
-
-		/**
-		 * returns the amount of object being drawn per frame<br>
-		 * @name getDrawCount
-		 * @memberOf me.game
-		 * @protected
- 		 * @ignore
-		 * @function
-		 * @return {Number} the amount of object draws
-		 */
-		api.getDrawCount = function()
-		{
-			return api.container.drawCount;
-		};
-	
 		/**
 		 * returns the list of entities with the specified name<br>
 		 * as defined in Tiled (Name field of the Object Properties)<br>
 		 * note : avoid calling this function every frame since
 		 * it parses the whole object list each time
+		 * @deprecated use me.game.world.getEntityByProp();
 		 * @name getEntityByName
 		 * @memberOf me.game
 		 * @public
@@ -1271,13 +1288,14 @@ window.me = window.me || {};
 		 * @return {me.ObjectEntity[]} Array of object entities
 		 */
 		api.getEntityByName = function(entityName) {
-			return api.container.getEntityByProp("name", entityName);
+			return api.world.getEntityByProp("name", entityName);
 		};
 		
 		/**
 		 * return the entity corresponding to the specified GUID<br>
 		 * note : avoid calling this function every frame since
 		 * it parses the whole object list each time
+		 * @deprecated use me.game.world.getEntityByProp();
 		 * @name getEntityByGUID
 		 * @memberOf me.game
 		 * @public
@@ -1286,7 +1304,7 @@ window.me = window.me || {};
 		 * @return {me.ObjectEntity} Object Entity (or null if not found)
 		 */
 		api.getEntityByGUID = function(guid) {
-			var obj = api.container.getEntityByProp("GUID", guid);
+			var obj = api.world.getEntityByProp("GUID", guid);
 			return (obj.length>0)?obj[0]:null;
 		};
 		
@@ -1294,6 +1312,7 @@ window.me = window.me || {};
 		 * return the entity corresponding to the property and value<br>
 		 * note : avoid calling this function every frame since
 		 * it parses the whole object list each time
+		 * @deprecated use me.game.world.getEntityByProp();
 		 * @name getEntityByProp
 		 * @memberOf me.game
 		 * @public
@@ -1303,7 +1322,7 @@ window.me = window.me || {};
 		 * @return {me.ObjectEntity[]} Array of object entities
 		 */
 		api.getEntityByProp = function(prop, value) {
-			return api.container.getEntityByProp(prop, value);
+			return api.world.getEntityByProp(prop, value);
 		};
 		
 		/**
@@ -1346,9 +1365,22 @@ window.me = window.me || {};
 			}
 		};
 
+
+		/**
+		 * Returns the entity container of the specified Child in the game world
+		 * @name getEntityContainer
+		 * @memberOf me.game
+		 * @function
+		 * @param {me.ObjectEntity} child
+		 * @return {me.EntityContainer}
+		 */
+		api.getEntityContainer = function(child) {
+			return child.ancestor;
+		};
+
 		
 		/**
-		 * remove an object
+		 * remove an object from the world
 		 * @name remove
 		 * @memberOf me.game
 		 * @public
@@ -1358,18 +1390,18 @@ window.me = window.me || {};
 		 * <strong>WARNING</strong>: Not safe to force asynchronously (e.g. onCollision callbacks)
 		 */
 		api.remove = function(obj, force) {
-			if (api.container.hasChild(obj)) {
+			if (obj.ancestor) {
 				// remove the object from the object list
 				if (force===true) {
 					// force immediate object deletion
-					api.container.removeChild(obj);
+					obj.ancestor.removeChild(obj);
 				} else {
 					// make it invisible (this is bad...)
 					obj.visible = obj.inViewport = false;
 					// wait the end of the current loop
 					/** @ignore */
 					pendingRemove = (function (obj) {
-						me.game.container.removeChild(obj);
+						obj.ancestor.removeChild(obj);
 						pendingRemove = null;
 					}).defer(obj);
 				}
@@ -1392,13 +1424,14 @@ window.me = window.me || {};
 				pendingRemove = null;
 			}
 			// destroy all objects in the root container
-			api.container.destroy();
+			api.world.destroy();
 		};
 
 		/**
 		 * Manually trigger the sort all the game objects.</p>
 		 * Since version 0.9.9, all objects are automatically sorted, <br>
 		 * except if a container autoSort property is set to false.
+		 * @deprecated use me.game.world.sort();
 		 * @name sort
 		 * @memberOf me.game
 		 * @public
@@ -1410,11 +1443,12 @@ window.me = window.me || {};
 		 * me.game.sort();
 		 */
 		api.sort = function() {
-			api.container.sort();
+			api.world.sort();
 		};
 
 		/**
 		 * Checks if the specified entity collides with others entities.
+		 * @deprecated use me.game.world.collide();
 		 * @name collide
 		 * @memberOf me.game
 		 * @public
@@ -1451,78 +1485,23 @@ window.me = window.me || {};
 		 * }
 		 */
 		api.collide = function(objA, multiple) {
-			var res;
-			// make sure we have a boolean
-			multiple = multiple===true ? true : false;
-			if (multiple===true) {
-				var mres = [], r = 0;
-			} 
-			var children = api.container.children;
-			// this should be replace by a list of the 4 adjacent cell around the object requesting collision
-			for ( var i = children.length, obj; i--, obj = children[i];)//for (var i = objlist.length; i-- ;)
-			{
-				if ((obj.inViewport || obj.alwaysUpdate) && obj.collidable && (obj!=objA))
-				{
-					res = obj.collisionBox.collideVsAABB.call(obj.collisionBox, objA.collisionBox);
-					if (res.x != 0 || res.y != 0) {
-						// notify the object
-						obj.onCollision.call(obj, res, objA);
-						// return the type (deprecated)
-						res.type = obj.type;
-						// return a reference of the colliding object
-						res.obj  = obj;
-						// stop here if we don't look for multiple collision detection
-						if (!multiple) {
-							return res;
-						}
-						mres[r++] = res;
-					}
-				}
-			}
-			return multiple?mres:null;
+			return api.world.collide (objA, multiple);
 		};
 
 		/**
 		 * Checks if the specified entity collides with others entities of the specified type.
+		 * @deprecated use me.game.world.collideType();
 		 * @name collideType
 		 * @memberOf me.game
 		 * @public
 		 * @function
 		 * @param {me.ObjectEntity} obj Object to be tested for collision
-		 * @param {String} type Entity type to be tested for collision
+		 * @param {String} type Entity type to be tested for collision (null to disable type check)
 		 * @param {Boolean} [multiple=false] check for multiple collision
 		 * @return {me.Vector2d} collision vector or an array of collision vector (multiple collision){@link me.Rect#collideVsAABB}
 		 */
 		api.collideType = function(objA, type, multiple) {
-			var res;
-			// make sure we have a boolean
-			multiple = multiple===true ? true : false;
-			if (multiple===true) {
-				var mres = [], r = 0;
-			} 
-			var children = api.container.children;
-			// this should be replace by a list of the 4 adjacent cell around the object requesting collision
-			for ( var i = children.length, obj; i--, obj = children[i];)//for (var i = objlist.length; i-- ;)
-			{
-				if ((obj.inViewport || obj.alwaysUpdate) && obj.collidable && (obj.type === type) && (obj!=objA))
-				{
-					res = obj.collisionBox.collideVsAABB.call(obj.collisionBox, objA.collisionBox);
-					if (res.x != 0 || res.y != 0) {
-						// notify the object
-						obj.onCollision.call(obj, res, objA);
-						// return the type (deprecated)
-						res.type = obj.type;
-						// return a reference of the colliding object
-						res.obj  = obj;
-						// stop here if we don't look for multiple collision detection
-						if (!multiple) {
-							return res;
-						}
-						mres[r++] = res;
-					}
-				}
-			}
-			return multiple?mres:null;
+			return api.world.collideType (objA, type, multiple);
 		};
 
 		/**
@@ -1549,10 +1528,10 @@ window.me = window.me || {};
 		api.update = function() {
 			
 			// update all objects
-			isDirty = api.container.update();
+			isDirty = api.world.update() || isDirty;
 			
 			// update the camera/viewport
-			isDirty |= api.viewport.update(isDirty);
+			isDirty = api.viewport.update(isDirty) || isDirty;
 
 			return isDirty;
 			
@@ -1584,8 +1563,10 @@ window.me = window.me || {};
 				api.viewport.screenX -= api.currentLevel.pos.x;
 				api.viewport.screenY -= api.currentLevel.pos.y;
 
-				// update all objects
-				api.container.draw(frameBuffer, fullscreen_rect);
+				// update all objects, 
+				// specifying the viewport as the rectangle area to redraw
+
+				api.world.draw(frameBuffer, api.viewport);
 
 				//restore context
 				frameBuffer.restore();
@@ -2543,16 +2524,7 @@ window.me = window.me || {};
 		 * @memberOf me.debug
 		 */
 		renderCollisionMap : false,
-
-		/**
-		 * render dirty region/rectangle<br>
-		 * default value : false<br>
-		 * (feature must be enabled through the me.sys.dirtyRegion flag)
-		 * @type Boolean
-		 * @memberOf me.debug
-		 */
-		renderDirty : false,
-		
+	
 		/**
 		 * render entities current velocity<br>
 		 * default value : false<br>
@@ -3352,6 +3324,7 @@ window.me = window.me || {};
 					// if function (callback) call it
 					else if (typeof(this.resetAnim) == "function" && this.resetAnim() === false) {
 						this.current.idx = this.current.length - 1;
+						this.setAnimationFrame(this.current.idx);
 						this.parent();
 						return false;
 					}
@@ -5414,7 +5387,7 @@ window.me = window.me || {};
 		/** 
 		 * Specify if the entity list should be automatically sorted when adding a new child
 		 * @public
-		 * @type String
+		 * @type Boolean
 		 * @name autoSort
 		 * @memberOf me.EntityContainer
 		 */
@@ -5422,15 +5395,24 @@ window.me = window.me || {};
 		
 		/** 
 		 * keep track of pending sort
-		 * @private
+		 * @ignore
 		 */
 		pendingSort : null,
 
 		/**
 		 * The array of children of this container.
-		 * @private
+		 * @ignore
 		 */	
 		children : null,
+
+		/**
+		 * Enable collision detection for this container (default true)<br>
+		 * @public
+		 * @type Boolean
+		 * @name collidable
+		 * @memberOf me.EntityContainer
+		 */
+		collidable : true,
 		
 
 		// constructor
@@ -5438,8 +5420,8 @@ window.me = window.me || {};
 			// call the parent constructor
 			this.parent(
 				new me.Vector2d(x || 0, y || 0),
-				width || me.game.viewport.width,  // which default value here ?
-				height || me.game.viewport.height 
+				width || Infinity, 
+				height || Infinity 
 			);
 			this.children = [];
 			// by default reuse the global me.game.setting
@@ -5551,21 +5533,11 @@ window.me = window.me || {};
 		 * @name hasChild
 		 * @memberOf me.EntityContainer
 		 * @function
+		 * @param {String} value Value of the property
 		 * @return {Boolean}
 		 */
 		hasChild : function(child) {
-			return (this.children.indexOf( child ) !== -1);
-		},
-
-		/**
-		 * Returns the container of the specified Child
-		 * @name getContainer
-		 * @memberOf me.EntityContainer
-		 * @function
-		 * @return {me.EntityContainer}
-		 */
-		getContainer : function(child) {
-			return child.ancestor;
+			return (this == child.ancestor);
 		},
 		
 		/**
@@ -5579,6 +5551,11 @@ window.me = window.me || {};
 		 * @param {String} prop Property name
 		 * @param {String} value Value of the property
 		 * @return {me.ObjectEntity[]} Array of object entities
+		 * @example
+		 * // get the first entity called "mainPlayer" in a specific container :
+		 * ent = myContainer.getEntityByProp("name", "mainPlayer");
+		 * // or query the whole world :
+		 * ent = me.game.world.getEntityByProp("name", "mainPlayer");
 		 */
 		getEntityByProp : function(prop, value)	{
 			var objList = [];	
@@ -5608,10 +5585,8 @@ window.me = window.me || {};
 		 * @param {me.ObjectEntity} child
 		 */
 		removeChild : function(child) {
-			var index = this.children.indexOf( child );
-			
-			
-			if  ( index !== -1 ) {
+
+			if  (this.hasChild(child)) {
 				
 				child.ancestor = undefined;
 				
@@ -5619,7 +5594,7 @@ window.me = window.me || {};
 					child.destroy();
 				}
 				
-				this.children.splice( index, 1 );
+				this.children.splice( this.getChildIndex(child), 1 );
 				
 				me.entityPool.freeInstance(child);
 			
@@ -5636,7 +5611,7 @@ window.me = window.me || {};
 		 * @param {me.ObjectEntity} child
 		 */
 		moveUp : function(child) {
-			var childIndex = getChildIndex(child);
+			var childIndex = this.getChildIndex(child);
 			if (childIndex -1 >= 0) {
 				// note : we use an inverted loop
 				this.swapChildren(child, this.getChildAt(childIndex-1));
@@ -5651,7 +5626,7 @@ window.me = window.me || {};
 		 * @param {me.ObjectEntity} child
 		 */
 		moveDown : function(child) {
-			var childIndex = getChildIndex(child);
+			var childIndex = this.getChildIndex(child);
 			if (childIndex+1 < this.children.length) {
 				// note : we use an inverted loop
 				this.swapChildren(child, this.getChildAt(childIndex+1));
@@ -5666,7 +5641,7 @@ window.me = window.me || {};
 		 * @param {me.ObjectEntity} child
 		 */
 		moveToTop : function(child) {
-			var childIndex = getChildIndex(child);
+			var childIndex = this.getChildIndex(child);
 			if (childIndex > 0) {
 				// note : we use an inverted loop
 				this.splice(0, 0, this.splice(childIndex, 1)[0]);
@@ -5683,13 +5658,85 @@ window.me = window.me || {};
 		 * @param {me.ObjectEntity} child
 		 */
 		moveToBottom : function(child) {
-			var childIndex = getChildIndex(child);
+			var childIndex = this.getChildIndex(child);
 			if (childIndex < (this.children.length -1)) {
 				// note : we use an inverted loop
 				this.splice((this.children.length -1), 0, this.splice(childIndex, 1)[0]);
 				// increment our child z value based on the next child depth
 				child.z = this.children[(this.children.length -2)].z - 1;
 			}
+		},
+		
+		/**
+		 * Checks if the specified entity collides with others entities in this container
+		 * @name collideType
+		 * @memberOf me.EntityContainer
+		 * @public
+		 * @function
+		 * @param {me.ObjectEntity} obj Object to be tested for collision
+		 * @param {Boolean} [multiple=false] check for multiple collision
+		 * @return {me.Vector2d} collision vector or an array of collision vector (multiple collision){@link me.Rect#collideVsAABB}
+		 */
+		collide : function(objA, multiple) {
+			return this.collideType(objA, null, multiple);
+		},
+		
+		/**
+		 * Checks if the specified entity collides with others entities in this container
+		 * @name collideType
+		 * @memberOf me.EntityContainer
+		 * @public
+		 * @function
+		 * @param {me.ObjectEntity} obj Object to be tested for collision
+		 * @param {String} [type=undefined] Entity type to be tested for collision
+		 * @param {Boolean} [multiple=false] check for multiple collision
+		 * @return {me.Vector2d} collision vector or an array of collision vector (multiple collision){@link me.Rect#collideVsAABB}
+		 */
+		collideType : function(objA, type, multiple) {
+			var res;
+			// make sure we have a boolean
+			multiple = multiple===true ? true : false;
+			if (multiple===true) {
+				var mres = [];
+			} 
+
+			// this should be replace by a list of the 4 adjacent cell around the object requesting collision
+			for ( var i = this.children.length, obj; i--, obj = this.children[i];) {
+			
+				if ( (obj.inViewport || obj.alwaysUpdate ) && obj.collidable ) {
+					
+					// recursivly check through
+					if (obj instanceof me.EntityContainer) {
+					
+						res = obj.collideType(objA, type, multiple); 
+						if (multiple) {
+							mres.concat(res);
+						} else if (res) {
+							// the child container returned collision information
+							return res;
+						}
+						
+					} else if ( (obj!=objA) && (!type || (obj.type === type)) ) {
+			
+						res = obj.collisionBox.collideVsAABB.call(obj.collisionBox, objA.collisionBox);
+						
+						if (res.x != 0 || res.y != 0) {
+							// notify the object
+							obj.onCollision.call(obj, res, objA);
+							// return the type (deprecated)
+							res.type = obj.type;
+							// return a reference of the colliding object
+							res.obj = obj;
+							// stop here if we don't look for multiple collision detection
+							if (!multiple) {
+								return res;
+							}
+							mres.push(res);
+						}
+					}
+				}
+			}
+			return multiple?mres:null;
 		},
 		
 		/**
@@ -5705,12 +5752,21 @@ window.me = window.me || {};
 				// and if auto-sort is enabled
 				return;
 			}
+						
 			// do nothing if there is already 
 			// a previous pending sort
 			if (this.pendingSort === null) {
+				// trigger other child container sort function (if any)
+				for (var i = this.children.length, obj; i--, obj = this.children[i];) {
+					if (obj instanceof me.EntityContainer) {
+						// note : this will generate one defered sorting function
+						// for each existing containe
+						obj.sort(force);
+					}
+				}
 				/** @ignore */
 				this.pendingSort = (function (self) {
-					// sort everything
+					// sort everything in this container
 					self.children.sort(self["_sort"+self.sortOn.toUpperCase()]);
 					// clear the defer id
 					self.pendingSort = null;
@@ -5722,14 +5778,14 @@ window.me = window.me || {};
 		
 		/**
 		 * Z Sorting function
-		 * @private
+		 * @ignore
 		 */
 		_sortZ : function (a,b) {
 			return (b.z) - (a.z);
 		},
 		/**
 		 * X Sorting function
-		 * @private
+		 * @ignore
 		 */
 		_sortX : function(a,b) { 
 			/* ? */
@@ -5738,7 +5794,7 @@ window.me = window.me || {};
 		},
 		/**
 		 * Y Sorting function
-		 * @private
+		 * @ignore
 		 */
 		_sortY : function(a,b) {
 			var result = (b.z - a.z);
@@ -5764,48 +5820,33 @@ window.me = window.me || {};
 				}	
 			}
 		},
-		
 
 		/**
-		 * @private
+		 * @ignore
 		 */
 		update : function() {
 			var isDirty = false;
-
-			if (me.state.isPaused()) {
-				// game is paused so include an extra check
-				for ( var i = this.children.length, obj; i--, obj = this.children[i];) {
-					if (obj.updateWhenPaused)
-						continue;
+			var isPaused = me.state.isPaused();
 			
-					// check if object is visible
-					obj.inViewport = obj.visible && (
-						obj.floating || (obj.getRect && me.game.viewport.isVisible(obj))
-					);
-
-					// update our object
-					isDirty |= (obj.inViewport || obj.alwaysUpdate) && obj.update();
+			for ( var i = this.children.length, obj; i--, obj = this.children[i];) {
+				if (isPaused && (!obj.updateWhenPaused)) {
+					// skip this object
+					continue;
 				}
-			} else {
-				// normal loop, game isn't paused
-				for ( var i = this.children.length, obj; i--, obj =this.children[i];) {
-
-					// check if object is visible
-					obj.inViewport = obj.visible && (
-						obj.floating || (obj.getRect && me.game.viewport.isVisible(obj))
-					);
-
-					// update our object
-					isDirty |= (obj.inViewport || obj.alwaysUpdate) && obj.update();
-				}
+	
+				// check if object is visible
+				obj.inViewport = obj.visible && (
+					obj.floating || (obj.getRect && me.game.viewport.isVisible(obj))
+				);
+				
+				// update our object
+				isDirty |= (obj.inViewport || obj.alwaysUpdate) && obj.update();
 			}
-
 			return isDirty;
-
 		},
 
 		/**
-		 * @private
+		 * @ignore
 		 */
 		draw : function(context, rect) {
 			this.drawCount = 0;			
@@ -6703,7 +6744,7 @@ window.me = window.me || {};
  *
  */
 
-(function($) {
+(function(window) {
 
 	/**
 	 * a default loading screen
@@ -6712,11 +6753,7 @@ window.me = window.me || {};
 	 * @constructor
 	 */
 	me.DefaultLoadingScreen = me.ScreenObject.extend({
-		/*---
-		
-			constructor
-			
-			---*/
+		// constructor
 		init : function() {
 			this.parent(true);
 
@@ -6735,10 +6772,6 @@ window.me = window.me || {};
 			this.logo2 = new me.Font('century gothic', 32, '#55aa00', 'middle');
 			this.logo2.bold();
 			this.logo1.textBaseline = this.logo2.textBaseline = "alphabetic";
-
-			// generated from /src/loader/logo.png
-			this.imgLogo = new Image();
-			this.imgLogo.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABVCAMAAACIGrFuAAADAFBMVEXu7u7t7e37+/v39/f4+Pjp6en7+/v7+/v////r6+v09PTs7Oz4+Pju7u7f39/19fX39/fs7Oz09PTr6+v6+vrx8fH09PT5+fn6+vrs7Oz5+fnw8PDy8vL////4+Pj6+vqZmZnt7e3z8/Pt7e3x8fHq6ury8vL////t7e34+Pju7u7////u7u7t7e3w8PDz7/P/zP/w8PDw8PD6+vr9/f3r6+vt7e3u7u739/f29vb19fXs7Ozw8PD29vb4+fjr6+u5ubn6+vr7+/v////x8fHw8PD////q6ur7+/ny8vL39/fw8PD29vb////39/fp6en09PTr6+v39/ft7e3////////6+vr6+vrs7Oz4+Pj////39/f29vb8/Pz39/f8/Pz19fXu7u75+fn6+vrw8PD4+Pj8/Pzu7+7s7Ozt7u3+/v7x8fH4+Pj+/v7////t7e34+Pjx8fHs7Ozu7u7v7+/4+Pj5+fnz8/P////u7u719fX////19fX4+Pj39/f29vZAQEDo6Ojv7+/////39/cAAADv7+/v7+/z8/P9/f3z8/Py8vLw8PDy8vLy8vL7+/v29vbr6+v6+vr4+Pjy8vL39/fr6+v////4+Pjz8/Pu7u739/fu7u739/f09PT5+fn9/f39/f3t7e37+/vy8vLw8PAAAAD9/f3r6+vu7u73+Pf+/v729vb5+fn4+Pizs7Pz8/P19fX09PT09PT6+vr9/f37+/v4+Pj8/Pz4+Pjr6+v9/f37+/v5+fnz8/P5+fn7+/v19fX7+/v////////+/v7///+/v7/Gxsbv7+/9/f3w8PDv7+/w8PDz8/P7+/vs7Oz39/f8/Pzj4+P29vb////6+vr////u7u7w8PD9/f3////7+/v////////+/v79/f3v7+/MzMyAgICqqqr////7+/u/v7////////////////8AAADs7Oz19vXy8vLu7+7z8/Px8fH4+Pj29vb19fX39/f5+fn09PTt7e36+vr8/Pz9/f37+/v+/v7////sE5ywAAAA7XRSTlP+4aarSutFgI7oXv9z8RC9hflg+zjXcHde/Hu7yUCJswXAKsUk8T2EVCZaJvzbRUAFQumbZ8zB9GGiSt3dt6znC6itQdPSbO9+yGLUx52G8r78X/ZKlzOOXY0tmlJ0uU1kJodM5Faj1/n5f0d9a5n7u+fpD/MQtstC7CcpC2inwATR2w4+AtL3xm1taENfTpBZ7bFX2F0NlUfD3cJcwLFcnHncPivUAXz+95NxERmCBhZmwRcwJxSdrJMIHpWhajYSUY0XOo0MCAnYoewZ7lYN4740BhOARivzIS4YgTgiHHIKBQIDKgUEAwIEAQAGaxhqAAAGjUlEQVR42u2Zd3RURRTGYy8RFcTee++9N7Bhj1iQjuhRQIpKXYp0QSnSQToHFBJACL13CCWEhJp6slnyylVCErLJvnKdO2/hsXm7+3ZIDn94+M7JSXY3M7/5vpk7782+ODgNOgM5AzkDOW0QVZUlRTlMyldktdohqiopUuX3FLUaIQwAXJ6czpOv+o5p79XXZF/K3pCqB6LK1ngzpjea0qnmMR2PK/DnZd1TwatWHVKgcECTm26o0NCSfowUQFKNpmwUVYPIRJjZIC8tHrmOXNTxwkta3rjf59vfbePky9PKEXETqDPFIM5Zrd38yhI+/AM3t26Rmw8hajbbQJwF0qlCZGq5aFYdnlFRz+ume4Lkw5Ikcylks1U5+m8D+VQgqsSa/XRxWikRrkiZnGn1L6lqpZGkw2rE1qCIQ1Rqkzz7LyLU/LplYhAQ9l+hT00cCKoohBDehu1o8ZQ1rrWWT78NcEDm7UbMBkkIQojUNruRqUNWVyq2QiJEhqTfiZgiBCHEwgt2MoK2YNdy7sFlecC9fsT4+YxGkBgR87PaMkTxkj3stSK7NlFgDhoaPgOKDXFFzL2WIb5tfpCN0Y4pWlr5u1E38CWQY4FQqp6pVNjbZy1kr6iRu/KhKWpoYvwPoLpD5ALw/l2DIRLmbHbPyZ6RjKdRZxDcyK3EuSW17xuG+CdrMYA92e7uV6GByH7yQHGBsKSaTULEkmVJIgg4DLWYDw55D6SoEFWCgqm0f0yaIYRgY08usyAavsv6iQwhm9Op9qadz+cidhXChp2oEYORPtgaGUKz4VlJ2+wcLxQIICjjrdNYTlwmFqdGhkhswrtQUiv430I+0n/GAB6HlOWAHAGiwC3r6RK6S2wyeMstNoNBAg3CQ6g2fL0RcVWio/bc19XibcSwIb4gxBnV4H9ZaZANEGXc354x3CEK9JqCiLcnidqgNf9oBWfYEL8TwhmZVOJTxW1QAlR/IZDyDL66KjPuasu221agitmgPRFWUvmFQj7yOCDM8H3Mbv8NoouK6iq3P2omhkjHbQWVIDT6XxCxRz/BqHi0uypYVJVk4NJKuzD5yEPEvSxeYRuvrEQnAwP4fuguTD6I8QT7Q9hG35dR19EhHUdAYQjE8vGH6HTIEmz5wmEjOO8lOaFxKTQfxBBNCsZ2QFNDDGfkBa99+eWMexDxczEGZbFjFbNholPkbn3I3YoEh8oQBwsx6BrQr02FbcMZ11iQbIgKnvaId0Oh4O39c89HtEFpdfHYN3dkZArirQwmdAw61JEh+KKKlFZw1HEW41zEAxkgiyAOPmugTklFDMtMDvYYx8MqPAuxISgiiNnlNNYo0nDByYcgBZoinhNrnUsSQywjhInRIetAOgFhx8e6WDaDYWM8L85wRxBj28lHbBn2GHg2SDEeeje+6ndDkHRmpNCGKNAIsYkrRKW7r+XD3kZ3BF9a40LO8RJ8j0WZoEYl0ExA16ztiKY7gi+tT0GyIaz3xnjePFCjEMh3n2EvlrCorUXrbuQzkELnZCk/SIQHqAr987zO9X9Eu/TcpJ0odntO5iK2gHQnwDr3w+Z9Q4dTSzsnt7BM/JV1G+pkDeJXqWztyKoaHD7rP99a0iveSalB7YImYgwrizNsCGkao/R1OEnPGbGpXpkoga66T7GBVoJIsA79iAsG7RldYF0mlm/IHjV36fASnq8YgXw8lsjiCYVQYNejnwWux/dOmzix54TxCaVW/LqhmygoDYu7UVhOyB3lqGtGSMUGLIA4w/8wYzgh7M3VaNCq0DWSrpt2/6IMfAgeASeEe+nB5qvqMtA/hHxEgGx5EI1qYJRRgYSH0ApLGlBlSgAHJEM+RIQwvi++ahRdw3qZ5CMihCjdHsBAVaLCx3sRIwqEDmOLumDAPEUbBhb/RqlHh5CXxU+SaXGZzMbAHJBUcIWQ16FIZsSTil/Nm7tDuNshB9DUxFyYaC5JinbiiHOcYBO/NFlmIkHh72ssG+4QO7LaE2K9kmscke32jV5c2BvpfeOQLuemO6GIvvqUJPHHTbRIslOKglt9GJJpsg/o47pv7LBGJQaxMQu7f3jUSt2gbTkoXdcCBieVdnrrENhBiUOCCeSOGjO+FMOofOSYj1cAxPolUpzLYxJv7id59duNTDhyzAgEAkeL36zz2qZBr2eqnEAmhCFOTjDuAs/m3AY+n2/t6K3eoFPLgwDE7QFfSH9eJfi8RBjihmKSmej3//yxbHT9B+2FgxOCDMA9AAAAAElFTkSuQmCC";
 		
 			// default progress bar height
 			this.barHeight = 4;
@@ -6759,12 +6792,6 @@ window.me = window.me || {};
 				me.event.unsubscribe(this.handle);
 				this.handle = null;
 			}
-			// free the Image ressource
-			if (this.imgLogo && (typeof(this.imgLogo.dispose) === 'function')) {
-				// cocoonJS extension
-				this.imgLogo.dispose();
-			} 
-			delete this.imgLogo;
 		},
 
 		// make sure the screen is refreshed every frame 
@@ -6785,11 +6812,46 @@ window.me = window.me || {};
 			return false;
 		},
 
-		/*---
+		// draw the melonJS logo
+		drawLogo : function (context, x, y) {		
 		
-			draw function
-		  ---*/
+			context.save();
+			
+			// translate to destination point
+			context.translate(x,y);
 
+			// generated using Illustrator and the Ai2Canvas plugin
+			context.beginPath();
+			context.moveTo(0.7, 48.9);
+			context.bezierCurveTo(10.8, 68.9, 38.4, 75.8, 62.2, 64.5);
+			context.bezierCurveTo(86.1, 53.1, 97.2, 27.7, 87.0, 7.7);
+			context.lineTo(87.0, 7.7);
+			context.bezierCurveTo(89.9, 15.4, 73.9, 30.2, 50.5, 41.4);
+			context.bezierCurveTo(27.1, 52.5, 5.2, 55.8, 0.7, 48.9);
+			context.lineTo(0.7, 48.9);
+			context.lineTo(0.7, 48.9);
+			context.closePath();
+			context.fillStyle = "rgb(255, 255, 255)";
+			context.fill();
+
+			context.beginPath();
+			context.moveTo(84.0, 7.0);
+			context.bezierCurveTo(87.6, 14.7, 72.5, 30.2, 50.2, 41.6);
+			context.bezierCurveTo(27.9, 53.0, 6.9, 55.9, 3.2, 48.2);
+			context.bezierCurveTo(-0.5, 40.4, 14.6, 24.9, 36.9, 13.5);
+			context.bezierCurveTo(59.2, 2.2, 80.3, -0.8, 84.0, 7.0);
+			context.lineTo(84.0, 7.0);
+			context.closePath();
+			context.lineWidth = 5.3;
+			context.strokeStyle = "rgb(255, 255, 255)";
+			context.lineJoin = "miter";
+			context.miterLimit = 4.0;
+			context.stroke();
+			
+			context.restore();
+		},
+		
+		// draw function
 		draw : function(context) {
 			
 			// measure the logo size
@@ -6800,11 +6862,11 @@ window.me = window.me || {};
 			// clear surface
 			me.video.clearSurface(context, "#202020");
 			
-			// draw the melonJS logo
-			context.drawImage(
-					this.imgLogo, 
-					(me.video.getWidth() - this.imgLogo.width) /2 , 
-					(me.video.getHeight()/2) - (this.barHeight/2) - 4 - this.imgLogo.height
+			// logo 100x85
+			this.drawLogo( 
+					context,
+					(me.video.getWidth() - 100) /2 ,  
+					(me.video.getHeight()/2) - (this.barHeight/2) - 90
 			);
 			
 			// draw the melonJS string
@@ -6823,11 +6885,7 @@ window.me = window.me || {};
 		}
 
 	});
-
-
-	/*---------------------------------------------------------*/
-	// END END END
-	/*---------------------------------------------------------*/
+	// --- END ---
 })(window);
 
 /*
@@ -11416,24 +11474,84 @@ window.me = window.me || {};
 (function($) {
 	
 	/**
-	 * TMX Group Object
+	 * TMX Object Group <br>
+	 * contains the object group definition as defined in Tiled. <br>
+	 * note : object group definition is translated into the virtual `me.game.world` using `me.EntityContainer`.
+	 * @see me.EntityContainer
 	 * @class
 	 * @extends Object
 	 * @memberOf me
 	 * @constructor
-	 * @ignore
 	 */
-	me.TMXOBjectGroup = Object.extend(
-	{
-
+	me.TMXObjectGroup = Object.extend({
 		
-		// constructor from XML content
+		/**
+		 * group name
+		 * @public
+		 * @type String
+		 * @name name
+		 * @memberOf me.TMXObjectGroup
+		 */
+		name : null,
+		
+		/**
+		 * group width
+		 * @public
+		 * @type Number
+		 * @name name
+		 * @memberOf me.TMXObjectGroup
+		 */
+		width : 0,
+		
+		/**
+		 * group height
+		 * @public
+		 * @type Number
+		 * @name name
+		 * @memberOf me.TMXObjectGroup
+		 */
+		height : 0,
+		
+		/**
+		 * group visibility state
+		 * @public
+		 * @type Boolean
+		 * @name name
+		 * @memberOf me.TMXObjectGroup
+		 */
+		visible : false,
+		
+		/**
+		 * group z order
+		 * @public
+		 * @type Number
+		 * @name name
+		 * @memberOf me.TMXObjectGroup
+		 */
+		z : 0,
+		
+		/**
+		 * group objects list definition
+		 * @see me.TMXObject
+		 * @public
+		 * @type Array
+		 * @name name
+		 * @memberOf me.TMXObjectGroup
+		 */
+		objects : [],
+
+		/**
+		 * constructor from XML content
+		 * @ignore
+		 * @function
+		 */
 		initFromXML : function(name, tmxObjGroup, tilesets, z) {
 			
 			this.name    = name;
 			this.width   = me.mapReader.TMXParser.getIntAttribute(tmxObjGroup, me.TMX_TAG_WIDTH);
 			this.height  = me.mapReader.TMXParser.getIntAttribute(tmxObjGroup, me.TMX_TAG_HEIGHT);
 			this.visible = (me.mapReader.TMXParser.getIntAttribute(tmxObjGroup, me.TMX_TAG_VISIBLE, 1) == 1);
+			this.opacity = me.mapReader.TMXParser.getFloatAttribute(tmxObjGroup, me.TMX_TAG_OPACITY, 1.0).clamp(0.0, 1.0);
 			this.z       = z;
 			this.objects = [];
 		
@@ -11444,13 +11562,17 @@ window.me = window.me || {};
 			
 			var data = tmxObjGroup.getElementsByTagName(me.TMX_TAG_OBJECT);
 			for ( var i = 0; i < data.length; i++) {
-				var object = new me.TMXOBject();
+				var object = new me.TMXObject();
 				object.initFromXML(data[i], tilesets, z);
 				this.objects.push(object);
 			}
 		},
 		
-		// constructor from XML content
+		/**
+		 * constructor from JSON content
+		 * @ignore
+		 * @function
+		 */
 		initFromJSON : function(name, tmxObjGroup, tilesets, z) {
 			var self = this;
 			
@@ -11458,6 +11580,7 @@ window.me = window.me || {};
 			this.width   = tmxObjGroup[me.TMX_TAG_WIDTH];
 			this.height  = tmxObjGroup[me.TMX_TAG_HEIGHT];
 			this.visible = tmxObjGroup[me.TMX_TAG_VISIBLE];
+			this.opacity = parseFloat(tmxObjGroup[me.TMX_TAG_OPACITY] || 1.0).clamp(0.0, 1.0);
 			this.z       = z;
 			this.objects  = [];
 			
@@ -11466,7 +11589,7 @@ window.me = window.me || {};
 			
 			// parse all TMX objects
 			tmxObjGroup["objects"].forEach(function(tmxObj) {
-				var object = new me.TMXOBject();
+				var object = new me.TMXObject();
 				object.initFromJSON(tmxObj, tilesets, z);
 				self.objects.push(object);
 			});
@@ -11482,26 +11605,133 @@ window.me = window.me || {};
 			this.objects = null;
 		},
 		
+		/**
+		 * return the object count
+		 * @ignore
+		 * @function
+		 */
 		getObjectCount : function() {
 			return this.objects.length;
 		},
 
+		/**
+		 * returns the object at the specified index
+		 * @ignore
+		 * @function
+		 */
 		getObjectByIndex : function(idx) {
 			return this.objects[idx];
 		}
 	});
 
 	/**
-	 * a TMX Object
+	 * a TMX Object defintion, as defined in Tiled. <br>
+	 * note : object definition are translated into the virtual `me.game.world` using `me.ObjectEntity`.
+	 * @see me.ObjectEntity
 	 * @class
 	 * @extends Object
 	 * @memberOf me
 	 * @constructor
-	 * @ignore
 	 */
 
-	me.TMXOBject = Object.extend(
-	{
+	me.TMXObject = Object.extend({
+
+		/**
+		 * object name
+		 * @public
+		 * @type String
+		 * @name name
+		 * @memberOf me.TMXObject
+		 */
+		name : null, 
+		
+		/**
+		 * object x position
+		 * @public
+		 * @type Number
+		 * @name x
+		 * @memberOf me.TMXObject
+		 */
+		x : 0,
+
+		/**
+		 * object y position
+		 * @public
+		 * @type Number
+		 * @name y
+		 * @memberOf me.TMXObject
+		 */
+		y : 0,
+
+		/**
+		 * object width
+		 * @public
+		 * @type Number
+		 * @name width
+		 * @memberOf me.TMXObject
+		 */
+		width : 0,
+
+		/**
+		 * object height
+		 * @public
+		 * @type Number
+		 * @name height
+		 * @memberOf me.TMXObject
+		 */
+		height : 0,
+		
+		/**
+		 * object z order
+		 * @public
+		 * @type Number
+		 * @name z
+		 * @memberOf me.TMXObject
+		 */
+		z : 0,
+
+		/**
+		 * object gid value
+		 * when defined the object is a tiled object
+		 * @public
+		 * @type Number
+		 * @name gid
+		 * @memberOf me.TMXObject
+		 */
+		gid : undefined,
+
+		/**
+		 * if true, the object is a polygone
+		 * @public
+		 * @type Boolean
+		 * @name isPolygon
+		 * @memberOf me.TMXObject
+		 */
+		isPolygon : false,
+		
+		/**
+		 * f true, the object is a polygone
+		 * @public
+		 * @type Boolean
+		 * @name isPolyline
+		 * @memberOf me.TMXObject
+		 */
+		isPolyline : false,
+		
+		/**
+		 * object point list (for polygone and polyline)
+		 * @public
+		 * @type Vector2d[]
+		 * @name points
+		 * @memberOf me.TMXObject
+		 */
+		points : undefined,
+
+		/**
+		 * constructor from XML content
+		 * @ignore
+		 * @function
+		 */
 		initFromXML :  function(tmxObj, tilesets, z) {
 			this.name = me.mapReader.TMXParser.getStringAttribute(tmxObj, me.TMX_TAG_NAME);
 			this.x = me.mapReader.TMXParser.getIntAttribute(tmxObj, me.TMX_TAG_X);
@@ -11521,6 +11751,7 @@ window.me = window.me || {};
 				if (!polygon.length) {
 					polygon = tmxObj.getElementsByTagName(me.TMX_TAG_POLYLINE);
 					this.isPolygon = false;
+					this.isPolyline = true;
 				}
 
 				if (polygon.length) {
@@ -11541,6 +11772,12 @@ window.me = window.me || {};
 			me.TMXUtils.applyTMXPropertiesFromXML(this, tmxObj);
 		},
 		
+
+		/**
+		 * constructor from JSON content
+		 * @ignore
+		 * @function
+		 */
 		initFromJSON :  function(tmxObj, tilesets, z) {
 			
 			
@@ -11582,6 +11819,11 @@ window.me = window.me || {};
 			me.TMXUtils.applyTMXPropertiesFromJSON(this, tmxObj);
 		},
 		
+		/**
+		 * set the object image (for Tiled Object)
+		 * @ignore
+		 * @function
+		 */
 		setImage : function(gid, tilesets) {
 			// get the corresponding tileset
 			var tileset = tilesets.getTilesetByGid(this.gid);
@@ -11600,6 +11842,11 @@ window.me = window.me || {};
 			this.image = tileset.getTileImage(tmxTile);
 		},
 		
+		/**
+		 * getObjectPropertyByName
+		 * @ignore
+		 * @function
+		 */
 		getObjectPropertyByName : function(name) {
 			return this[name];
 		}
@@ -11955,7 +12202,7 @@ window.me = window.me || {};
 		getTileOffsetX : function(tileId) {
 			var offset = this.tileXOffset[tileId];
 			if (typeof(offset) === 'undefined') {
-				this.tileXOffset[tileId] = this.margin + (this.spacing + this.tilewidth)  * (tileId % this.hTileCount);
+				offset = this.tileXOffset[tileId] = this.margin + (this.spacing + this.tilewidth)  * (tileId % this.hTileCount);
 			}
 			return offset;
 		},
@@ -11967,7 +12214,7 @@ window.me = window.me || {};
 		getTileOffsetY : function(tileId) {
 			var offset = this.tileYOffset[tileId];
 			if (typeof(offset) === 'undefined') {
-				this.tileYOffset[tileId] = this.margin + (this.spacing + this.tileheight)	* ~~(tileId / this.hTileCount);
+				offset = this.tileYOffset[tileId] = this.margin + (this.spacing + this.tileheight)	* ~~(tileId / this.hTileCount);
 			}
 			return offset;
 		},
@@ -12179,13 +12426,13 @@ window.me = window.me || {};
 		 * draw the tile map
 		 * @ignore
 		 */
-		drawTileLayer : function(context, layer, viewport, rect) {
+		drawTileLayer : function(context, layer, rect) {
 			// get top-left and bottom-right tile position
-			var start = this.pixelToTileCoords(viewport.x + rect.pos.x, 
-											   viewport.y + rect.pos.y).floorSelf();
+			var start = this.pixelToTileCoords(rect.pos.x, 
+											   rect.pos.y).floorSelf();
 				
-			var end = this.pixelToTileCoords(viewport.x + rect.pos.x + rect.width + this.tilewidth, 
-											 viewport.y + rect.pos.y + rect.height + this.tileheight).ceilSelf();
+			var end = this.pixelToTileCoords(rect.pos.x + rect.width + this.tilewidth, 
+											 rect.pos.y + rect.height + this.tileheight).ceilSelf();
 			
 			//ensure we are in the valid tile range
 			end.x = end.x > this.cols ? this.cols : end.x;
@@ -12299,17 +12546,17 @@ window.me = window.me || {};
 		 * draw the tile map
 		 * @ignore
 		 */
-		drawTileLayer : function(context, layer, viewport, rect) {
+		drawTileLayer : function(context, layer, rect) {
 		
 			// cache a couple of useful references
 			var tileset = layer.tileset;
 			var offset  = tileset.tileoffset;
 
 			// get top-left and bottom-right tile position
-			var rowItr = this.pixelToTileCoords(viewport.x + rect.pos.x - tileset.tilewidth, 
-											    viewport.y + rect.pos.y - tileset.tileheight).floorSelf();
-			var TileEnd = this.pixelToTileCoords(viewport.x + rect.pos.x + rect.width + tileset.tilewidth, 
-												 viewport.y + rect.pos.y + rect.height + tileset.tileheight).ceilSelf();
+			var rowItr = this.pixelToTileCoords(rect.pos.x - tileset.tilewidth, 
+											    rect.pos.y - tileset.tileheight).floorSelf();
+			var TileEnd = this.pixelToTileCoords(rect.pos.x + rect.width + tileset.tilewidth, 
+												 rect.pos.y + rect.height + tileset.tileheight).ceilSelf();
 			
 			var rectEnd = this.tileToPixelCoords(TileEnd.x, TileEnd.y);
 			
@@ -12412,9 +12659,8 @@ window.me = window.me || {};
 			
 			this.opacity = 1.0;
 			
-			this.floating = true;
-			
-			this.parent(new me.Vector2d(0, 0), me.game.viewport.width, me.game.viewport.height);
+			this.parent(new me.Vector2d(0, 0), Infinity, Infinity);
+
 		},
 
 		/**
@@ -12868,7 +13114,7 @@ window.me = window.me || {};
 			me.TMXUtils.applyTMXPropertiesFromXML(this, layer);
 			
 			// check for the correct rendering method
-			if (this.preRender === undefined) {
+			if (typeof (this.preRender) == 'undefined') {
 				this.preRender = me.sys.preRender;
 			}
 			
@@ -12881,7 +13127,7 @@ window.me = window.me || {};
 
 
 			// if pre-rendering method is use, create the offline canvas
-			if (this.preRender) {
+			if (this.preRender === true) {
 				this.layerCanvas = me.video.createCanvas(this.cols * this.tilewidth, this.rows * this.tileheight);
 				this.layerSurface = me.video.getContext2d(this.layerCanvas);
 
@@ -12909,10 +13155,10 @@ window.me = window.me || {};
 			me.TMXUtils.applyTMXPropertiesFromJSON(this, layer);
 			
 			// check for the correct rendering method
-			if (this.preRender === undefined) {
+			if (typeof (this.preRender) == 'undefined') {
 				this.preRender = me.sys.preRender;
 			}
-			
+
 			// detect if the layer is a collision map
 			this.isCollisionMap = (this.name.toLowerCase().contains(me.COLLISION_LAYER));
 			if (this.isCollisionMap && !me.debug.renderCollisionMap) {
@@ -12921,7 +13167,7 @@ window.me = window.me || {};
 			}
 
 			// if pre-rendering method is use, create the offline canvas
-			if (this.preRender) {
+			if (this.preRender === true) {
 				this.layerCanvas = me.video.createCanvas(this.cols * this.tilewidth, this.rows * this.tileheight);
 				this.layerSurface = me.video.getContext2d(this.layerCanvas);
 				
@@ -13136,10 +13382,7 @@ window.me = window.me || {};
 		 * @ignore
 		 */
 		draw : function(context, rect) {
-			
-			// get a reference to the viewport
-			var vpos = me.game.viewport.pos;
-			
+						
 			// use the offscreen canvas
 			if (this.preRender) {
 			
@@ -13148,11 +13391,11 @@ window.me = window.me || {};
 			
 				// draw using the cached canvas
 				context.drawImage(this.layerCanvas, 
-								  vpos.x + rect.pos.x, //sx
-								  vpos.y + rect.pos.y, //sy
+								  rect.pos.x, //sx
+								  rect.pos.y, //sy
 								  width, height,    //sw, sh
-								  vpos.x + rect.pos.x, //dx
-								  vpos.y + rect.pos.y, //dy
+								  rect.pos.x, //dx
+								  rect.pos.y, //dy
 								  width, height);   //dw, dh
 			}
 			// dynamically render the layer
@@ -13162,7 +13405,7 @@ window.me = window.me || {};
 				context.globalAlpha = this.opacity;
 
 				// draw the layer
-				this.renderer.drawTileLayer(context, this, vpos, rect);
+				this.renderer.drawTileLayer(context, this, rect);
 				
 				// restore context to initial state
 				context.globalAlpha = _alpha;
@@ -13296,8 +13539,11 @@ window.me = window.me || {};
 		},
 		
 		/**
-		 * return the specified object group
-		 * @ignore	
+		 * return the corresponding object group definition
+		 * @name me.TMXTileMap#getObjectGroupByName
+		 * @public
+		 * @function
+		 * @return {me.TMXObjectGroup} group
 		 */
 		getObjectGroupByName : function(name) {
 			var objectGroup = null;
@@ -13313,8 +13559,11 @@ window.me = window.me || {};
 		},
 
 		/**
-		 * return all the object group
-		 * @ignore		
+		 * return all the existing object group definition
+		 * @name me.TMXTileMap#getObjectGroups
+		 * @public
+		 * @function
+		 * @return {me.TMXObjectGroup[]} Array of Groups
 		 */
 		getObjectGroups : function() {
 			return this.objectGroups;
@@ -13809,7 +14058,7 @@ window.me = window.me || {};
    
 		readObjectGroup: function(map, data, z) {
 			var name = this.TMXParser.getStringAttribute(data, me.TMX_TAG_NAME);
-			var group = new me.TMXOBjectGroup();
+			var group = new me.TMXObjectGroup();
 			group.initFromXML(name, data, map.tilesets, z);
 			return group;
 		}
@@ -13958,7 +14207,7 @@ window.me = window.me || {};
 		},
 		
 		readObjectGroup: function(map, data, z) {
-			var group = new me.TMXOBjectGroup();
+			var group = new me.TMXObjectGroup();
 			group.initFromJSON(data[me.TMX_TAG_NAME], data, map.tilesets, z);
 			return group;
 		}
