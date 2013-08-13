@@ -14,12 +14,14 @@ var game = {
 
         // Set a callback to run when loading is complete.
         me.loader.onload = this.loaded.bind(this);
-        this.loadResources();
 
         // Initialize melonJS and display a loading screen.
         game.LoadBlipjoyLogo(function () {
             me.state.set(me.state.LOADING, new game.LoadingScreen());
             me.state.change(me.state.LOADING);
+
+            // Load resources after changing to loading screen
+            game.loadResources();
         });
     },
 
