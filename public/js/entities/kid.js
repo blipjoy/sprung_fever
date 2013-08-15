@@ -33,36 +33,36 @@ game.Kid = game.Person.extend({
         }
 
         // Sprinting
+        var stamina = game.playscreen.stamina;
         this.sprinting = this.cansprint && me.input.isKeyPressed("sprint");
         if (this.sprinting && this.moving) {
-            me.game.HUD.updateItemValue("stamina", -1);
-            if (me.game.HUD.getItemValue("stamina") <= 0) {
+            stamina.value -= 1;
+            if (stamina.value <= 0) {
                 this.cansprint = false;
             }
         }
         else {
-            me.game.HUD.updateItemValue("stamina", 0.5);
-            if (me.game.HUD.getItemValue("stamina") >= 256) {
-                me.game.HUD.reset("stamina");
+            stamina.value += 0.5;
+            if (stamina.value >= stamina.defaultvalue) {
+                stamina.reset();
                 this.cansprint = true;
             }
         }
 
         // Attention
-        var attn = 0;
+        var attention = game.playscreen.attention;
         if (!this.attentionDeficit) {
-            me.game.HUD.updateItemValue("attention", 0.25);
-            attn = me.game.HUD.getItemValue("attention");
-            if (attn >= 256)
-                me.game.HUD.reset("attention");
-            else if (attn > 128) {
+            attention.value += 0.25;
+            if (attention.value >= attention.defaultvalue)
+                attention.reset();
+            else if (attention.value > attention.defaultvalue / 2) {
                 game.playscreen.bindKeys(false, false);
             }
-            else if (attn > 64) {
+            else if (attention.value > attention.defaultvalue / 4) {
                 game.playscreen.bindKeys(true, false);
             }
         }
-        else if (me.game.HUD.getItemValue("attention") <= 0 &&
+        else if (attention.value <= 0 &&
             !game.playscreen.restart) {
             // End game.
             game.playscreen.restart = true;
@@ -75,21 +75,20 @@ game.Kid = game.Person.extend({
             this.attentionDeficit = false;
 
             // "Nervous" effects
-            attn = me.game.HUD.getItemValue("attention");
-            if (attn < 32) {
+            if (attention.value < attention.defaultvalue / 8) {
                 game.playscreen.bindKeys(true, true);
                 me.game.viewport.shake(12, 50);
             }
-            else if (attn < 64) {
+            else if (attention.value < attention.defaultvalue / 4) {
                 game.playscreen.bindKeys(true, false);
                 me.game.viewport.shake(8, 50);
             }
-            else if (attn < 128) {
+            else if (attention.value < attention.defaultvalue / 2) {
                 me.game.viewport.shake(4, 50);
             }
 
             // Emit a random heart
-            if (!~~(Math.random() * attn * 0.2)) {
+            if (!~~(Math.random() * attention.value * 0.2)) {
                 me.game.add(me.entityPool.newInstanceOf("heart",
                     this.pos.x + (Math.random() - 0.5) * 15,
                     this.pos.y - (this.renderable.height - 10),
@@ -99,9 +98,9 @@ game.Kid = game.Person.extend({
             }
         }
 
-        if (attn < 256) {
+        if (attention.value < attention.defaultvalue) {
             // Emit a random sweat drop
-            if (!~~(Math.random() * attn * 0.3)) {
+            if (!~~(Math.random() * attention.value * 0.3)) {
                 me.audio.play("sweatdrop", false, null, 0.1);
                 me.game.add(me.entityPool.newInstanceOf("sweat",
                     this.pos.x + (Math.random() - 0.5) * 15,
@@ -112,11 +111,14 @@ game.Kid = game.Person.extend({
         }
 
         // HUD Heartbeat
+        var attn = attention.value;
+        var full_attn = attention.defaultvalue;
+        var hAttn = full_attn / 2;
         game.playscreen.heart.rate = attn * 3 + 150;
-        game.playscreen.heart.minSize = (0.2 / 256) * attn + 0.7;
+        game.playscreen.heart.minSize = (0.2 / full_attn) * attn + 0.7;
 
         // Red overlay opacity
-        game.playscreen.red.alpha = (attn < 128) ? (128 - attn) / 128 : 0;
+        game.playscreen.red.alpha = (attn < hAttn) ? (hAttn - attn) / hAttn : 0;
 
         var result = this.parent();
         me.game.collide(this, true);

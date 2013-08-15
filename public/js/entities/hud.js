@@ -1,7 +1,25 @@
-game.HUD_Meter = me.HUD_Item.extend({
-    "init" : function (name, x, y, val, bg, fg) {
-        this.parent(x, y, val);
+game.ColorLayer = me.Renderable.extend({
+    "init" : function (pos, w, h, name, color) {
+        this.parent(pos, w, h);
+        this.name = name;
+        this.color = color;
+    },
 
+    "update" : function () {
+        return true;
+    },
+
+    "draw" : function (context) {
+        context.fillStyle = this.color;
+        context.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+    }
+})
+
+game.HUD_Meter = me.Renderable.extend({
+    "init" : function (name, x, y, val, bg, fg) {
+        this.parent(new me.Vector2d(x, y), 100, 20);
+
+        this.defaultvalue = this.value = val;
         this.bg = bg;
         this.fg = fg;
 
@@ -19,6 +37,15 @@ game.HUD_Meter = me.HUD_Item.extend({
         ctx.shadowOffsetY = 2;
 
         font.draw(ctx, name + ":", 0, 0);
+    },
+
+    "reset" : function () {
+        this.value = this.defaultvalue;
+    },
+
+    "update" : function () {
+        // FIXME: Non-optimal!
+        return true;
     },
 
     "draw" : function (context) {
@@ -195,13 +222,8 @@ game.HUD_Heart = me.SpriteObject.extend({
             this._sourceAngle = -(Math.PI / 2);
         }
 
-        this.isPersistent = true;
-        this.floating = true;
-
         // Animation!
-        this.size = 1;
-        this.minSize = 0.9
-        this.rate = 1000;
+        this.reset();
 
         this.beat = function () {
             me.audio.play("heartbeat1", false, null, (800 - this.rate) / 800);
@@ -240,6 +262,12 @@ game.HUD_Heart = me.SpriteObject.extend({
 
     "onDestroyEvent" : function () {
         me.event.unsubscribe(me.event.LEVEL_LOADED, this.beat.bind(this));
+    },
+
+    "reset" : function () {
+        this.size = 1;
+        this.minSize = 0.9
+        this.rate = 1000;
     },
 
     "update" : function () {

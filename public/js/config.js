@@ -6,6 +6,8 @@
     window.c = {
         "DEBUG"     : false,
 
+        "DOUBLEBUF" : true,
+
         "WIDTH"     : 960,
         "HEIGHT"    : 640,
 

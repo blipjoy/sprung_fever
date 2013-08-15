@@ -10,16 +10,30 @@ game.PlayScreen = me.ScreenObject.extend({
 
         me.game.onLevelLoaded = this.onLevelLoaded.bind(this);
 
-        // Create HUD
-        me.game.addHUD(0, 0, c.WIDTH, 50, "rgba(0, 0, 0, 0.5)");
-        me.game.HUD.addItem("attention", new game.HUD_Meter(
+        // Create HUD items
+        this.attention = new game.HUD_Meter(
             "Attention", 20, 25, 256, "#AC0028", "#FC589C"
-        ));
-        me.game.HUD.addItem("stamina", new game.HUD_Meter(
+        );
+        this.stamina = new game.HUD_Meter(
             "Stamina", c.WIDTH - 256 - 20, 25, 256, "#AC8000", "#FCB800"
-        ));
+        );
         this.heart = new game.HUD_Heart(c.WIDTH / 2 - 17, 15);
-        me.game.add(this.heart, 1000);
+
+        // Create HUD
+        var hud = new me.EntityContainer(0, 0, c.WIDTH, 50);
+        hud.addChild(new game.ColorLayer(
+            new me.Vector2d(0, 0),
+            c.WIDTH,
+            50,
+            "HUD bg",
+            "rgba(0, 0, 0, 0.5)"
+        ));
+        hud.addChild(this.attention, 1);
+        hud.addChild(this.stamina, 1);
+        hud.addChild(this.heart, 1);
+        hud.floating = true;
+        hud.isPersistent = true;
+        me.game.add(hud, 1000);
 
         // Mobile UI
         this.mobile_ui = null;
@@ -38,9 +52,9 @@ game.PlayScreen = me.ScreenObject.extend({
 
     "onLevelLoaded" : function (name) {
         // Reset HUD
-        me.game.HUD.reset();
-        this.heart.rate = 1000;
-        this.heart.minSize = 0.9;
+        this.attention.reset();
+        this.stamina.reset();
+        this.heart.reset();
         this.red.alpha = 0;
 
         // Rebind keys
@@ -78,7 +92,7 @@ game.PlayScreen = me.ScreenObject.extend({
         me.input.unbindKey(me.input.KEY.S);
 
         // Disable HUD
-        me.game.disableHUD();
+        me.game.remove(this.hud);
         me.game.remove(this.heart);
         me.game.remove(this.red);
 

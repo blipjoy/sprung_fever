@@ -51,7 +51,8 @@ game.BadItem = game.ItemBase.extend({
         me.audio.play("baditem", false, null, 0.3);
 
         game.kid.attentionDeficit = true;
-        me.game.HUD.updateItemValue("attention", -128);
+        var attention = game.playscreen.attention;
+        attention.value -= attention.defaultvalue / 2;
 
         this.parent(res, obj);
     }
