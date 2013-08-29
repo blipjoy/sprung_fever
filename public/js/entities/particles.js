@@ -46,7 +46,7 @@ game.Sweat = me.ObjectEntity.extend({
         this.renderable = game.texture.createAnimationFromName([
             "sweat-1.png", "sweat-2.png", "sweat-3.png", "sweat-4.png"
         ]);
-        this.renderable.animationspeed = ~~(me.sys.fps / 10);
+        this.renderable.animationspeed = 112;
 
         // Define animation frames
         this.renderable.addAnimation("default", [ 0, 1, 2, 3 ]);

@@ -16,7 +16,7 @@ game.Person = me.ObjectEntity.extend({
             }
         }
         this.renderable = game.texture.createAnimationFromName(names);
-        this.renderable.animationspeed = ~~(me.sys.fps / 30);
+        this.renderable.animationspeed = 48;
 
         // Define animation frames
         this.renderable.addAnimation("stand-left", [ 0 ]);
@@ -84,7 +84,7 @@ game.Person = me.ObjectEntity.extend({
                     this.renderable.animationspeed;
             }
             else {
-                this.renderable.current.animationspeed = 0;
+                this.renderable.current.animationspeed = 24;
             }
         }
 
