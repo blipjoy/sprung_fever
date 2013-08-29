@@ -25,7 +25,7 @@ game.Door = me.ObjectEntity.extend({
                     .onComplete((function () {
                         this.open = 2;
                     }).bind(this))
-                    .easing(me.Tween.Easing.Sinusoidal.EaseOut)
+                    .easing(me.Tween.Easing.Sinusoidal.Out)
                     .start();
             }
         }
@@ -39,7 +39,7 @@ game.Door = me.ObjectEntity.extend({
                 .onComplete((function () {
                     this.open = 0;
                 }).bind(this))
-                .easing(me.Tween.Easing.Sinusoidal.EaseOut)
+                .easing(me.Tween.Easing.Sinusoidal.Out)
                 .start();
         }
 

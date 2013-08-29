@@ -107,6 +107,7 @@ game.UI = me.Renderable.extend({
 
         // Event handlers
         function mousemove(e) {
+console.log("mousedown", e);
             // Iterate each button
             for (var name in buttons) {
                 var button = buttons[name];
@@ -131,6 +132,7 @@ game.UI = me.Renderable.extend({
         }
 
         function mouseup(e) {
+console.log("mouseup", e);
             // Iterate each button
             for (var name in buttons) {
                 var button = buttons[name];

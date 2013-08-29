@@ -20,7 +20,7 @@ game.PlayScreen = me.ScreenObject.extend({
         this.heart = new game.HUD_Heart(c.WIDTH / 2 - 17, 15);
 
         // Create HUD
-        var hud = new me.EntityContainer(0, 0, c.WIDTH, 50);
+        var hud = new me.ObjectContainer(0, 0, c.WIDTH, 50);
         hud.addChild(new game.ColorLayer(
             new me.Vector2d(0, 0),
             c.WIDTH,

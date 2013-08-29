@@ -115,7 +115,7 @@ game.Errands = me.Renderable.extend({
                 "angle" : 0
             }, 1000)
             .delay(500)
-            .easing(me.Tween.Easing.Back.EaseOut)
+            .easing(me.Tween.Easing.Back.Out)
             .start();
 
         new me.Tween(this.pos)
@@ -123,13 +123,13 @@ game.Errands = me.Renderable.extend({
                 "x" : 150
             }, 1000)
             .delay(500)
-            .easing(me.Tween.Easing.Back.EaseOut)
+            .easing(me.Tween.Easing.Back.Out)
             .onComplete((function () {
                 new me.Tween(this)
                     .to({
                         "ratio" : 0.1875
                     }, 500)
-                    .easing(me.Tween.Easing.Quartic.EaseIn)
+                    .easing(me.Tween.Easing.Quartic.In)
                     .delay(1000)
                     .start();
 
@@ -233,7 +233,7 @@ game.HUD_Heart = me.SpriteObject.extend({
                     "size" : this.minSize
                 }, this.rate / 5)
                 .delay(this.rate)
-                .easing(me.Tween.Easing.Bounce.EaseOut)
+                .easing(me.Tween.Easing.Bounce.Out)
                 .onUpdate((function () {
                     this.resize(this.size);
                 }).bind(this))
@@ -245,7 +245,7 @@ game.HUD_Heart = me.SpriteObject.extend({
                         .to({
                             "size" : 1
                         }, this.rate / 5)
-                        .easing(me.Tween.Easing.Back.EaseOut)
+                        .easing(me.Tween.Easing.Back.Out)
                         .onUpdate((function () {
                             this.resize(this.size);
                         }).bind(this))
