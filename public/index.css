@@ -31,3 +31,15 @@ body {
 	image-rendering: optimize-contrast;
 	-ms-interpolation-mode: nearest-neighbor;
 }
+
+#gamemix {
+    position: relative;
+    margin: -70px auto 0 auto;
+    width: 400px;
+}
+
+#gamemix img {
+    margin: 0 10px 0 0;
+    float: left;
+    border: none;
+}

@@ -132,6 +132,11 @@ game.TitleScreen = me.ScreenObject.extend({
     },
 
     "onDestroyEvent" : function () {
+        var gamemix = document.getElementById("gamemix");
+        if (gamemix) {
+            document.body.removeChild(gamemix);
+        }
+
         if (me.sys.isMobile) {
             me.input.triggerKeyEvent(me.input.KEY.ENTER, false);
             var vp = me.game.viewport;
