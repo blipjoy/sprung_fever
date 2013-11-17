@@ -28,9 +28,9 @@ game.PlayScreen = me.ScreenObject.extend({
             "HUD bg",
             "rgba(0, 0, 0, 0.5)"
         ));
-        hud.addChild(this.attention, 1);
-        hud.addChild(this.stamina, 1);
-        hud.addChild(this.heart, 1);
+        hud.addChild(this.attention);
+        hud.addChild(this.stamina);
+        hud.addChild(this.heart);
         hud.floating = true;
         hud.isPersistent = true;
         me.game.add(hud, 1000);

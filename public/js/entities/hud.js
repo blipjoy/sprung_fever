@@ -3,6 +3,7 @@ game.ColorLayer = me.Renderable.extend({
         this.parent(pos, w, h);
         this.name = name;
         this.color = color;
+        this.z = 0;
     },
 
     "update" : function () {
@@ -18,6 +19,7 @@ game.ColorLayer = me.Renderable.extend({
 game.HUD_Meter = me.Renderable.extend({
     "init" : function (name, x, y, val, bg, fg) {
         this.parent(new me.Vector2d(x, y), 100, 20);
+        this.z = 1;
 
         this.defaultvalue = this.value = val;
         this.bg = bg;
@@ -217,6 +219,7 @@ game.HUD_Heart = me.SpriteObject.extend({
             heart.frame.width,
             heart.frame.height
         );
+        this.z = 1;
         this.offset.setV(heart.frame.pos);
         if (heart.rotated) {
             this._sourceAngle = -(Math.PI / 2);
