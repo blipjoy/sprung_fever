@@ -1,3 +1,36 @@
+game.PersonSprite = function (name) {
+    // Animations
+    var names = [];
+    var dirs = [ "left", "right", "up", "down" ];
+    for (var j = 0; j < 4; j++) {
+        for (var i = 1; i <= 10; i++) {
+            names.push(name + "-" + dirs[j] + "-" + i + ".png");
+        }
+    }
+    var sprite = game.texture.createAnimationFromName(names);
+    sprite.animationspeed = 48;
+
+    // Define animation frames
+    sprite.addAnimation("stand-left", [ 0 ]);
+    sprite.addAnimation("left", [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    ]);
+    sprite.addAnimation("stand-right", [ 10 ]);
+    sprite.addAnimation("right", [
+        10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+    ]);
+    sprite.addAnimation("stand-up", [ 20 ]);
+    sprite.addAnimation("up", [
+        20, 21, 22, 23, 24, 25, 26, 27, 28, 29
+    ]);
+    sprite.addAnimation("stand-down", [ 30 ]);
+    sprite.addAnimation("down", [
+        30, 31, 32, 33, 34, 35, 36, 37, 38, 39
+    ]);
+
+    return sprite;
+};
+
 game.Person = me.ObjectEntity.extend({
     "init" : function (x, y, settings) {
         this.parent(x, y, settings);
@@ -8,33 +41,7 @@ game.Person = me.ObjectEntity.extend({
         this.moving = false;
 
         // Animations
-        var names = [];
-        var dirs = [ "left", "right", "up", "down" ];
-        for (var j = 0; j < 4; j++) {
-            for (var i = 1; i <= 10; i++) {
-                names.push(settings.name + "-" + dirs[j] + "-" + i + ".png");
-            }
-        }
-        this.renderable = game.texture.createAnimationFromName(names);
-        this.renderable.animationspeed = 48;
-
-        // Define animation frames
-        this.renderable.addAnimation("stand-left", [ 0 ]);
-        this.renderable.addAnimation("left", [
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-        ]);
-        this.renderable.addAnimation("stand-right", [ 10 ]);
-        this.renderable.addAnimation("right", [
-            10, 11, 12, 13, 14, 15, 16, 17, 18, 19
-        ]);
-        this.renderable.addAnimation("stand-up", [ 20 ]);
-        this.renderable.addAnimation("up", [
-            20, 21, 22, 23, 24, 25, 26, 27, 28, 29
-        ]);
-        this.renderable.addAnimation("stand-down", [ 30 ]);
-        this.renderable.addAnimation("down", [
-            30, 31, 32, 33, 34, 35, 36, 37, 38, 39
-        ]);
+        this.renderable = game.PersonSprite(game.GENDERS[settings.name]);
 
         // Default Animation
         this.renderable.setCurrentAnimation("stand-down");

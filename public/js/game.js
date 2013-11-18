@@ -91,7 +91,6 @@ var game = {
         me.state.set(me.state.GAME_END, new game.EndScreen());
 
         // Bind global keys
-        me.input.bindKey(me.input.KEY.ENTER, "action");
         me.input.bindKey(me.input.KEY.SHIFT, "sprint");
 
         // Add object classes to entity pool.
@@ -151,5 +150,11 @@ var game = {
         return str.split(/\s/).map(function (s) {
             return s[0].toUpperCase() + s.substr(1).toLowerCase();
         }).join(" ");
+    },
+
+    "GENDERS" : {
+        "player" : "kid",
+        "crush1" : "redgirl",
+        "crush2" : "girl"
     }
 };
