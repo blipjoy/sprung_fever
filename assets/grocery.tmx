@@ -4,7 +4,7 @@
   <property name="items" value="json:[&quot;milk&quot;,&quot;bread&quot;,&quot;eggs&quot;,&quot;cheese&quot;,&quot;broccoli&quot;,&quot;carrots&quot;]"/>
  </properties>
  <tileset firstgid="1" name="Tileset" tilewidth="48" tileheight="48" spacing="3" margin="3">
-  <image source="../public/resources/img/tileset.png" width="615" height="615"/>
+  <image source="../public/data/img/tileset.png" width="615" height="615"/>
  </tileset>
  <tileset firstgid="145" name="Metatiles" tilewidth="24" tileheight="24">
   <image source="metatiles24x24.png" width="24" height="24"/>
