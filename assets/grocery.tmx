@@ -25,20 +25,20 @@
   </data>
  </layer>
  <objectgroup name="Objects" width="80" height="60">
-  <object name="kid" x="1520" y="1358" width="29" height="19"/>
-  <object name="girl" x="1752" y="960" width="24" height="24"/>
-  <object name="redgirl" x="1272" y="768" width="24" height="24"/>
-  <object name="redgirl" x="744" y="960" width="24" height="24"/>
-  <object name="girl" x="1032" y="480" width="24" height="24"/>
-  <object name="redgirl" x="1752" y="384" width="24" height="24"/>
-  <object name="girl" x="1488" y="624" width="24" height="24"/>
-  <object name="redgirl" x="1368" y="504" width="24" height="24"/>
-  <object name="girl" x="1152" y="768" width="24" height="24"/>
-  <object name="girl" x="1776" y="816" width="24" height="24"/>
-  <object name="girl" x="768" y="624" width="24" height="24"/>
-  <object name="redgirl" x="1522" y="1110" width="24" height="24"/>
-  <object name="girl" x="1584" y="504" width="24" height="24"/>
-  <object name="girl" x="912" y="840" width="24" height="24"/>
+  <object name="player" x="1520" y="1358" width="29" height="19"/>
+  <object name="crush2" x="1752" y="960" width="24" height="24"/>
+  <object name="crush1" x="1272" y="768" width="24" height="24"/>
+  <object name="crush1" x="744" y="960" width="24" height="24"/>
+  <object name="crush2" x="1032" y="480" width="24" height="24"/>
+  <object name="crush1" x="1752" y="384" width="24" height="24"/>
+  <object name="crush2" x="1488" y="624" width="24" height="24"/>
+  <object name="crush1" x="1368" y="504" width="24" height="24"/>
+  <object name="crush2" x="1152" y="768" width="24" height="24"/>
+  <object name="crush2" x="1776" y="816" width="24" height="24"/>
+  <object name="crush2" x="768" y="624" width="24" height="24"/>
+  <object name="crush1" x="1522" y="1110" width="24" height="24"/>
+  <object name="crush2" x="1584" y="504" width="24" height="24"/>
+  <object name="crush2" x="912" y="840" width="24" height="24"/>
   <object name="milk" x="1776" y="336" width="24" height="24"/>
   <object name="bread" x="648" y="960" width="24" height="24"/>
   <object name="eggs" x="1416" y="504" width="24" height="24"/>

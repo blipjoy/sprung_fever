@@ -42,7 +42,7 @@
     <property name="image" value="book_return"/>
    </properties>
   </object>
-  <object name="kid" x="897" y="864" width="29" height="19"/>
+  <object name="player" x="897" y="864" width="29" height="19"/>
   <object name="war and peace" x="1602" y="194" width="24" height="24">
    <properties>
     <property name="image" value="book1"/>
@@ -70,30 +70,30 @@
   </object>
   <object name="bible" x="312" y="144" width="24" height="24"/>
   <object name="comics" x="1571" y="381" width="24" height="24"/>
-  <object name="redgirl" x="443" y="779" width="24" height="24"/>
-  <object name="girl" x="205" y="876" width="24" height="24"/>
-  <object name="girl" x="1092" y="684" width="24" height="24"/>
-  <object name="redgirl" x="611" y="491" width="24" height="24"/>
-  <object name="girl" x="1357" y="298" width="24" height="24"/>
-  <object name="redgirl" x="1716" y="881" width="24" height="24"/>
-  <object name="girl" x="1406" y="163" width="24" height="24"/>
-  <object name="redgirl" x="1080" y="168" width="24" height="24"/>
-  <object name="girl" x="760" y="139" width="24" height="24"/>
-  <object name="redgirl" x="158" y="138" width="24" height="24"/>
-  <object name="girl" x="829" y="372" width="24" height="24"/>
-  <object name="girl" x="1043" y="491" width="24" height="24"/>
-  <object name="girl" x="713" y="592" width="24" height="24"/>
-  <object name="redgirl" x="1354" y="784" width="24" height="24"/>
-  <object name="girl" x="1272" y="192" width="24" height="24"/>
-  <object name="girl" x="1474" y="496" width="24" height="24"/>
-  <object name="girl" x="1740" y="707" width="24" height="24"/>
-  <object name="redgirl" x="1841" y="424" width="24" height="24"/>
-  <object name="redgirl" x="1572" y="563" width="24" height="24"/>
-  <object name="girl" x="1859" y="249" width="24" height="24"/>
-  <object name="girl" x="158" y="471" width="24" height="24"/>
-  <object name="girl" x="367" y="138" width="24" height="24"/>
-  <object name="redgirl" x="588" y="108" width="24" height="24"/>
-  <object name="redgirl" x="781" y="253" width="24" height="24"/>
+  <object name="crush1" x="443" y="779" width="24" height="24"/>
+  <object name="crush2" x="205" y="876" width="24" height="24"/>
+  <object name="crush2" x="1092" y="684" width="24" height="24"/>
+  <object name="crush1" x="611" y="491" width="24" height="24"/>
+  <object name="crush2" x="1357" y="298" width="24" height="24"/>
+  <object name="crush1" x="1716" y="881" width="24" height="24"/>
+  <object name="crush2" x="1406" y="163" width="24" height="24"/>
+  <object name="crush1" x="1080" y="168" width="24" height="24"/>
+  <object name="crush2" x="760" y="139" width="24" height="24"/>
+  <object name="crush1" x="158" y="138" width="24" height="24"/>
+  <object name="crush2" x="829" y="372" width="24" height="24"/>
+  <object name="crush2" x="1043" y="491" width="24" height="24"/>
+  <object name="crush2" x="713" y="592" width="24" height="24"/>
+  <object name="crush1" x="1354" y="784" width="24" height="24"/>
+  <object name="crush2" x="1272" y="192" width="24" height="24"/>
+  <object name="crush2" x="1474" y="496" width="24" height="24"/>
+  <object name="crush2" x="1740" y="707" width="24" height="24"/>
+  <object name="crush1" x="1841" y="424" width="24" height="24"/>
+  <object name="crush1" x="1572" y="563" width="24" height="24"/>
+  <object name="crush2" x="1859" y="249" width="24" height="24"/>
+  <object name="crush2" x="158" y="471" width="24" height="24"/>
+  <object name="crush2" x="367" y="138" width="24" height="24"/>
+  <object name="crush1" x="588" y="108" width="24" height="24"/>
+  <object name="crush1" x="781" y="253" width="24" height="24"/>
   <object name="modern psychology" x="1733" y="632" width="24" height="24">
    <properties>
     <property name="image" value="book1"/>
@@ -104,7 +104,7 @@
     <property name="image" value="book2"/>
    </properties>
   </object>
-  <object name="redgirl" x="182" y="589" width="24" height="24"/>
+  <object name="crush1" x="182" y="589" width="24" height="24"/>
  </objectgroup>
  <layer name="Foreground" width="80" height="40">
   <data encoding="base64">

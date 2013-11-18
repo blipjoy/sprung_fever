@@ -50,7 +50,7 @@ game.BadItem = game.ItemBase.extend({
     "onCollision" : function (res, obj) {
         me.audio.play("baditem", false, null, 0.3);
 
-        game.kid.attentionDeficit = true;
+        game.player.attentionDeficit = true;
         var attention = game.playscreen.attention;
         attention.value -= attention.defaultvalue / 2;
 

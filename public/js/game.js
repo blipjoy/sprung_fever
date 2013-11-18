@@ -34,7 +34,7 @@ var game = {
             resources.push({
                 "name"  : value,
                 "type"  : "image",
-                "src"   : "resources/img/" + value + ".png"
+                "src"   : "data/img/" + value + ".png"
             })
         });
 
@@ -43,7 +43,7 @@ var game = {
             resources.push({
                 "name"  : value,
                 "type"  : "json",
-                "src"   : "resources/img/" + value + ".json"
+                "src"   : "data/img/" + value + ".json"
             })
         });
 
@@ -52,7 +52,7 @@ var game = {
             resources.push({
                 "name"  : value,
                 "type"  : "tmx",
-                "src"   : "resources/map/" + value + ".json"
+                "src"   : "data/map/" + value + ".json"
             })
         });
 
@@ -61,7 +61,7 @@ var game = {
             resources.push({
                 "name"      : value,
                 "type"      : "audio",
-                "src"       : "resources/sfx/",
+                "src"       : "data/sfx/",
                 "channel"   : 3
             })
         });
@@ -71,7 +71,7 @@ var game = {
             resources.push({
                 "name"      : value,
                 "type"      : "audio",
-                "src"       : "resources/bgm/",
+                "src"       : "data/bgm/",
                 "channel"   : 1,
                 "stream"    : true
             })
@@ -95,9 +95,9 @@ var game = {
         me.input.bindKey(me.input.KEY.SHIFT, "sprint");
 
         // Add object classes to entity pool.
-        me.entityPool.add("kid", game.Kid);
-        me.entityPool.add("girl", game.Girl);
-        me.entityPool.add("redgirl", game.Girl);
+        me.entityPool.add("player", game.Player);
+        me.entityPool.add("crush1", game.Crush);
+        me.entityPool.add("crush2", game.Crush);
         me.entityPool.add("door", game.Door);
         me.entityPool.add("exit", game.Exit);
 

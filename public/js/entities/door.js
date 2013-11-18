@@ -14,7 +14,7 @@ game.Door = me.ObjectEntity.extend({
     },
 
     "update" : function () {
-        if ((this.pos.distance(game.kid.pos) / 48) < 2) {
+        if ((this.pos.distance(game.player.pos) / 48) < 2) {
             // Open the door
             if (this.open === 0) {
                 this.open = 1;

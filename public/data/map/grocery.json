@@ -28,7 +28,7 @@
          "objects":[
                 {
                  "height":19,
-                 "name":"kid",
+                 "name":"player",
                  "properties":
                     {
 
@@ -41,7 +41,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"girl",
+                 "name":"crush2",
                  "properties":
                     {
 
@@ -54,7 +54,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"redgirl",
+                 "name":"crush1",
                  "properties":
                     {
 
@@ -67,7 +67,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"redgirl",
+                 "name":"crush1",
                  "properties":
                     {
 
@@ -80,7 +80,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"girl",
+                 "name":"crush2",
                  "properties":
                     {
 
@@ -93,7 +93,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"redgirl",
+                 "name":"crush1",
                  "properties":
                     {
 
@@ -106,7 +106,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"girl",
+                 "name":"crush2",
                  "properties":
                     {
 
@@ -119,7 +119,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"redgirl",
+                 "name":"crush1",
                  "properties":
                     {
 
@@ -132,7 +132,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"girl",
+                 "name":"crush2",
                  "properties":
                     {
 
@@ -145,7 +145,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"girl",
+                 "name":"crush2",
                  "properties":
                     {
 
@@ -158,7 +158,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"girl",
+                 "name":"crush2",
                  "properties":
                     {
 
@@ -171,7 +171,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"redgirl",
+                 "name":"crush1",
                  "properties":
                     {
 
@@ -184,7 +184,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"girl",
+                 "name":"crush2",
                  "properties":
                     {
 
@@ -197,7 +197,7 @@
                 }, 
                 {
                  "height":24,
-                 "name":"girl",
+                 "name":"crush2",
                  "properties":
                     {
 

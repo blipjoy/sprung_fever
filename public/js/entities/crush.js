@@ -1,4 +1,4 @@
-game.Girl = game.Person.extend({
+game.Crush = game.Person.extend({
     "timeout" : 0,
 
     "update" : function () {
@@ -20,8 +20,8 @@ game.Girl = game.Person.extend({
         }
 
         // AoE
-        if ((this.pos.distance(game.kid.pos) / 48) < 3) {
-            game.kid.attentionDeficit = true;
+        if ((this.pos.distance(game.player.pos) / 48) < 3) {
+            game.player.attentionDeficit = true;
             game.playscreen.attention.value -= 0.5;
         }
 
