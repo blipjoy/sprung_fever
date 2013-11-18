@@ -2,16 +2,30 @@
 <data version="1.0">
     <struct type="Settings">
         <key>fileFormatVersion</key>
-        <int>1</int>
-        <key>variation</key>
-        <string>main</string>
-        <key>verbose</key>
-        <false/>
+        <int>3</int>
+        <key>texturePackerVersion</key>
+        <string>3.2.1</string>
         <key>autoSDSettings</key>
-        <array/>
+        <array>
+            <struct type="AutoSDSettings">
+                <key>scale</key>
+                <double>1</double>
+                <key>extension</key>
+                <string></string>
+                <key>spriteFilter</key>
+                <string></string>
+                <key>acceptFractionalValues</key>
+                <false/>
+                <key>maxTextureSize</key>
+                <QSize>
+                    <key>width</key>
+                    <int>-1</int>
+                    <key>height</key>
+                    <int>-1</int>
+                </QSize>
+            </struct>
+        </array>
         <key>allowRotation</key>
-        <false/>
-        <key>quiet</key>
         <false/>
         <key>premultiplyAlpha</key>
         <false/>
@@ -98,8 +112,6 @@
             <enum type="AndEngine::MinFilter">Linear</enum>
             <key>packageName</key>
             <string>Texture</string>
-            <key>javaFileName</key>
-            <filename>../public/data/img/player.java</filename>
             <key>wrap</key>
             <struct type="AndEngineWrap">
                 <key>s</key>
@@ -110,10 +122,21 @@
             <key>magFilter</key>
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
-        <key>dataFileName</key>
-        <filename>../public/data/img/texture.json</filename>
-        <key>mainExtension</key>
-        <string></string>
+        <key>dataFileNames</key>
+        <map type="GFileNameMap">
+            <key>data</key>
+            <struct type="DataFile">
+                <key>name</key>
+                <filename>../public/data/img/texture.json</filename>
+            </struct>
+            <key>java</key>
+            <struct type="DataFile">
+                <key>name</key>
+                <filename>../public/data/img/kid.java</filename>
+            </struct>
+        </map>
+        <key>multiPack</key>
+        <false/>
         <key>forceIdenticalLayout</key>
         <false/>
         <key>outputFormat</key>
@@ -127,6 +150,8 @@
         <true/>
         <key>trimSpriteNames</key>
         <false/>
+        <key>cleanTransparentPixels</key>
+        <true/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -146,126 +171,86 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>player-down-1.png</filename>
-            <filename>player-down-2.png</filename>
-            <filename>player-down-3.png</filename>
-            <filename>player-down-4.png</filename>
-            <filename>player-down-5.png</filename>
-            <filename>player-down-6.png</filename>
-            <filename>player-down-7.png</filename>
-            <filename>player-down-8.png</filename>
-            <filename>player-down-9.png</filename>
-            <filename>player-down-10.png</filename>
-            <filename>player-left-1.png</filename>
-            <filename>player-left-2.png</filename>
-            <filename>player-left-3.png</filename>
-            <filename>player-left-4.png</filename>
-            <filename>player-left-5.png</filename>
-            <filename>player-left-6.png</filename>
-            <filename>player-left-7.png</filename>
-            <filename>player-left-8.png</filename>
-            <filename>player-left-9.png</filename>
-            <filename>player-left-10.png</filename>
-            <filename>player-right-1.png</filename>
-            <filename>player-right-2.png</filename>
-            <filename>player-right-3.png</filename>
-            <filename>player-right-4.png</filename>
-            <filename>player-right-5.png</filename>
-            <filename>player-right-6.png</filename>
-            <filename>player-right-7.png</filename>
-            <filename>player-right-8.png</filename>
-            <filename>player-right-9.png</filename>
-            <filename>player-right-10.png</filename>
-            <filename>player-up-1.png</filename>
-            <filename>player-up-2.png</filename>
-            <filename>player-up-3.png</filename>
-            <filename>player-up-4.png</filename>
-            <filename>player-up-5.png</filename>
-            <filename>player-up-6.png</filename>
-            <filename>player-up-7.png</filename>
-            <filename>player-up-8.png</filename>
-            <filename>player-up-9.png</filename>
-            <filename>player-up-10.png</filename>
-            <filename>crush2-down-1.png</filename>
-            <filename>crush2-down-2.png</filename>
-            <filename>crush2-down-3.png</filename>
-            <filename>crush2-down-4.png</filename>
-            <filename>crush2-down-5.png</filename>
-            <filename>crush2-down-6.png</filename>
-            <filename>crush2-down-7.png</filename>
-            <filename>crush2-down-8.png</filename>
-            <filename>crush2-down-9.png</filename>
-            <filename>crush2-down-10.png</filename>
-            <filename>crush2-left-1.png</filename>
-            <filename>crush2-left-2.png</filename>
-            <filename>crush2-left-3.png</filename>
-            <filename>crush2-left-4.png</filename>
-            <filename>crush2-left-5.png</filename>
-            <filename>crush2-left-6.png</filename>
-            <filename>crush2-left-7.png</filename>
-            <filename>crush2-left-8.png</filename>
-            <filename>crush2-left-9.png</filename>
-            <filename>crush2-left-10.png</filename>
-            <filename>crush2-right-1.png</filename>
-            <filename>crush2-right-2.png</filename>
-            <filename>crush2-right-3.png</filename>
-            <filename>crush2-right-4.png</filename>
-            <filename>crush2-right-5.png</filename>
-            <filename>crush2-right-6.png</filename>
-            <filename>crush2-right-7.png</filename>
-            <filename>crush2-right-8.png</filename>
-            <filename>crush2-right-9.png</filename>
-            <filename>crush2-right-10.png</filename>
-            <filename>crush2-up-1.png</filename>
-            <filename>crush2-up-2.png</filename>
-            <filename>crush2-up-3.png</filename>
-            <filename>crush2-up-4.png</filename>
-            <filename>crush2-up-5.png</filename>
-            <filename>crush2-up-6.png</filename>
-            <filename>crush2-up-7.png</filename>
-            <filename>crush2-up-8.png</filename>
-            <filename>crush2-up-9.png</filename>
-            <filename>crush2-up-10.png</filename>
-            <filename>crush1-down-1.png</filename>
-            <filename>crush1-down-2.png</filename>
-            <filename>crush1-down-3.png</filename>
-            <filename>crush1-down-4.png</filename>
-            <filename>crush1-down-5.png</filename>
-            <filename>crush1-down-6.png</filename>
-            <filename>crush1-down-7.png</filename>
-            <filename>crush1-down-8.png</filename>
-            <filename>crush1-down-9.png</filename>
-            <filename>crush1-down-10.png</filename>
-            <filename>crush1-left-1.png</filename>
-            <filename>crush1-left-2.png</filename>
-            <filename>crush1-left-3.png</filename>
-            <filename>crush1-left-4.png</filename>
-            <filename>crush1-left-5.png</filename>
-            <filename>crush1-left-6.png</filename>
-            <filename>crush1-left-7.png</filename>
-            <filename>crush1-left-8.png</filename>
-            <filename>crush1-left-9.png</filename>
-            <filename>crush1-left-10.png</filename>
-            <filename>crush1-right-1.png</filename>
-            <filename>crush1-right-2.png</filename>
-            <filename>crush1-right-3.png</filename>
-            <filename>crush1-right-4.png</filename>
-            <filename>crush1-right-5.png</filename>
-            <filename>crush1-right-6.png</filename>
-            <filename>crush1-right-7.png</filename>
-            <filename>crush1-right-8.png</filename>
-            <filename>crush1-right-9.png</filename>
-            <filename>crush1-right-10.png</filename>
-            <filename>crush1-up-1.png</filename>
-            <filename>crush1-up-2.png</filename>
-            <filename>crush1-up-3.png</filename>
-            <filename>crush1-up-4.png</filename>
-            <filename>crush1-up-5.png</filename>
-            <filename>crush1-up-6.png</filename>
-            <filename>crush1-up-7.png</filename>
-            <filename>crush1-up-8.png</filename>
-            <filename>crush1-up-9.png</filename>
-            <filename>crush1-up-10.png</filename>
+            <filename>kid-down-1.png</filename>
+            <filename>kid-down-2.png</filename>
+            <filename>kid-down-3.png</filename>
+            <filename>kid-down-4.png</filename>
+            <filename>kid-down-5.png</filename>
+            <filename>kid-down-6.png</filename>
+            <filename>kid-down-7.png</filename>
+            <filename>kid-down-8.png</filename>
+            <filename>kid-down-9.png</filename>
+            <filename>kid-down-10.png</filename>
+            <filename>kid-left-1.png</filename>
+            <filename>kid-left-2.png</filename>
+            <filename>kid-left-3.png</filename>
+            <filename>kid-left-4.png</filename>
+            <filename>kid-left-5.png</filename>
+            <filename>kid-left-6.png</filename>
+            <filename>kid-left-7.png</filename>
+            <filename>kid-left-8.png</filename>
+            <filename>kid-left-9.png</filename>
+            <filename>kid-left-10.png</filename>
+            <filename>kid-right-1.png</filename>
+            <filename>kid-right-2.png</filename>
+            <filename>kid-right-3.png</filename>
+            <filename>kid-right-4.png</filename>
+            <filename>kid-right-5.png</filename>
+            <filename>kid-right-6.png</filename>
+            <filename>kid-right-7.png</filename>
+            <filename>kid-right-8.png</filename>
+            <filename>kid-right-9.png</filename>
+            <filename>kid-right-10.png</filename>
+            <filename>kid-up-1.png</filename>
+            <filename>kid-up-2.png</filename>
+            <filename>kid-up-3.png</filename>
+            <filename>kid-up-4.png</filename>
+            <filename>kid-up-5.png</filename>
+            <filename>kid-up-6.png</filename>
+            <filename>kid-up-7.png</filename>
+            <filename>kid-up-8.png</filename>
+            <filename>kid-up-9.png</filename>
+            <filename>kid-up-10.png</filename>
+            <filename>redgirl-down-1.png</filename>
+            <filename>redgirl-down-2.png</filename>
+            <filename>redgirl-down-3.png</filename>
+            <filename>redgirl-down-4.png</filename>
+            <filename>redgirl-down-5.png</filename>
+            <filename>redgirl-down-6.png</filename>
+            <filename>redgirl-down-7.png</filename>
+            <filename>redgirl-down-8.png</filename>
+            <filename>redgirl-down-9.png</filename>
+            <filename>redgirl-down-10.png</filename>
+            <filename>redgirl-left-1.png</filename>
+            <filename>redgirl-left-2.png</filename>
+            <filename>redgirl-left-3.png</filename>
+            <filename>redgirl-left-4.png</filename>
+            <filename>redgirl-left-5.png</filename>
+            <filename>redgirl-left-6.png</filename>
+            <filename>redgirl-left-7.png</filename>
+            <filename>redgirl-left-8.png</filename>
+            <filename>redgirl-left-9.png</filename>
+            <filename>redgirl-left-10.png</filename>
+            <filename>redgirl-right-1.png</filename>
+            <filename>redgirl-right-2.png</filename>
+            <filename>redgirl-right-3.png</filename>
+            <filename>redgirl-right-4.png</filename>
+            <filename>redgirl-right-5.png</filename>
+            <filename>redgirl-right-6.png</filename>
+            <filename>redgirl-right-7.png</filename>
+            <filename>redgirl-right-8.png</filename>
+            <filename>redgirl-right-9.png</filename>
+            <filename>redgirl-right-10.png</filename>
+            <filename>redgirl-up-1.png</filename>
+            <filename>redgirl-up-2.png</filename>
+            <filename>redgirl-up-3.png</filename>
+            <filename>redgirl-up-4.png</filename>
+            <filename>redgirl-up-5.png</filename>
+            <filename>redgirl-up-6.png</filename>
+            <filename>redgirl-up-7.png</filename>
+            <filename>redgirl-up-8.png</filename>
+            <filename>redgirl-up-9.png</filename>
+            <filename>redgirl-up-10.png</filename>
             <filename>heart.png</filename>
             <filename>sweat-1.png</filename>
             <filename>sweat-2.png</filename>
