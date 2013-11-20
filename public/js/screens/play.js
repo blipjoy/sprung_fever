@@ -37,7 +37,7 @@ game.PlayScreen = me.ScreenObject.extend({
 
         // Mobile UI
         this.mobile_ui = null;
-        if (me.sys.isMobile || c.DEBUG) {
+        if (me.device.isMobile || c.DEBUG) {
             this.mobile_ui = new game.UI();
             me.game.add(this.mobile_ui, Infinity);
         }

@@ -277,7 +277,7 @@ game.TitleScreen = me.ScreenObject.extend({
         switch (this.state) {
         case this.STATES.IDLE:
             if (((this.step / 20) & 3) !== 0) {
-                var msg = (me.sys.isMobile ? "Tap" : "Press Enter") +
+                var msg = (me.device.isMobile ? "Tap" : "Press Enter") +
                     " to Start";
 
                 context.shadowBlur = 3;
@@ -301,7 +301,7 @@ game.TitleScreen = me.ScreenObject.extend({
             this.font.draw(context, "BOY", c.WIDTH * 0.333, c.HEIGHT * 0.6);
             this.font.draw(context, "GIRL", c.WIDTH * 0.667, c.HEIGHT * 0.6);
 
-            if (!me.sys.isMobile) {
+            if (!me.device.isMobile) {
                 context.lineWidth = 3;
                 context.strokeStyle = "#fff";
                 context.strokeRect(
@@ -325,7 +325,7 @@ game.TitleScreen = me.ScreenObject.extend({
             this.font.draw(context, "BOYS", c.WIDTH * 0.333, c.HEIGHT * 0.6);
             this.font.draw(context, "GIRLS", c.WIDTH * 0.667, c.HEIGHT * 0.6);
 
-            if (!me.sys.isMobile) {
+            if (!me.device.isMobile) {
                 context.lineWidth = 3;
                 context.strokeStyle = "#fff";
                 context.strokeRect(
