@@ -61,7 +61,7 @@ window.onReady(function () {
         );
     }
 
-    else if (!me.device.isMobile && typeof(c.HASH.debug) === "undefined") {
+    else if (!me.device.isMobile && !c.DEBUG) {
         var gamemix = document.createElement("div");
         gamemix.id = "gamemix";
 

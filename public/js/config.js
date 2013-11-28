@@ -10,7 +10,7 @@
             var kv = value.split("=");
             var k = kv.shift();
             var v = kv.join("=");
-            hash[k] = v;
+            hash[k] = v || true;
         });
 
         return hash;
@@ -52,7 +52,7 @@
     };
 
     // Helper to enable debug by setting a special hash in the URL.
-    if (typeof(window.c.HASH.debug) !== "undefined") {
+    if (window.c.HASH.debug) {
         c.DEBUG = true;
         window.onReady(function () {
             enableDebug.defer(true);
@@ -61,10 +61,10 @@
 
     window.addEventListener("hashchange", function (e) {
         defineConst(window.c, "HASH", parseHash());
-
-        var debug = (typeof(window.c.HASH.debug) !== "undefined");
-        enableDebug(debug);
-        defineConst(window.c, "DEBUG", debug);
+        defineConst(window.c, "DEBUG", window.c.HASH.debug);
+        if (window.c.DEBUG) {
+            enableDebug();
+        }
     });
 
     // Turn the `c` object into a hash of constants.
@@ -82,7 +82,7 @@
     me.sys.preRender = true; // Be faster!
     me.sys.stopOnAudioError = false;
 
-    function enableDebug(enable) {
+    function enableDebug() {
         if (!enabled) {
             enabled = true;
             me.plugin.register(debugPanel, "debug");
