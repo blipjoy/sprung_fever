@@ -155,6 +155,6 @@ var game = {
     "GENDERS" : {
         "player" : "kid",
         "crush1" : "redgirl",
-        "crush2" : "girl"
+        "crush2" : "redgirl"
     }
 };
